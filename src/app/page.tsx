@@ -1,11 +1,15 @@
 import TextRoll from "@/components/ui/text-roll"
 import TransitionLink from "@/components/ui/transition-link"
 
-const navigationItems: { name: string; href?: string }[] = [
-  { name: "About" },
+const navigationItems: {
+  name: string
+  href?: string
+  externalHref?: string
+}[] = [
+  { name: "About", href: "/about" },
   { name: "Projects", href: "/projects" },
   { name: "Blog" },
-  { name: "Newsletter" },
+  { name: "Newsletter", externalHref: "https://maily.so/automata" },
   { name: "Contact" },
 ]
 
@@ -27,6 +31,19 @@ export default function Home() {
                   {item.name}
                 </TextRoll>
               </TransitionLink>
+            ) : item.externalHref ? (
+              <a
+                href={item.externalHref}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <TextRoll
+                  center
+                  className="text-4xl leading-[0.8] font-extrabold tracking-[-0.03em] uppercase transition-colors lg:text-5xl"
+                >
+                  {item.name}
+                </TextRoll>
+              </a>
             ) : (
               <TextRoll
                 center
