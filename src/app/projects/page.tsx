@@ -1,6 +1,7 @@
 "use client"
 
 import { useRouter, useSearchParams } from "next/navigation"
+import { AnimatePresence, motion } from "motion/react"
 
 import { cn } from "@/lib/utils"
 import TransitionLink from "@/components/ui/transition-link"
@@ -66,9 +67,19 @@ export default function ProjectsPage() {
         </div>
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {visibleProjects.map((project) => (
-            <ProjectCard key={project.slug} project={project} categoryParam={activeCategory} />
-          ))}
+          <AnimatePresence mode="popLayout">
+            {visibleProjects.map((project, index) => (
+              <motion.div
+                key={project.slug}
+                initial={{ opacity: 0, scale: 0.96 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.96 }}
+                transition={{ duration: 0.2, delay: index * 0.04 }}
+              >
+                <ProjectCard project={project} categoryParam={activeCategory} />
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </div>
       </div>
     </main>
