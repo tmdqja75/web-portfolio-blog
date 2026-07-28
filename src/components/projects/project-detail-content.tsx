@@ -3,6 +3,7 @@
 import { motion } from "motion/react"
 
 import type { Project } from "@/app/projects/data"
+import { AwsDiagram } from "./aws-diagram"
 
 export function ProjectDetailContent({
   project,
@@ -66,7 +67,7 @@ export function ProjectDetailContent({
           </div>
         )}
 
-        {/* project.diagram rendering added in Task 10 */}
+        {project.diagram && <AwsDiagram diagram={project.diagram} />}
 
         {project.links && (
           <div className="mt-8 flex flex-wrap gap-3">
