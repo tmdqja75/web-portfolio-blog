@@ -19,7 +19,7 @@ export function ProjectCard({
       <motion.div
         layoutId={`card-image-${project.slug}`}
         whileHover={{ scale: 1.03 }}
-        transition={{ duration: 0.2 }}
+        transition={{ duration: 0.2, layout: { type: "spring", stiffness: 300, damping: 30 } }}
         className="relative aspect-[4/5] overflow-hidden rounded-xl bg-cover bg-center shadow-sm"
         style={{ backgroundImage: `url(${project.image})` }}
       >
