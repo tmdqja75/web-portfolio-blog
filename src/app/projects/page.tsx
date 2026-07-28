@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter, useSearchParams } from "next/navigation"
-import { AnimatePresence, motion } from "motion/react"
+import { AnimatePresence, motion, useReducedMotion } from "motion/react"
 
 import { cn } from "@/lib/utils"
 import TransitionLink from "@/components/ui/transition-link"
@@ -11,6 +11,7 @@ import { categories, getCategoryProjects } from "./data"
 export default function ProjectsPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const shouldReduceMotion = useReducedMotion()
   const activeCategory = searchParams.get("category")
   const visibleProjects = getCategoryProjects(activeCategory)
 
@@ -74,7 +75,7 @@ export default function ProjectsPage() {
                 initial={{ opacity: 0, scale: 0.96 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.96 }}
-                transition={{ duration: 0.2, delay: index * 0.04 }}
+                transition={{ duration: 0.2, delay: shouldReduceMotion ? 0 : index * 0.04 }}
               >
                 <ProjectCard project={project} categoryParam={activeCategory} />
               </motion.div>

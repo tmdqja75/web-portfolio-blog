@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { motion } from "motion/react"
+import { motion, useReducedMotion } from "motion/react"
 
 import type { Project } from "@/app/projects/data"
 
@@ -12,6 +12,7 @@ export function ProjectCard({
   project: Project
   categoryParam: string | null
 }) {
+  const shouldReduceMotion = useReducedMotion()
   const href = `/projects/${project.slug}${categoryParam ? `?category=${categoryParam}` : ""}`
 
   return (
@@ -19,7 +20,11 @@ export function ProjectCard({
       <motion.div
         layoutId={`card-image-${project.slug}`}
         whileHover={{ scale: 1.03 }}
-        transition={{ duration: 0.2, layout: { type: "spring", stiffness: 300, damping: 30 } }}
+        transition={
+          shouldReduceMotion
+            ? { duration: 0.15 }
+            : { duration: 0.2, layout: { type: "spring", stiffness: 300, damping: 30 } }
+        }
         className="relative aspect-[4/5] overflow-hidden rounded-xl bg-cover bg-center shadow-sm"
         style={{ backgroundImage: `url(${project.image})` }}
       >

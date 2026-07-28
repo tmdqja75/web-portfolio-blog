@@ -1,6 +1,6 @@
 "use client"
 
-import { motion } from "motion/react"
+import { motion, useReducedMotion } from "motion/react"
 
 import type { Project } from "@/app/projects/data"
 import { AwsDiagram } from "./aws-diagram"
@@ -14,18 +14,23 @@ export function ProjectDetailContent({
   titleLayoutId?: string
   imageLayoutId?: string
 }) {
+  const shouldReduceMotion = useReducedMotion()
+  const layoutTransition = shouldReduceMotion
+    ? { duration: 0.15 }
+    : { layout: { type: "spring" as const, stiffness: 300, damping: 30 } }
+
   return (
     <div className="mx-auto max-w-3xl">
       <motion.div
         layoutId={imageLayoutId}
-        transition={{ layout: { type: "spring", stiffness: 300, damping: 30 } }}
+        transition={layoutTransition}
         className="relative aspect-[16/9] w-full overflow-hidden rounded-xl bg-cover bg-center"
         style={{ backgroundImage: `url(${project.image})` }}
       />
 
       <motion.h1
         layoutId={titleLayoutId}
-        transition={{ layout: { type: "spring", stiffness: 300, damping: 30 } }}
+        transition={layoutTransition}
         className="mt-6 text-2xl font-semibold text-[#171717] dark:text-white"
         style={{ letterSpacing: "-0.96px" }}
       >
@@ -35,7 +40,11 @@ export function ProjectDetailContent({
       <motion.div
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2, duration: 0.3, staggerChildren: 0.06 }}
+        transition={
+          shouldReduceMotion
+            ? { duration: 0.15, staggerChildren: 0 }
+            : { delay: 0.2, duration: 0.3, staggerChildren: 0.06 }
+        }
       >
         {(project.role || project.timeframe) && (
           <p className="mt-1 text-sm text-[#888888]">
