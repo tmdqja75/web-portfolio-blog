@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import { useRef, useState } from "react"
+import { motion, useInView, useReducedMotion } from "motion/react"
 
 import type { ProjectDiagram } from "@/app/projects/data"
 import { AWS_ICONS } from "./aws-icons/registry"
@@ -11,10 +12,16 @@ export function AwsDiagram({ diagram }: { diagram: ProjectDiagram }) {
 
   const nodeById = Object.fromEntries(diagram.nodes.map((n) => [n.id, n]))
 
+  const svgRef = useRef<SVGSVGElement>(null)
+  const isInView = useInView(svgRef, { once: false, amount: 0.4 })
+  const shouldReduceMotion = useReducedMotion()
+  const animateFlow = isInView && !shouldReduceMotion
+
   return (
     <div className="relative mt-8">
       <h2 className="mb-3 text-sm font-semibold text-[#171717] dark:text-white">Architecture</h2>
       <svg
+        ref={svgRef}
         viewBox="0 0 100 100"
         className="w-full rounded-xl border border-[#ebebeb] bg-white dark:border-zinc-800 dark:bg-zinc-950"
         onClick={(e) => {
@@ -26,14 +33,20 @@ export function AwsDiagram({ diagram }: { diagram: ProjectDiagram }) {
           const to = nodeById[edge.to]
           if (!from || !to) return null
           const midX = (from.x + to.x) / 2
+          const d = `M ${from.x} ${from.y} L ${midX} ${from.y} L ${midX} ${to.y} L ${to.x} ${to.y}`
           return (
-            <path
-              key={i}
-              d={`M ${from.x} ${from.y} L ${midX} ${from.y} L ${midX} ${to.y} L ${to.x} ${to.y}`}
-              fill="none"
-              stroke="#a1a1a1"
-              strokeWidth={0.5}
-            />
+            <g key={i}>
+              <path d={d} fill="none" stroke="#a1a1a1" strokeWidth={0.5} />
+              {animateFlow && (
+                <motion.circle
+                  r={1.2}
+                  fill="#171717"
+                  style={{ offsetPath: `path("${d}")`, offsetRotate: "0deg" }}
+                  animate={{ offsetDistance: ["0%", "100%"], opacity: [0, 1, 1, 0] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "linear", delay: i * 0.3 }}
+                />
+              )}
+            </g>
           )
         })}
 
