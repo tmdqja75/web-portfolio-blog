@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation"
 
 import TransitionLink from "@/components/ui/transition-link"
+import { ProjectDetailContent } from "@/components/projects/project-detail-content"
 import { getProject } from "@/app/projects/data"
 
 export default async function ProjectPage({
@@ -20,9 +21,8 @@ export default async function ProjectPage({
       >
         ← Back
       </TransitionLink>
-      <div className="mx-auto max-w-3xl pt-24">
-        <h1 className="text-2xl font-semibold text-[#171717] dark:text-white">{project.title}</h1>
-        <p className="mt-2 text-[#4d4d4d] dark:text-zinc-400">{project.description}</p>
+      <div className="pt-24">
+        <ProjectDetailContent project={project} />
       </div>
     </main>
   )
