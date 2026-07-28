@@ -12,6 +12,7 @@
 
 - No test framework is configured in this repo — every task's verification step is a manual dev-server check, not an automated test. Do not introduce Jest/Playwright/etc. as a side effect of this feature.
 - Ink `#171717` is the only primary/dark color (DESIGN.md) — use it for active filter chips, close/back buttons, focus rings. Never introduce a separate brand accent color.
+- No decorative "AI slop" gradients — no purple-to-blue/pink blob backgrounds, no glassmorphism panels, no rainbow-mesh fills on cards, buttons, or overlays. The only gradient in this feature is the existing functional one already in use: the black-to-transparent overlay on card/hero images that keeps title text legible over a photo. Every other surface (chips, panels, tooltips, stat tiles, buttons) stays flat per DESIGN.md's ink-and-near-white system — solid fills only, no gradient fills, no gradient borders/glows for emphasis.
 - Geist via `next/font`, display weight caps at 600, aggressive negative letter-spacing on display sizes (DESIGN.md).
 - Spacing on a 4px base; radii from the existing `rounded` token scale (6px in-app buttons, 8-12px cards) (DESIGN.md).
 - Placeholder images stay plain CSS `background-image` with `picsum.photos` — `next/image` remotePatterns is not configured; don't mix approaches (AGENTS.md).
