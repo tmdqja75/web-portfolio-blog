@@ -1,5 +1,6 @@
 "use client"
 
+import { Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { AnimatePresence, motion, useReducedMotion } from "motion/react"
 
@@ -9,6 +10,14 @@ import { ProjectCard } from "@/components/projects/project-card"
 import { categories, getCategoryProjects } from "./data"
 
 export default function ProjectsPage() {
+  return (
+    <Suspense fallback={null}>
+      <ProjectsPageInner />
+    </Suspense>
+  )
+}
+
+function ProjectsPageInner() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const shouldReduceMotion = useReducedMotion()
