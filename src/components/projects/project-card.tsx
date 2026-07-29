@@ -25,7 +25,7 @@ export function ProjectCard({
             ? { duration: 0.15 }
             : { duration: 0.2, layout: { type: "spring", stiffness: 300, damping: 30 } }
         }
-        className="relative aspect-[4/5] overflow-hidden rounded-xl bg-cover bg-center shadow-sm"
+        className="relative aspect-[16/9] overflow-hidden rounded-xl bg-cover bg-center shadow-sm"
         style={{ backgroundImage: `url(${project.image})` }}
       >
         <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/70 via-black/20 to-transparent p-4">
