@@ -96,7 +96,7 @@ export function ProjectDetailOverlay({ project }: { project: Project }) {
           <button
             onClick={close}
             aria-label="Close"
-            className="absolute top-4 right-4 flex h-7 w-7 cursor-pointer items-center justify-center rounded-[6px] bg-zinc-200 text-[#171717] dark:bg-zinc-800 dark:text-white"
+            className="fixed top-6 right-6 z-30 flex h-7 w-7 cursor-pointer items-center justify-center rounded-[6px] bg-white text-[#171717] shadow-md dark:bg-zinc-900 dark:text-white"
           >
             ✕
           </button>
