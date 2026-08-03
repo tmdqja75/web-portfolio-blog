@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Noto_Sans_KR } from "next/font/google";
+import PageTransition from "@/components/ui/page-transition";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -32,7 +33,9 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} ${notoSansKr.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col bg-zinc-50 dark:bg-black">{children}</body>
+      <body className="flex min-h-full flex-col bg-zinc-50 dark:bg-black">
+        <PageTransition>{children}</PageTransition>
+      </body>
     </html>
   );
 }

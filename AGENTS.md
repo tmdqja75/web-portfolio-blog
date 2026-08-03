@@ -30,10 +30,16 @@ Next.js 16.2.11 (App Router, Turbopack, `src/app/`), React 19, TypeScript, Tailw
 
 ## Architecture
 
-Single-user portfolio/blog. Two pages:
+Single-user portfolio/blog. Two top-level pages plus a projects detail route:
 
 - `src/app/page.tsx` — landing: full-screen nav list (`navigationItems` array; items with `href` become links) using `TextRoll` hover animation.
-- `src/app/projects/page.tsx` — client component. Three independently scrolling infinite card carousels. Scroll is custom: wheel events accumulate a target offset, rAF loop lerps toward it (inertia), content is translated via `transform` inside an `overflow-hidden` viewport (no native scroll/scrollbar). Each column renders its card list twice; the offset wraps modulo half the content height for a seamless loop — cards must use `margin-bottom` (not flex `gap`) so the wrap period stays exact. Card data lives in the `columns` array at the top of the file.
+- `src/app/projects/page.tsx` — client component (wrapped in `Suspense` since it reads `useSearchParams`). Filterable grid (not a carousel): category buttons write `?category=` to the URL, `AnimatePresence`/`motion` fades cards in/out on filter change. Project data comes from `src/app/projects/data.ts` (`categories`, `getCategoryProjects`, `getProject`), not an inline array.
+- `src/app/projects/[slug]/page.tsx` — full-page project detail (direct nav / refresh / no-JS fallback).
+- `src/app/projects/@modal/(.)[slug]/page.tsx` + `default.tsx` — parallel/intercepted route: clicking a card from `/projects` opens the same detail as an overlay modal (`ProjectDetailOverlay`) without leaving the grid; `src/app/projects/layout.tsx` renders `{children}` and `{modal}` side by side per Next's parallel-routes convention.
+- `src/components/projects/project-card.tsx` — grid card, shares a `layoutId` (`card-image-<slug>` / `card-title-<slug>`) with the overlay for the morph transition.
+- `src/components/projects/project-detail-overlay.tsx` — modal chrome: focus trap (Tab cycles within the panel), Escape/backdrop-click to close (`router.back()`), prev/next via arrow keys and a thumbnail rail, all gated through `getCategoryProjects` so navigation stays within the active filter.
+- `src/components/projects/project-detail-content.tsx` — body shared between the full page and the overlay.
+- `src/components/projects/aws-diagram.tsx` + `aws-icons/` — interactive AWS architecture diagram (in-view gated flow animation, respects `prefers-reduced-motion` via `useReducedMotion`) used inside a project's detail content.
 
 ### Page transitions
 
