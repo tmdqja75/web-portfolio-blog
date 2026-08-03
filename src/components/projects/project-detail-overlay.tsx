@@ -71,7 +71,7 @@ export function ProjectDetailOverlay({ project }: { project: Project }) {
           <button
             onClick={() => goTo(prevProject.slug)}
             aria-label="Previous project"
-            className="fixed top-1/2 left-4 z-30 flex h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-white text-[#171717] shadow-md dark:bg-zinc-900 dark:text-white"
+            className="fixed top-1/2 left-4 z-30 flex h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-white bg-white text-[#171717] shadow-md dark:bg-zinc-900 dark:text-white"
           >
             ←
           </button>
@@ -80,7 +80,7 @@ export function ProjectDetailOverlay({ project }: { project: Project }) {
           <button
             onClick={() => goTo(nextProject.slug)}
             aria-label="Next project"
-            className="fixed top-1/2 right-4 z-30 flex h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-white text-[#171717] shadow-md dark:bg-zinc-900 dark:text-white"
+            className="fixed top-1/2 right-4 z-30 flex h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-white bg-white text-[#171717] shadow-md dark:bg-zinc-900 dark:text-white"
           >
             →
           </button>
@@ -96,7 +96,7 @@ export function ProjectDetailOverlay({ project }: { project: Project }) {
           <button
             onClick={close}
             aria-label="Close"
-            className="fixed top-6 right-6 z-30 flex h-7 w-7 cursor-pointer items-center justify-center rounded-[6px] bg-white text-[#171717] shadow-md dark:bg-zinc-900 dark:text-white"
+            className="fixed top-6 right-6 z-30 flex h-7 w-7 cursor-pointer items-center justify-center rounded-[6px] border border-white bg-white text-[#171717] shadow-md dark:bg-zinc-900 dark:text-white"
           >
             ✕
           </button>
