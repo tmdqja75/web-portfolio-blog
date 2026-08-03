@@ -23,7 +23,7 @@ export function ProjectDetailOverlay({ project }: { project: Project }) {
 
   const goTo = (slug: string) => {
     const qs = activeCategory ? `?category=${activeCategory}` : ""
-    router.push(`/projects/${slug}${qs}`, { scroll: false })
+    router.replace(`/projects/${slug}${qs}`, { scroll: false })
   }
 
   useEffect(() => {
