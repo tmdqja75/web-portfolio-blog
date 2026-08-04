@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Posts are raw HTML in markdown — scan them so utility classes survive. */
+@source "../../content";
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -8,7 +11,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-geist-sans), var(--font-noto-kr);
   --font-mono: var(--font-geist-mono);
   --font-kr: var(--font-noto-kr);
 }
@@ -37,4 +40,124 @@ body {
 
 .page-fade-in {
   animation: page-fade-in 300ms ease;
+}
+
+/* TOC anchors glide; reduced-motion jumps. */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  /* Hand-written SVG/CSS diagrams in posts hold still too. */
+  .post-body *,
+  .post-body *::before,
+  .post-body *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Rendered markdown */
+.post-body {
+  font-family: var(--font-sans), sans-serif;
+  font-size: 15px;
+  line-height: 1.85;
+  color: #171717;
+}
+
+.post-body > * + * {
+  margin-top: 1.25em;
+}
+
+.post-body h2 {
+  margin-top: 2.5em;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+.post-body h3 {
+  margin-top: 2em;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.post-body ul,
+.post-body ol {
+  padding-left: 1.25em;
+  list-style: disc;
+}
+
+.post-body ol {
+  list-style: decimal;
+}
+
+.post-body li + li {
+  margin-top: 0.4em;
+}
+
+.post-body a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.post-body blockquote {
+  border-left: 2px solid #ebebeb;
+  padding-left: 1em;
+  color: #4d4d4d;
+}
+
+.post-body img {
+  max-width: 100%;
+  border-radius: 8px;
+}
+
+.post-body :not(pre) > code {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.86em;
+  background: #ebebeb;
+  border-radius: 4px;
+  padding: 0.1em 0.35em;
+}
+
+.post-body pre {
+  overflow-x: auto;
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* Shiki ships both themes in one payload; pick per color scheme. */
+.post-body .shiki,
+.post-body .shiki span {
+  color: var(--shiki-light);
+  background-color: var(--shiki-light-bg);
+}
+
+@media (prefers-color-scheme: dark) {
+  .post-body {
+    color: #ededed;
+  }
+
+  .post-body blockquote {
+    border-left-color: #27272a;
+    color: #a1a1aa;
+  }
+
+  .post-body :not(pre) > code {
+    background: #27272a;
+  }
+
+  .post-body .shiki,
+  .post-body .shiki span {
+    color: var(--shiki-dark);
+    background-color: var(--shiki-dark-bg);
+  }
 }

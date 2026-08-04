@@ -8,7 +8,7 @@ const navigationItems: {
 }[] = [
   { name: "About", href: "/about" },
   { name: "Projects", href: "/projects" },
-  { name: "Blog" },
+  { name: "Blog", href: "/blog" },
   { name: "Newsletter", externalHref: "https://maily.so/automata" },
   { name: "Contact" },
 ]
