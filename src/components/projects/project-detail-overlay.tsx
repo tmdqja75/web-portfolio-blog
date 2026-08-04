@@ -62,16 +62,16 @@ export function ProjectDetailOverlay({ project }: { project: Project }) {
   }, [router])
 
   useEffect(() => {
-    panelRef.current?.focus()
+    panelRef.current?.focus({ preventScroll: true })
   }, [])
 
   return (
     <AnimatePresence>
       <motion.div
-        className="fixed inset-0 z-20 flex items-start justify-center overflow-y-auto bg-black/40 p-6"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-20 flex items-start justify-center overflow-y-auto p-6"
+        initial={{ backgroundColor: "rgba(0,0,0,0)" }}
+        animate={{ backgroundColor: "rgba(0,0,0,0.4)" }}
+        exit={{ backgroundColor: "rgba(0,0,0,0)" }}
         onClick={(e) => {
           if (e.target === e.currentTarget) close()
         }}
@@ -109,11 +109,7 @@ export function ProjectDetailOverlay({ project }: { project: Project }) {
           >
             ✕
           </button>
-          <ProjectDetailContent
-            project={project}
-            imageLayoutId={`card-image-${project.slug}`}
-            titleLayoutId={`card-title-${project.slug}`}
-          />
+          <ProjectDetailContent project={project} />
 
           {navigable.length > 1 && (
             <div className="fixed inset-x-0 bottom-6 z-30 flex justify-center gap-2">
