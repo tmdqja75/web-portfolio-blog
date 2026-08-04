@@ -47,7 +47,7 @@ export default function ReadingRail({ headings }: { headings: Heading[] }) {
 
       {/* self-start keeps the nav content-height; a stretched grid item never sticks. */}
       {headings.length > 0 && (
-        <nav className="sticky top-24 hidden self-start border-l border-zinc-200 pl-4 lg:block dark:border-zinc-800">
+        <nav className="sticky top-24 hidden self-start border-l border-zinc-200 pl-4 xl:col-start-3 xl:block dark:border-zinc-800">
           <div className="font-mono text-[10px] tracking-[0.08em] text-zinc-500 uppercase">
             목차
           </div>

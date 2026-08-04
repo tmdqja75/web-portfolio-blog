@@ -39,9 +39,10 @@ export default async function PostPage({
         ← Back
       </TransitionLink>
 
-      <div className="mx-auto grid max-w-5xl gap-12 pt-24 lg:grid-cols-[minmax(0,65ch)_180px]">
+      {/* Symmetric side tracks keep the column on the page's centre line; the rail rides the right one. */}
+      <div className="mx-auto grid max-w-6xl gap-12 pt-24 xl:grid-cols-[minmax(0,1fr)_minmax(0,65ch)_minmax(0,1fr)]">
         {/* min-w-0 lets code blocks scroll inside the column instead of widening the page. */}
-        <article className="w-full max-w-[65ch] min-w-0">
+        <article className="mx-auto w-full max-w-[65ch] min-w-0 xl:col-start-2">
           <div className="font-mono text-[10px] tracking-[0.08em] text-zinc-500 uppercase">
             {meta.date.replaceAll("-", ".")} · {meta.tag} · {meta.minutes}분
           </div>
