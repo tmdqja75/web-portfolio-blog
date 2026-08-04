@@ -26,9 +26,19 @@ export function ProjectDetailOverlay({ project }: { project: Project }) {
     router.replace(`/projects/${slug}${qs}`, { scroll: false })
   }
 
+  const navRef = useRef({ prevProject, nextProject, activeCategory })
+  useEffect(() => {
+    navRef.current = { prevProject, nextProject, activeCategory }
+  }, [prevProject, nextProject, activeCategory])
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") close()
+      const { prevProject, nextProject, activeCategory } = navRef.current
+      const goTo = (slug: string) => {
+        const qs = activeCategory ? `?category=${activeCategory}` : ""
+        router.replace(`/projects/${slug}${qs}`, { scroll: false })
+      }
+      if (e.key === "Escape") router.back()
       if (e.key === "ArrowLeft" && prevProject) goTo(prevProject.slug)
       if (e.key === "ArrowRight" && nextProject) goTo(nextProject.slug)
       if (e.key === "Tab" && panelRef.current) {
@@ -49,8 +59,7 @@ export function ProjectDetailOverlay({ project }: { project: Project }) {
     }
     document.addEventListener("keydown", handleKeyDown)
     return () => document.removeEventListener("keydown", handleKeyDown)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [prevProject, nextProject])
+  }, [router])
 
   useEffect(() => {
     panelRef.current?.focus()
