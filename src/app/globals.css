@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Posts are raw HTML in markdown — scan them so utility classes survive. */
+@source "../../content";
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -48,6 +51,15 @@ html {
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+
+  /* Hand-written SVG/CSS diagrams in posts hold still too. */
+  .post-body *,
+  .post-body *::before,
+  .post-body *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
