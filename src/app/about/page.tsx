@@ -1,6 +1,12 @@
 "use client"
 
-import { motion, type Variants } from "motion/react"
+import {
+  motion,
+  useMotionTemplate,
+  useMotionValue,
+  useSpring,
+  type Variants,
+} from "motion/react"
 import Image from "next/image"
 import type { IconBaseProps, IconType } from "react-icons"
 import {
@@ -119,6 +125,73 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
   )
 }
 
+function TechCard({
+  tech,
+  index,
+}: {
+  tech: (typeof stack)[number]
+  index: number
+}) {
+  const mouseX = useMotionValue(100)
+  const mouseY = useMotionValue(100)
+  const springX = useSpring(mouseX, { stiffness: 150, damping: 20, mass: 0.5 })
+  const springY = useSpring(mouseY, { stiffness: 150, damping: 20, mass: 0.5 })
+  const backgroundImage = useMotionTemplate`radial-gradient(circle at ${springX}% ${springY}%, ${tech.color}40, ${tech.color}29 35%, ${tech.color}14 65%, ${tech.color}08 100%, transparent 160%)`
+
+  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+    const rect = e.currentTarget.getBoundingClientRect()
+    mouseX.set(((e.clientX - rect.left) / rect.width) * 100)
+    mouseY.set(((e.clientY - rect.top) / rect.height) * 100)
+  }
+
+  function handleMouseLeave() {
+    mouseX.set(100)
+    mouseY.set(100)
+  }
+
+  return (
+    <motion.div
+      variants={rise}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className={cn(
+        "relative flex flex-col gap-1 overflow-hidden bg-black p-6",
+        index === 8 && "lg:col-start-2",
+        index === 9 && "lg:col-start-3",
+      )}
+      style={{ backgroundImage }}
+    >
+      {typeof tech.icon === "string" ? (
+        <Image
+          src={tech.icon}
+          alt=""
+          aria-hidden
+          width={48}
+          height={48}
+          className="pointer-events-none absolute right-4 top-1/2 h-12 w-12 -translate-y-1/2 object-contain"
+        />
+      ) : tech.badge ? (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute right-4 top-1/2 flex h-14 w-14 -translate-y-1/2 items-center justify-center rounded-lg bg-white"
+        >
+          <tech.icon className="h-9 w-9 text-black" />
+        </div>
+      ) : (
+        <tech.icon
+          aria-hidden
+          className="pointer-events-none absolute right-4 top-1/2 h-12 w-12 -translate-y-1/2"
+          style={{ color: tech.color }}
+        />
+      )}
+      <span className="text-lg font-medium tracking-[-0.01em]">
+        {tech.name}
+      </span>
+      <span className="font-mono text-xs text-white/40">{tech.category}</span>
+    </motion.div>
+  )
+}
+
 export default function About() {
   return (
     <main className="font-kr min-h-screen bg-black text-white/90 selection:bg-white selection:text-black">
@@ -202,48 +275,7 @@ export default function About() {
         <Eyebrow>기술 스택</Eyebrow>
         <div className="grid grid-cols-2 gap-px overflow-hidden rounded-lg bg-black sm:grid-cols-3 lg:grid-cols-4">
           {stack.map((tech, index) => (
-            <motion.div
-              key={tech.name}
-              variants={rise}
-              className={cn(
-                "relative flex flex-col gap-1 overflow-hidden bg-black p-6",
-                index === 8 && "lg:col-start-2",
-                index === 9 && "lg:col-start-3",
-              )}
-              style={{
-                backgroundImage: `radial-gradient(circle at 100% 100%, ${tech.color}33, transparent 70%)`,
-              }}
-            >
-              {typeof tech.icon === "string" ? (
-                <Image
-                  src={tech.icon}
-                  alt=""
-                  aria-hidden
-                  width={48}
-                  height={48}
-                  className="pointer-events-none absolute right-4 top-1/2 h-12 w-12 -translate-y-1/2 object-contain"
-                />
-              ) : tech.badge ? (
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute right-4 top-1/2 flex h-14 w-14 -translate-y-1/2 items-center justify-center rounded-lg bg-white"
-                >
-                  <tech.icon className="h-9 w-9 text-black" />
-                </div>
-              ) : (
-                <tech.icon
-                  aria-hidden
-                  className="pointer-events-none absolute right-4 top-1/2 h-12 w-12 -translate-y-1/2"
-                  style={{ color: tech.color }}
-                />
-              )}
-              <span className="text-lg font-medium tracking-[-0.01em]">
-                {tech.name}
-              </span>
-              <span className="font-mono text-xs text-white/40">
-                {tech.category}
-              </span>
-            </motion.div>
+            <TechCard key={tech.name} tech={tech} index={index} />
           ))}
         </div>
       </Section>
