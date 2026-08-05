@@ -3,34 +3,25 @@
 import { motion, useReducedMotion } from "motion/react"
 
 import type { Project } from "@/app/projects/data"
-import { AwsDiagram } from "./aws-diagram"
 
-export function ProjectDetailContent({
-  project,
-  titleLayoutId,
-  imageLayoutId,
-}: {
-  project: Project
-  titleLayoutId?: string
-  imageLayoutId?: string
-}) {
+export function ProjectDetailContent({ project }: { project: Project }) {
   const shouldReduceMotion = useReducedMotion()
-  const layoutTransition = shouldReduceMotion
-    ? { duration: 0.15 }
-    : { layout: { type: "spring" as const, stiffness: 300, damping: 30 } }
+  const entranceTransition = shouldReduceMotion ? { duration: 0.15 } : { duration: 0.3 }
 
   return (
     <div className="mx-auto max-w-3xl">
       <motion.div
-        layoutId={imageLayoutId}
-        transition={layoutTransition}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={entranceTransition}
         className="relative aspect-[16/9] w-full overflow-hidden rounded-xl bg-cover bg-center"
         style={{ backgroundImage: `url(${project.image})` }}
       />
 
       <motion.h1
-        layoutId={titleLayoutId}
-        transition={layoutTransition}
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={entranceTransition}
         className="mt-6 text-2xl font-semibold text-[#171717] dark:text-white"
         style={{ letterSpacing: "-0.96px" }}
       >
@@ -75,8 +66,6 @@ export function ProjectDetailContent({
             ))}
           </div>
         )}
-
-        {project.diagram && <AwsDiagram diagram={project.diagram} />}
 
         {project.links && (
           <div className="mt-8 flex flex-wrap gap-3">

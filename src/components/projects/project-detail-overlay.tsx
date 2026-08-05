@@ -26,9 +26,19 @@ export function ProjectDetailOverlay({ project }: { project: Project }) {
     router.replace(`/projects/${slug}${qs}`, { scroll: false })
   }
 
+  const navRef = useRef({ prevProject, nextProject, activeCategory })
+  useEffect(() => {
+    navRef.current = { prevProject, nextProject, activeCategory }
+  }, [prevProject, nextProject, activeCategory])
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") close()
+      const { prevProject, nextProject, activeCategory } = navRef.current
+      const goTo = (slug: string) => {
+        const qs = activeCategory ? `?category=${activeCategory}` : ""
+        router.replace(`/projects/${slug}${qs}`, { scroll: false })
+      }
+      if (e.key === "Escape") router.back()
       if (e.key === "ArrowLeft" && prevProject) goTo(prevProject.slug)
       if (e.key === "ArrowRight" && nextProject) goTo(nextProject.slug)
       if (e.key === "Tab" && panelRef.current) {
@@ -49,20 +59,19 @@ export function ProjectDetailOverlay({ project }: { project: Project }) {
     }
     document.addEventListener("keydown", handleKeyDown)
     return () => document.removeEventListener("keydown", handleKeyDown)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [prevProject, nextProject])
+  }, [router])
 
   useEffect(() => {
-    panelRef.current?.focus()
+    panelRef.current?.focus({ preventScroll: true })
   }, [])
 
   return (
     <AnimatePresence>
       <motion.div
-        className="fixed inset-0 z-20 flex items-start justify-center overflow-y-auto bg-black/40 p-6"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-20 flex items-start justify-center overflow-y-auto p-6"
+        initial={{ backgroundColor: "rgba(0,0,0,0)" }}
+        animate={{ backgroundColor: "rgba(0,0,0,0.4)" }}
+        exit={{ backgroundColor: "rgba(0,0,0,0)" }}
         onClick={(e) => {
           if (e.target === e.currentTarget) close()
         }}
@@ -100,11 +109,7 @@ export function ProjectDetailOverlay({ project }: { project: Project }) {
           >
             ✕
           </button>
-          <ProjectDetailContent
-            project={project}
-            imageLayoutId={`card-image-${project.slug}`}
-            titleLayoutId={`card-title-${project.slug}`}
-          />
+          <ProjectDetailContent project={project} />
 
           {navigable.length > 1 && (
             <div className="fixed inset-x-0 bottom-6 z-30 flex justify-center gap-2">

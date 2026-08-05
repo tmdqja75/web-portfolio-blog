@@ -10,11 +10,18 @@ export default function ReadingRail({ headings }: { headings: Heading[] }) {
   const [active, setActive] = useState(headings[0]?.id ?? "")
 
   useEffect(() => {
-    const onScroll = () => {
+    let ticking = false
+    const update = () => {
       const max = document.documentElement.scrollHeight - window.innerHeight
       setProgress(max > 0 ? Math.min(1, window.scrollY / max) : 1)
+      ticking = false
     }
-    onScroll()
+    const onScroll = () => {
+      if (ticking) return
+      ticking = true
+      requestAnimationFrame(update)
+    }
+    update()
     window.addEventListener("scroll", onScroll, { passive: true })
     return () => window.removeEventListener("scroll", onScroll)
   }, [])
@@ -40,8 +47,8 @@ export default function ReadingRail({ headings }: { headings: Heading[] }) {
     <>
       <div className="fixed inset-x-0 top-0 z-20 h-0.5">
         <div
-          className="h-full bg-[#171717] dark:bg-white"
-          style={{ width: `${progress * 100}%` }}
+          className="h-full w-full origin-left bg-[#171717] dark:bg-white"
+          style={{ transform: `scaleX(${progress})` }}
         />
       </div>
 

@@ -18,24 +18,19 @@ export function ProjectCard({
   return (
     <Link href={href} scroll={false} className="group block">
       <motion.div
-        layoutId={`card-image-${project.slug}`}
         whileHover={{ scale: 1.03 }}
-        transition={
-          shouldReduceMotion
-            ? { duration: 0.15 }
-            : { duration: 0.2, layout: { type: "spring", stiffness: 300, damping: 30 } }
-        }
-        className="relative aspect-[16/9] overflow-hidden rounded-xl bg-cover bg-center shadow-sm"
-        style={{ backgroundImage: `url(${project.image})` }}
+        transition={shouldReduceMotion ? { duration: 0.15 } : { duration: 0.2 }}
+        className="relative aspect-[16/9] overflow-hidden rounded-xl shadow-sm"
       >
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${project.image})` }}
+        />
+
         <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/70 via-black/20 to-transparent p-4">
-          <motion.h3
-            layoutId={`card-title-${project.slug}`}
-            className="text-base font-semibold text-white"
-            style={{ letterSpacing: "-0.28px" }}
-          >
+          <h3 className="text-base font-semibold text-white" style={{ letterSpacing: "-0.28px" }}>
             {project.title}
-          </motion.h3>
+          </h3>
           <p className="text-sm font-normal text-white/70" style={{ letterSpacing: "-0.28px" }}>
             {project.subtitle}
           </p>

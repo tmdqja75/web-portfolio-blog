@@ -1,21 +1,5 @@
 export type ProjectLink = { label: string; href: string }
 
-export type DiagramNode = {
-  id: string
-  service: string // AWS service key — see src/components/projects/aws-icons/registry.ts (Task 10)
-  label: string
-  detail: string
-  x: number // 0-100, percentage position within the diagram canvas
-  y: number
-}
-
-export type DiagramEdge = { from: string; to: string }
-
-export type ProjectDiagram = {
-  nodes: DiagramNode[]
-  edges: DiagramEdge[]
-}
-
 export type ProjectMetric = { value: string; label: string }
 
 export type Project = {
@@ -30,7 +14,6 @@ export type Project = {
   timeframe?: string
   links?: ProjectLink[]
   metrics?: ProjectMetric[]
-  diagram?: ProjectDiagram
 }
 
 export const projects: Project[] = [
@@ -50,17 +33,6 @@ export const projects: Project[] = [
       { value: "3x", label: "faster rollback" },
       { value: "40%", label: "fewer promotion errors" },
     ],
-    diagram: {
-      nodes: [
-        { id: "api", service: "api-gateway", label: "API Gateway", detail: "Receives registry read/write requests.", x: 15, y: 50 },
-        { id: "lambda", service: "lambda", label: "Registry Service", detail: "Validates and persists model version metadata.", x: 50, y: 50 },
-        { id: "db", service: "rds", label: "PostgreSQL", detail: "Stores model version lineage and promotion status.", x: 85, y: 50 },
-      ],
-      edges: [
-        { from: "api", to: "lambda" },
-        { from: "lambda", to: "db" },
-      ],
-    },
   },
   {
     slug: "feature-store",
@@ -111,19 +83,6 @@ export const projects: Project[] = [
       { value: "150+", label: "PRs reviewed" },
       { value: "22%", label: "fewer review-cycle iterations" },
     ],
-    diagram: {
-      nodes: [
-        { id: "webhook", service: "api-gateway", label: "Webhook", detail: "Receives GitHub PR events.", x: 10, y: 50 },
-        { id: "queue", service: "sqs", label: "Queue", detail: "Buffers incoming review requests.", x: 35, y: 50 },
-        { id: "worker", service: "lambda", label: "Review Worker", detail: "Runs LLM analysis and posts comments.", x: 62, y: 50 },
-        { id: "storage", service: "s3", label: "Diff Cache", detail: "Caches PR diffs for reuse across review passes.", x: 88, y: 50 },
-      ],
-      edges: [
-        { from: "webhook", to: "queue" },
-        { from: "queue", to: "worker" },
-        { from: "worker", to: "storage" },
-      ],
-    },
   },
   {
     slug: "tool-router",

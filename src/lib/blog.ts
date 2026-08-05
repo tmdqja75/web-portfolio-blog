@@ -1,5 +1,6 @@
 import fs from "node:fs/promises"
 import path from "node:path"
+import { cache } from "react"
 
 import matter from "gray-matter"
 import { Marked } from "marked"
@@ -56,7 +57,7 @@ export async function getAllPosts(): Promise<PostMeta[]> {
     .sort((a, b) => b.date.localeCompare(a.date))
 }
 
-export async function getPost(slug: string) {
+export const getPost = cache(async (slug: string) => {
   const post = await read(slug).catch(() => null)
   if (!post || post.draft) return null
 
@@ -86,4 +87,4 @@ export async function getPost(slug: string) {
 
   const html = await marked.parse(post.content)
   return { meta: post.meta, html, headings }
-}
+})
