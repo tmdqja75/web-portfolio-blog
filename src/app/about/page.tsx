@@ -10,17 +10,22 @@ import {
 import Image from "next/image"
 import type { IconBaseProps, IconType } from "react-icons"
 import {
+  SiApacheairflow,
+  SiBentoml,
   SiClaudecode,
   SiDocker,
+  SiFastapi,
+  SiGrafana,
   SiLangchain,
   SiLanggraph,
   SiMlflow,
+  SiModelcontextprotocol,
   SiPostgresql,
+  SiPrometheus,
   SiPython,
 } from "react-icons/si"
 import { FaAws } from "react-icons/fa6"
 import TransitionLink from "@/components/ui/transition-link"
-import { cn } from "@/lib/utils"
 
 function SiHermesagent(props: IconBaseProps) {
   return (
@@ -48,16 +53,16 @@ const introText =
 
 const timeline: { period: string; org: string; detail: string }[] = [
   {
-    period: "2018 — 2022",
-    org: "연세대학교",
+    period: "2015 — 2021",
+    org: "The University of Texas at Austin",
     detail:
-      "컴퓨터공학 학사, 머신러닝과 분산 시스템을 중점적으로 공부했습니다.",
+      "기계공학 학사. 졸업 이후 머신러닝과 데이터 엔지니어링으로 방향을 옮겨, 물리 시스템을 다루던 감각을 소프트웨어로 가져왔습니다.",
   },
   {
-    period: "2022 — 현재",
-    org: "업스테이지",
+    period: "2023.06 — 현재",
+    org: "RE-ABLE",
     detail:
-      "AI 에이전트 엔지니어로 재직 중이며, 오케스트레이션 로직부터 프로덕션 배포까지 기업용 자동화를 위한 멀티 에이전트 LLM 시스템을 설계하고 있습니다.",
+      "건물 에너지 관리(BEMS) 플랫폼에서 LLM 에이전트를 설계·배포·운영합니다. LangGraph 기반 대화형 에이전트를 0에서 프로덕션까지 단독으로 올렸고, 평가 스위트와 Langfuse 관측성으로 품질을 정량 관리합니다. MLflow·BentoML·Airflow를 ECS에 올린 MLOps 파이프라인과 Prometheus/Grafana 모니터링까지 직접 운영합니다.",
   },
 ]
 
@@ -69,13 +74,25 @@ const stack: {
   badge?: boolean
 }[] = [
   { name: "Python", category: "언어", icon: SiPython, color: "#3776AB" },
-  { name: "AWS", category: "인프라", icon: FaAws, color: "#FF9900" },
+  { name: "FastAPI", category: "백엔드", icon: SiFastapi, color: "#009688" },
   { name: "LangChain", category: "오케스트레이션", icon: SiLangchain, color: "#1C3C3C" },
   { name: "LangGraph", category: "오케스트레이션", icon: SiLanggraph, color: "#1C3C3C" },
-  { name: "Docker", category: "인프라", icon: SiDocker, color: "#2496ED" },
+  {
+    name: "MCP",
+    category: "프로토콜",
+    icon: SiModelcontextprotocol,
+    color: "#FFFFFF",
+    badge: true,
+  },
   { name: "PostgreSQL", category: "데이터", icon: SiPostgresql, color: "#4169E1" },
+  { name: "AWS", category: "인프라", icon: FaAws, color: "#FF9900" },
+  { name: "Docker", category: "인프라", icon: SiDocker, color: "#2496ED" },
+  { name: "BentoML", category: "서빙", icon: SiBentoml, color: "#FF6E42" },
+  { name: "Airflow", category: "오케스트레이션", icon: SiApacheairflow, color: "#017CEE" },
   { name: "MLflow", category: "모델링", icon: SiMlflow, color: "#0194E2" },
   { name: "LangFuse", category: "관측성", icon: "/icons/langfuse.svg", color: "#0A60B5" },
+  { name: "Prometheus", category: "관측성", icon: SiPrometheus, color: "#E6522C" },
+  { name: "Grafana", category: "관측성", icon: SiGrafana, color: "#F46800" },
   { name: "Claude Code", category: "에이전트", icon: SiClaudecode, color: "#D97757" },
   {
     name: "Hermes Agent",
@@ -125,13 +142,7 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
   )
 }
 
-function TechCard({
-  tech,
-  index,
-}: {
-  tech: (typeof stack)[number]
-  index: number
-}) {
+function TechCard({ tech }: { tech: (typeof stack)[number] }) {
   const mouseX = useMotionValue(100)
   const mouseY = useMotionValue(100)
   const springX = useSpring(mouseX, { stiffness: 150, damping: 20, mass: 0.5 })
@@ -154,11 +165,7 @@ function TechCard({
       variants={rise}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className={cn(
-        "relative flex flex-col gap-1 overflow-hidden bg-black p-6",
-        index === 8 && "lg:col-start-2",
-        index === 9 && "lg:col-start-3",
-      )}
+      className="relative flex flex-col gap-1 overflow-hidden bg-black p-6"
       style={{ backgroundImage }}
     >
       {typeof tech.icon === "string" ? (
@@ -274,8 +281,8 @@ export default function About() {
       <Section>
         <Eyebrow>기술 스택</Eyebrow>
         <div className="grid grid-cols-2 gap-px overflow-hidden rounded-lg bg-black sm:grid-cols-3 lg:grid-cols-4">
-          {stack.map((tech, index) => (
-            <TechCard key={tech.name} tech={tech} index={index} />
+          {stack.map((tech) => (
+            <TechCard key={tech.name} tech={tech} />
           ))}
         </div>
       </Section>
@@ -295,32 +302,18 @@ export default function About() {
           className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-4"
         >
           <a
-            href="mailto:hasb@example.com"
+            href="mailto:tmdqja75@gmail.com"
             className="text-lg text-white/80 underline-offset-4 transition-colors hover:text-white hover:underline"
           >
-            hasb@example.com
+            tmdqja75@gmail.com
           </a>
           <a
-            href="https://github.com"
+            href="https://github.com/tmdqja75"
             target="_blank"
             rel="noreferrer"
             className="text-lg text-white/80 underline-offset-4 transition-colors hover:text-white hover:underline"
           >
             GitHub
-          </a>
-          <a
-            href="https://linkedin.com"
-            target="_blank"
-            rel="noreferrer"
-            className="text-lg text-white/80 underline-offset-4 transition-colors hover:text-white hover:underline"
-          >
-            LinkedIn
-          </a>
-          <a
-            href="/resume.pdf"
-            className="font-mono text-sm text-white/60 transition-colors hover:text-white"
-          >
-            이력서 다운로드 ↓
           </a>
         </motion.div>
       </Section>
