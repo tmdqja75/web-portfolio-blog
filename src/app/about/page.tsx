@@ -72,11 +72,29 @@ const stack: {
   icon: IconType | string
   color: string
   badge?: boolean
+  badgeBg?: string
+  badgeIconColor?: string
 }[] = [
   { name: "Python", category: "언어", icon: SiPython, color: "#3776AB" },
   { name: "FastAPI", category: "백엔드", icon: SiFastapi, color: "#009688" },
-  { name: "LangChain", category: "오케스트레이션", icon: SiLangchain, color: "#1C3C3C" },
-  { name: "LangGraph", category: "오케스트레이션", icon: SiLanggraph, color: "#1C3C3C" },
+  {
+    name: "LangChain",
+    category: "오케스트레이션",
+    icon: SiLangchain,
+    color: "#80C8FF",
+    badge: true,
+    badgeBg: "#80C8FF",
+    badgeIconColor: "#030710",
+  },
+  {
+    name: "LangGraph",
+    category: "오케스트레이션",
+    icon: SiLanggraph,
+    color: "#80C8FF",
+    badge: true,
+    badgeBg: "#80C8FF",
+    badgeIconColor: "#030710",
+  },
   {
     name: "MCP",
     category: "프로토콜",
@@ -145,9 +163,9 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
 function TechCard({ tech }: { tech: (typeof stack)[number] }) {
   const mouseX = useMotionValue(100)
   const mouseY = useMotionValue(100)
-  const springX = useSpring(mouseX, { stiffness: 150, damping: 20, mass: 0.5 })
-  const springY = useSpring(mouseY, { stiffness: 150, damping: 20, mass: 0.5 })
-  const backgroundImage = useMotionTemplate`radial-gradient(circle at ${springX}% ${springY}%, ${tech.color}40, ${tech.color}29 35%, ${tech.color}14 65%, ${tech.color}08 100%, transparent 160%)`
+  const springX = useSpring(mouseX, { stiffness: 40, damping: 10, mass: 1 })
+  const springY = useSpring(mouseY, { stiffness: 40, damping: 10, mass: 1 })
+  const backgroundImage = useMotionTemplate`radial-gradient(circle at ${springX}% ${springY}%, ${tech.color}40, ${tech.color}29 50%, ${tech.color}14 90%, ${tech.color}08 140%, transparent 220%)`
 
   function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
     const rect = e.currentTarget.getBoundingClientRect()
@@ -180,9 +198,10 @@ function TechCard({ tech }: { tech: (typeof stack)[number] }) {
       ) : tech.badge ? (
         <div
           aria-hidden
-          className="pointer-events-none absolute right-4 top-1/2 flex h-14 w-14 -translate-y-1/2 items-center justify-center rounded-lg bg-white"
+          className="pointer-events-none absolute right-4 top-1/2 flex h-14 w-14 -translate-y-1/2 items-center justify-center rounded-lg"
+          style={{ backgroundColor: tech.badgeBg ?? "#FFFFFF" }}
         >
-          <tech.icon className="h-9 w-9 text-black" />
+          <tech.icon className="h-9 w-9" style={{ color: tech.badgeIconColor ?? "#000000" }} />
         </div>
       ) : (
         <tech.icon
