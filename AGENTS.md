@@ -39,7 +39,38 @@ Single-user portfolio/blog. Two top-level pages plus a projects detail route:
 - `src/components/projects/project-card.tsx` — grid card, shares a `layoutId` (`card-image-<slug>` / `card-title-<slug>`) with the overlay for the morph transition.
 - `src/components/projects/project-detail-overlay.tsx` — modal chrome: focus trap (Tab cycles within the panel), Escape/backdrop-click to close (`router.back()`), prev/next via arrow keys and a thumbnail rail, all gated through `getCategoryProjects` so navigation stays within the active filter.
 - `src/components/projects/project-detail-content.tsx` — body shared between the full page and the overlay.
-- `src/components/projects/aws-diagram.tsx` + `aws-icons/` — interactive AWS architecture diagram (in-view gated flow animation, respects `prefers-reduced-motion` via `useReducedMotion`) used inside a project's detail content.
+
+### PAAR project sections
+
+A project can carry an optional `paar` field (`ProjectPAAR` in `data.ts`) that renders four
+content sections — Problem / Analysis / Action / Result — instead of the generic
+description-paragraph + `diagramImage` layout. Each section is `{ heading: string, bullets:
+string[] }` (`problem` also carries an optional `stats: ProjectMetric[]`, a 3-up mini stat
+row). Write a heading specific to that project's story (e.g. "도면 한 장에 30분씩"), never
+the generic template wording ("왜 필요했나" / "무엇을 검토했나" / ...).
+
+- `project-detail-content.tsx` renders the fixed English eyebrow tags (`PAAR_EYEBROW`:
+  PROBLEM/ANALYSIS/ACTION/RESULT) above each section's per-project `heading`/`bullets`, and
+  looks up an optional animated diagram per section via `PAAR_DIAGRAM` (analysis/action/result
+  keys — problem has no diagram slot, use `stats` there instead).
+- Diagrams live in `pipeline-diagram.tsx` (Action — 5-step flow), `analysis-diagram.tsx`
+  (Analysis — 3-candidate comparison with rejected/accepted paths converging to one outcome),
+  `accuracy-diagram.tsx` (Result — bar chart). All are `motion.svg`, revealed via `whileInView`
+  and gated by `useReducedMotion`, on a 1200-unit-wide viewBox.
+- **Size SVG text for the scale-down, not the raw number.** The viewBox shrinks to fit the
+  ~700px article column, so a "12" `fontSize` renders at ~7px on screen. Current diagrams use
+  17-23px for body text and 44px for the big stat number in the Result chart — tune future
+  additions to match that on-screen size, not the SVG unit count.
+- The diagram wrapper is `overflow-x-auto` with a `min-w-[640px]` inner div, not
+  `overflow-hidden` + plain `w-full` — on mobile this lets text stay legible via horizontal
+  scroll instead of shrinking to illegible size.
+- The top-of-page `metrics` array renders as a `TL;DR` bullet list (bold value + `·` + label),
+  not boxed stat cards — keep that pattern for other projects' headline numbers.
+- Bullets and headings should go through the `korean-humanizer` skill before shipping. The
+  recurring tell in this content was em dash (—) used as a "claim — detail" separator; replace
+  with a period, parentheses, or a connecting clause. The bullet-list format itself is not an
+  AI tell (it's a normal resume/portfolio convention) — don't flatten it into prose.
+- `dxf-panel-parser` in `data.ts` is the worked example for all of the above.
 
 ### Page transitions
 
