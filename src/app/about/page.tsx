@@ -102,6 +102,12 @@ const stack: {
     color: "#FFFFFF",
     badge: true,
   },
+  {
+    name: "DSPy",
+    category: "프레임워크",
+    icon: "/icons/dspy.png",
+    color: "#EF4036",
+  },
   { name: "PostgreSQL", category: "데이터", icon: SiPostgresql, color: "#4169E1" },
   { name: "AWS", category: "인프라", icon: FaAws, color: "#FF9900" },
   { name: "Docker", category: "인프라", icon: SiDocker, color: "#2496ED" },
