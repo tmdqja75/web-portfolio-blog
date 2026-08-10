@@ -95,6 +95,13 @@ const stack: {
     badgeBg: "#80C8FF",
     badgeIconColor: "#030710",
   },
+  { name: "Airflow", category: "오케스트레이션", icon: SiApacheairflow, color: "#017CEE" },
+  {
+    name: "DSPy",
+    category: "프레임워크",
+    icon: "/icons/dspy.png",
+    color: "#EF4036",
+  },
   {
     name: "MCP",
     category: "프로토콜",
@@ -102,21 +109,6 @@ const stack: {
     color: "#FFFFFF",
     badge: true,
   },
-  {
-    name: "DSPy",
-    category: "프레임워크",
-    icon: "/icons/dspy.png",
-    color: "#EF4036",
-  },
-  { name: "PostgreSQL", category: "데이터", icon: SiPostgresql, color: "#4169E1" },
-  { name: "AWS", category: "인프라", icon: FaAws, color: "#FF9900" },
-  { name: "Docker", category: "인프라", icon: SiDocker, color: "#2496ED" },
-  { name: "BentoML", category: "서빙", icon: SiBentoml, color: "#FF6E42" },
-  { name: "Airflow", category: "오케스트레이션", icon: SiApacheairflow, color: "#017CEE" },
-  { name: "MLflow", category: "모델링", icon: SiMlflow, color: "#0194E2" },
-  { name: "LangFuse", category: "관측성", icon: "/icons/langfuse.svg", color: "#0A60B5" },
-  { name: "Prometheus", category: "관측성", icon: SiPrometheus, color: "#E6522C" },
-  { name: "Grafana", category: "관측성", icon: SiGrafana, color: "#F46800" },
   { name: "Claude Code", category: "에이전트", icon: SiClaudecode, color: "#D97757" },
   {
     name: "Hermes Agent",
@@ -125,6 +117,14 @@ const stack: {
     color: "#FFFFFF",
     badge: true,
   },
+  { name: "PostgreSQL", category: "데이터", icon: SiPostgresql, color: "#4169E1" },
+  { name: "AWS", category: "인프라", icon: FaAws, color: "#FF9900" },
+  { name: "Docker", category: "인프라", icon: SiDocker, color: "#2496ED" },
+  { name: "BentoML", category: "서빙", icon: SiBentoml, color: "#FF6E42" },
+  { name: "MLflow", category: "모델링", icon: SiMlflow, color: "#0194E2" },
+  { name: "LangFuse", category: "관측성", icon: "/icons/langfuse.svg", color: "#0A60B5" },
+  { name: "Prometheus", category: "관측성", icon: SiPrometheus, color: "#E6522C" },
+  { name: "Grafana", category: "관측성", icon: SiGrafana, color: "#F46800" },
 ]
 
 const rise: Variants = {
