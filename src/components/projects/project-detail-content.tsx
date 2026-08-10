@@ -7,13 +7,29 @@ import type { Project, ProjectMetric } from "@/app/projects/data"
 import { PipelineDiagram } from "@/components/projects/pipeline-diagram"
 import { AnalysisDiagram } from "@/components/projects/analysis-diagram"
 import { AccuracyDiagram } from "@/components/projects/accuracy-diagram"
+import { ChatbotPipelineDiagram } from "@/components/projects/chatbot-pipeline-diagram"
+import { ChatbotAnalysisDiagram } from "@/components/projects/chatbot-analysis-diagram"
+import { ChatbotLatencyDiagram } from "@/components/projects/chatbot-latency-diagram"
+import { ChatbotArchitectureDiagram } from "@/components/projects/chatbot-architecture-diagram"
 
 const PAAR_EYEBROW = { problem: "PROBLEM", analysis: "ANALYSIS", action: "ACTION", result: "RESULT" } as const
 
-const PAAR_DIAGRAM: Record<string, ComponentType | undefined> = {
-  analysis: AnalysisDiagram,
-  action: PipelineDiagram,
-  result: AccuracyDiagram,
+type PAARDiagramKey = "analysis" | "action" | "result"
+
+// Each project's paar section can render its own diagram set — keyed by slug so
+// projects don't accidentally share another project's illustrations. A section can
+// point at one diagram or a list of diagrams stacked in order.
+const PAAR_DIAGRAM_BY_PROJECT: Record<string, Partial<Record<PAARDiagramKey, ComponentType | ComponentType[]>>> = {
+  "dxf-panel-parser": {
+    analysis: AnalysisDiagram,
+    action: PipelineDiagram,
+    result: AccuracyDiagram,
+  },
+  "savee-chatbot-api": {
+    analysis: ChatbotAnalysisDiagram,
+    action: [ChatbotPipelineDiagram, ChatbotArchitectureDiagram],
+    result: ChatbotLatencyDiagram,
+  },
 }
 
 function PAARSection({
@@ -26,9 +42,10 @@ function PAARSection({
   eyebrow: string
   heading: string
   bullets: string[]
-  diagram?: ComponentType
+  diagram?: ComponentType | ComponentType[]
   stats?: ProjectMetric[]
 }) {
+  const diagrams = Diagram ? (Array.isArray(Diagram) ? Diagram : [Diagram]) : []
   return (
     <div className="mt-10 border-t border-[#ebebeb] pt-8 first:mt-8 first:border-t-0 first:pt-0 dark:border-zinc-800">
       <span className="text-xs font-semibold tracking-[1.5px] text-[#888888] dark:text-zinc-500">{eyebrow}</span>
@@ -56,11 +73,15 @@ function PAARSection({
         </div>
       )}
 
-      {Diagram && (
-        <div className="mt-6 overflow-x-auto rounded-xl border border-[#ebebeb] dark:border-zinc-800">
-          <div className="min-w-[640px]">
-            <Diagram />
-          </div>
+      {diagrams.length > 0 && (
+        <div className="mt-6 space-y-4">
+          {diagrams.map((D, i) => (
+            <div key={i} className="overflow-x-auto rounded-xl border border-[#ebebeb] dark:border-zinc-800">
+              <div className="min-w-[640px]">
+                <D />
+              </div>
+            </div>
+          ))}
         </div>
       )}
     </div>
@@ -70,6 +91,7 @@ function PAARSection({
 export function ProjectDetailContent({ project }: { project: Project }) {
   const shouldReduceMotion = useReducedMotion()
   const entranceTransition = shouldReduceMotion ? { duration: 0.15 } : { duration: 0.3 }
+  const paarDiagram = PAAR_DIAGRAM_BY_PROJECT[project.slug] ?? {}
 
   return (
     <div className="mx-auto max-w-3xl">
@@ -149,19 +171,19 @@ export function ProjectDetailContent({ project }: { project: Project }) {
               eyebrow={PAAR_EYEBROW.analysis}
               heading={project.paar.analysis.heading}
               bullets={project.paar.analysis.bullets}
-              diagram={PAAR_DIAGRAM.analysis}
+              diagram={paarDiagram.analysis}
             />
             <PAARSection
               eyebrow={PAAR_EYEBROW.action}
               heading={project.paar.action.heading}
               bullets={project.paar.action.bullets}
-              diagram={PAAR_DIAGRAM.action}
+              diagram={paarDiagram.action}
             />
             <PAARSection
               eyebrow={PAAR_EYEBROW.result}
               heading={project.paar.result.heading}
               bullets={project.paar.result.bullets}
-              diagram={PAAR_DIAGRAM.result}
+              diagram={paarDiagram.result}
             />
           </div>
         ) : (

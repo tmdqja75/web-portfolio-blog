@@ -150,6 +150,70 @@ export const projects: Project[] = [
     },
   },
   {
+    slug: "savee-chatbot-api",
+    title: "세이비 챗봇 API",
+    subtitle: "BEMS 데이터를 자연어로 묻는 LangGraph 에이전트",
+    category: "AI Agent",
+    image: "/projects/savee-chatbot-api-banner.png",
+    description:
+      "BEMS 사용자가 여러 대시보드를 뒤지고 시각화 페이지에 들어갈 때마다 필터를 손으로 입력해야 하던 문제를 직접 발굴했습니다. 중앙 오케스트레이터 방식은 토큰 낭비와 디버깅 난이도가 걸렸고 n8n은 서버를 하나 더 관리해야 해서 LangGraph 노드 기반 설계를 택했습니다.",
+    techStack: [
+      "Python",
+      "LangGraph",
+      "FastAPI",
+      "WebSocket",
+      "PostgreSQL",
+      "Langfuse",
+      "Docker",
+      "AWS",
+    ],
+    role: "단독 개발 (백엔드·에이전트·인프라), 프론트엔드 1명과 API 협업",
+    timeframe: "2025.08–2025.11 (유지보수 지속)",
+    metrics: [
+      { value: "1780ms→855ms", label: "건물정보 조회 지연 (async 병렬화, 51.98%↓)" },
+      { value: "LLM 호출 4회→1회", label: "db_agent 쿼리 처리 (3-노드 재설계, MCP 서버로 분리)" },
+    ],
+    paar: {
+      problem: {
+        heading: "매번 손으로 필터를 입력해야 했다",
+        bullets: [
+          "BEMS 제품 Savee 사용자가 인사이트를 얻으려면 여러 대시보드를 수동으로 뒤져야 했음",
+          "시각화 페이지에 들어갈 때마다 위치·기간·비교 기간 필터를 매번 손으로 조합해야 했음",
+          "지시받은 업무가 아니라 사내에서 LLM/에이전트 활용을 탐색하던 시점에 직접 제안해 착수",
+        ],
+      },
+      analysis: {
+        heading: "오케스트레이터 대신 노드 기반 그래프",
+        bullets: [
+          "중앙 오케스트레이터 LLM 기각. 매 스텝이 오케스트레이터를 거쳐 토큰을 낭비하고, 실패 지점 추적이 어려움",
+          "n8n 기각. 별도 서버를 새로 운영·관리해야 하는 포인트가 늘어남",
+          "LangGraph 채택. 노드별로 필요한 프롬프트만 실행, 실패 지점을 노드 단위로 좁혀 디버깅 가능",
+          "복잡한 DB 조회는 별도 db_agent 서브그래프로 분리, 이후 MCP 서버로 독립시켜 사내 재사용 가능하게 확장",
+          "노드 단위 설계로 디버깅은 쉬워졌지만 스텝마다 LLM 호출이 늘어 지연시간이 누적되는 트레이드오프를 체감",
+          "db_agent 응답 지연 원인 진단: 쿼리 하나에 LLM 호출이 4번(작성·검증 도구 호출·재실행 호출·응답 작성) 걸렸고, 결과가 100행 넘으면 특히 느려짐",
+          "SQL 문법 검증을 LLM 대신 sqlglot(정적 파서)으로 대체. 의미 오류(테이블·컬럼 존재 여부)는 못 잡지만, 검증 한 번마다 LLM을 부르던 비용을 없앰",
+        ],
+      },
+      action: {
+        heading: "LangGraph 에이전트 + WebSocket 스트리밍 API",
+        bullets: [
+          "관련성 판단→건물정보 병렬 수집(async)→정보추출→응답생성으로 이어지는 LangGraph 에이전트 단독 설계·구현",
+          "FastAPI+WebSocket으로 첫 토큰부터 실시간 스트리밍, 개발용 Streamlit UI 구성",
+          "Docker/ECR/ECS 기반 dev/prod CI/CD 구축(GitHub Actions), 프론트엔드 1명과 API 문서로 협업",
+          "db_agent를 write_sql_query→check_sql_query(sqlglot)→execute_query 3-노드로 재설계, MCP 서버(ds-llm-building-mcp)의 get_energy_query_v2 툴로 전환",
+        ],
+      },
+      result: {
+        heading: "두 곳의 병목을 찾아 각각 줄였다",
+        bullets: [
+          "건물정보 조회 지연시간 1780.87ms→855.11ms (51.98%↓, 2.08x), 프로덕션 DB 대상 5회 반복 측정",
+          "db_agent 쿼리당 LLM 호출 4회→1회로 축소(3-노드 재설계 자체로 검증되는 구조적 수치). 응답시간(ms) 실측치는 남아있지 않아 수치화하지 않음",
+          "실사용자 풀은 아직 많지 않아 사용량·정확도는 수치화하지 않음. 현재도 개발·운영은 지속 중",
+        ],
+      },
+    },
+  },
+  {
     slug: "tool-router",
     title: "Tool Router",
     subtitle: "Dynamic tool selection layer",
