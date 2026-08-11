@@ -218,7 +218,7 @@ export const projects: Project[] = [
     title: "오토마타 뉴스레터 자동화",
     subtitle: "LangGraph 멀티에이전트 기반 AI 뉴스레터 자동 발행 시스템",
     category: "AI Agent",
-    image: "https://picsum.photos/seed/newsletter1/640/400",
+    image: "/projects/newsletter-automation-banner.png",
     description:
       "매주 수요일 발행하는 AI 뉴스레터의 리서치와 작성에 부담을 느껴 자동화를 시작했지만, 오픈엔드 에이전트에게 전부 맡기는 방식은 실제 운영에서 토픽 품질을 보장하지 못했습니다. 검색과 랭킹은 결정론적 파이프라인으로 옮기고 토픽 선정에는 Human-in-the-Loop 승인 단계를 남기는 구조로 다시 설계했습니다. 현재도 실제로 매주 발행 중이며, LangSmith로 실측한 실행당 평균 소요 시간은 27분, 비용은 1.06달러입니다.",
     techStack: [
