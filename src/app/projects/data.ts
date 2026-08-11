@@ -214,6 +214,78 @@ export const projects: Project[] = [
     },
   },
   {
+    slug: "newsletter-automation",
+    title: "오토마타 뉴스레터 자동화",
+    subtitle: "LangGraph 멀티에이전트 기반 AI 뉴스레터 자동 발행 시스템",
+    category: "AI Agent",
+    image: "https://picsum.photos/seed/newsletter1/640/400",
+    description:
+      "매주 수요일 발행하는 AI 뉴스레터의 리서치와 작성에 부담을 느껴 자동화를 시작했지만, 오픈엔드 에이전트에게 전부 맡기는 방식은 실제 운영에서 토픽 품질을 보장하지 못했습니다. 검색과 랭킹은 결정론적 파이프라인으로 옮기고 토픽 선정에는 Human-in-the-Loop 승인 단계를 남기는 구조로 다시 설계했습니다. 현재도 실제로 매주 발행 중이며, LangSmith로 실측한 실행당 평균 소요 시간은 27분, 비용은 1.06달러입니다.",
+    techStack: [
+      "Python",
+      "LangGraph",
+      "deepagents",
+      "Claude API",
+      "Tavily API",
+      "GitHub API",
+      "LangSmith",
+    ],
+    role: "단독 개발 (Claude Code 협업)",
+    timeframe: "2026.01–2026.08 (진행 중)",
+    links: [
+      { label: "Repository", href: "https://github.com/tmdqja75/newsletter-automation-gpters" },
+    ],
+    metrics: [
+      { value: "27분·$1.06", label: "실행당 평균 (LangSmith 실측 12회, 범위 7~66분·$0.71~$1.54)" },
+      { value: "오픈엔드→결정론적+HITL", label: "토픽 품질 저하를 겪은 뒤 에이전트 아키텍처 재설계" },
+      { value: "실제 발행 중", label: "매주 수요일 실사용 시스템" },
+    ],
+    paar: {
+      problem: {
+        heading: "리서치 1주, 작성 1시간, 매주 반복",
+        bullets: [
+          "매주 수요일 발행하는 AI 뉴스레터를 위해 리서치가 한 주에 걸쳐 분산되고, 작성에도 별도로 한 시간이 들어 개인 시간 부담이 컸음",
+          "ChatGPT로 초안을 쓰면 톤이 어색해 결국 손으로 다듬어야 했고, 바쁜 주에는 발행이 밀리기도 함",
+          "지시받은 업무가 아니라 뉴스레터 운영자 본인이 직접 겪은 문제라 자발적으로 착수",
+        ],
+        stats: [
+          { value: "주 1회", label: "발행 주기" },
+          { value: "1주+1h", label: "리서치+작성 소요(수동)" },
+          { value: "7개월", label: "개발 기간(파트타임)" },
+        ],
+      },
+      analysis: {
+        heading: "완전 자동화 대신 결정론적 파이프라인과 HITL",
+        bullets: [
+          "오픈엔드 LLM 리서치 루프 기각. 실행마다 결과가 달라 재현이 불가능하고 비용도 예측할 수 없었음",
+          "8카테고리·12쿼리 고정 검색 플랜에 정규화, 중복 제거, 날짜 필터, 점수 랭킹을 더한 결정론적 파이프라인 채택",
+          "완전 자동 토픽 선정은 실운영에서 품질 저하를 겪어 기각하고, LangGraph interrupt 기반 HITL 승인 단계로 전환",
+          "실운영 결과 20개 중 16개가 SEO 리스티클로 채워지는 문제를 직접 확인하고 원인 5가지를 역추적해 해결",
+          "리서치 결과가 사용자에게 닿기까지 LLM이 네 번 재전사하며 화면 번호와 실제 URL 매핑이 어긋날 수 있는 구조적 버그를 발견해 매핑 로직을 전부 Python으로 옮김",
+        ],
+      },
+      action: {
+        heading: "Orchestrator가 조율하는 멀티에이전트 파이프라인",
+        bullets: [
+          "run_weekly_research가 검색과 랭킹을 파이썬 함수로 결정론적으로 처리하고, Orchestrator는 결과 파일 경로만 전달받는 구조로 설계",
+          "HITL 모드에서는 request_topic_selection 도구 안에서 interrupt를 호출해 후보를 보여주고 Command(resume)으로 재개",
+          "선택된 토픽마다 article-writer 서브에이전트를 병렬 호출해 리서치 보강, 팩트 기반 작성, 톤 교정을 한 번에 처리",
+          "GitHub Search API와 Trending 스크래핑, PyTorch-KR 포럼(Discourse API)을 새 리서치 소스로 추가",
+          "LangSmith로 에이전트 트레이스를 모니터링하고 run_metrics.json에 실행별 토큰 사용량과 소요 시간을 기록",
+        ],
+      },
+      result: {
+        heading: "LangSmith 실측, 평균 27분·$1.06",
+        bullets: [
+          "프로덕션 실행 12회 기준 평균 27분(범위 7~66분), $1.06(범위 $0.71~$1.54)으로 실측",
+          "리서치 1주 분산과 작성 1시간 수작업을 실행당 평균 27분짜리 자동 파이프라인으로 대체",
+          "SEO 리스티클 문제의 원인 진단과 수정은 완료했으나, 개선 후 비율은 재측정이 필요한 상태로 남겨둠",
+          "현재도 실제로 매주 수요일 발행에 쓰이고 있음",
+        ],
+      },
+    },
+  },
+  {
     slug: "tool-router",
     title: "Tool Router",
     subtitle: "Dynamic tool selection layer",
