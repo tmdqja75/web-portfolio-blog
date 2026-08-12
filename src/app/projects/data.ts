@@ -37,6 +37,78 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    slug: "aws-mlops-platform",
+    title: "AWS 기반 MLOps 플랫폼",
+    subtitle: "혼자 운영하고 팀이 함께 쓰는 모델 배포 표준",
+    category: "MLOps",
+    image: "/projects/aws-mlops-platform-banner.png",
+    description:
+      "모델 실험은 각자 로컬에서 관리하고, 운영 추론 코드는 Lambda에서 직접 고치던 시기였습니다. 두 명의 팀원이 퇴사한 뒤 혼자 플랫폼을 맡게 되어 SageMaker와 단일 EC2 구성을 검토했지만, 운영 부담과 장애 전파 범위가 컸습니다. BentoML과 ECS Fargate로 모델 서비스를 분리하고 MLflow, DynamoDB, Prometheus/Grafana를 연결해 공통 배포 경로를 만들었습니다. 수동 배포는 약 30분이 걸렸고, GitHub Actions 실배포 실행 60건의 중앙값은 4.71분이었습니다.",
+    techStack: [
+      "Python",
+      "MLflow",
+      "BentoML",
+      "Docker",
+      "GitHub Actions",
+      "AWS ECS",
+      "DynamoDB",
+      "Prometheus",
+      "Grafana",
+    ],
+    role: "MLOps 플랫폼 설계·구현·운영",
+    timeframe: "2024.11 이후 (초기 구축 4~5개월)",
+    metrics: [
+      { value: "30분→4.71분", label: "배포 리드타임 (Before 회고 추정, After 실배포 중앙값 60건)" },
+      { value: "84.3% 단축", label: "GitHub Actions 기반 변경 감지·ECR·ECS CD" },
+      { value: "팀원 2명 재사용", label: "각자의 BentoML 서비스를 공통 경로로 배포" },
+    ],
+    paar: {
+      problem: {
+        heading: "배포는 수동, 장애는 웹 화면에서 먼저 발견",
+        bullets: [
+          "모델 실험과 성능 비교가 데이터 사이언티스트 각자의 로컬 환경에 흩어져 있었음",
+          "전처리·재학습 모델·비즈니스 규칙이 바뀔 때마다 Lambda 추론 코드를 직접 수정해 배포",
+          "데이터 불일치와 추론 실패를 알려주는 모니터링이 없어 잘못된 정보가 웹 UI에 반영된 뒤 디버깅을 시작",
+          "팀원 2명이 퇴사한 뒤 플랫폼 구축과 운영을 혼자 맡아, 한 사람이 감당할 수 있는 구조가 필요했음",
+        ],
+        stats: [
+          { value: "약 30분", label: "기존 수동 배포(회고 추정)" },
+          { value: "1명", label: "플랫폼 구축·운영 담당" },
+          { value: "사후 감지", label: "기존 장애 대응 방식" },
+        ],
+      },
+      analysis: {
+        heading: "관리형 통합보다 작은 표준을 선택",
+        bullets: [
+          "SageMaker를 시도했지만 인원이 줄어든 팀에서 혼자 설정하고 운영하기에는 부담이 컸음",
+          "단일 EC2에 여러 Docker 서비스를 올리는 방식도 시도했으나, 디스크나 호스트 장애가 모든 서비스를 함께 멈추게 해 기각",
+          "모델별 FastAPI와 Dockerfile도 검토했지만 전처리, 모델 로딩, 오류 응답, 패키징 규칙을 매번 다시 만들어야 했음",
+          "BentoML을 서비스 정의와 컨테이너 패키징의 공통 계약으로 쓰고, ECS Fargate로 모델별 실패 범위를 분리",
+          "MLflow는 실험·아티팩트, DynamoDB는 건물별 배포 구성에 사용. 유연한 속성이 타입 드리프트를 만든 점은 남은 과제",
+        ],
+      },
+      action: {
+        heading: "실험 기록부터 배포와 알림까지 한 경로로",
+        bullets: [
+          "MLflow를 ECS에 배포하고 RDS 백엔드와 S3 아티팩트 저장소를 연결, 학습 코드의 실험 로깅 규칙을 통합",
+          "BentoML 서비스 템플릿과 scikit-learn Pipeline 전처리, 공통 API·오류 응답, Prometheus 메트릭 규칙을 설계",
+          "변경 앱 탐지→컨테이너 빌드→ECR 푸시→ALB 라우팅 검증→ECS 갱신을 GitHub Actions로 자동화",
+          "Prometheus/Grafana를 EC2 기반 DS 서버에서 운영하고 커스텀 지표와 Slack 알림을 연결",
+          "모델 알고리즘·건물별 비즈니스 로직·DynamoDB 조회 코드는 각 담당자가 맡고, 본인은 플랫폼 계층을 소유",
+        ],
+      },
+      result: {
+        heading: "실배포 중앙값 4.71분",
+        bullets: [
+          "기존 수동 Lambda 배포 약 30분(회고 추정)에서 GitHub Actions 실배포 중앙값 4.71분으로 단축",
+          "성공한 워크플로 중 소요 시간 2분 이상을 실배포로 분류해 60건을 집계. 55건이 3~6분 안에 완료",
+          "30분과 중앙값을 비교하면 배포 리드타임이 84.3% 줄고 속도는 6.4배가 됨",
+          "다른 데이터 사이언티스트 2명이 같은 경로로 자신의 BentoML 서비스를 배포",
+        ],
+      },
+    },
+  },
+  {
     slug: "dxf-panel-parser",
     title: "DXF 분전반 도면 파서",
     subtitle: "VLM 기반 회로표 자동 추출 파이프라인",
