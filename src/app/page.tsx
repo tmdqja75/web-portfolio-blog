@@ -5,12 +5,13 @@ const navigationItems: {
   name: string
   href?: string
   externalHref?: string
+  emailHref?: string
 }[] = [
   { name: "About", href: "/about" },
   { name: "Projects", href: "/projects" },
   { name: "Blog", href: "/blog" },
   { name: "Newsletter", externalHref: "https://maily.so/automata" },
-  { name: "Contact" },
+  { name: "Contact", emailHref: "mailto:tmdqja75@gmail.com" },
 ]
 
 export default function Home() {
@@ -37,6 +38,15 @@ export default function Home() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
+                <TextRoll
+                  center
+                  className="text-4xl leading-[0.8] font-extrabold tracking-[-0.03em] uppercase transition-colors lg:text-5xl"
+                >
+                  {item.name}
+                </TextRoll>
+              </a>
+            ) : item.emailHref ? (
+              <a href={item.emailHref}>
                 <TextRoll
                   center
                   className="text-4xl leading-[0.8] font-extrabold tracking-[-0.03em] uppercase transition-colors lg:text-5xl"

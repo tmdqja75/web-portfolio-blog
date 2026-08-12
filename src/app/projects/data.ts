@@ -37,59 +37,6 @@ export type Project = {
 
 export const projects: Project[] = [
   {
-    slug: "model-registry",
-    title: "Model Registry",
-    subtitle: "Versioned model lifecycle management",
-    category: "MLOps",
-    image: "https://picsum.photos/seed/mlops1/640/400",
-    description:
-      "Placeholder description: a centralized registry for tracking model versions, lineage, and promotion status across training and serving environments.",
-    techStack: ["Python", "MLflow", "PostgreSQL", "Docker"],
-    role: "Sole engineer",
-    timeframe: "2025",
-    links: [{ label: "Repository", href: "#" }],
-    metrics: [
-      { value: "3x", label: "faster rollback" },
-      { value: "40%", label: "fewer promotion errors" },
-    ],
-  },
-  {
-    slug: "feature-store",
-    title: "Feature Store",
-    subtitle: "Low-latency feature serving",
-    category: "MLOps",
-    image: "https://picsum.photos/seed/mlops2/640/400",
-    description:
-      "Placeholder description: a low-latency online feature store backing real-time inference, with an offline store for training-time consistency.",
-    techStack: ["Python", "Redis", "DynamoDB"],
-    role: "Sole engineer",
-    timeframe: "2025",
-  },
-  {
-    slug: "training-pipeline",
-    title: "Training Pipeline",
-    subtitle: "Distributed training orchestration",
-    category: "MLOps",
-    image: "https://picsum.photos/seed/mlops3/640/400",
-    description:
-      "Placeholder description: orchestrates distributed training jobs across a GPU cluster, with automatic checkpointing and failure recovery.",
-    techStack: ["Python", "Kubernetes", "PyTorch"],
-    metrics: [{ value: "2.5x", label: "training throughput" }],
-  },
-  {
-    slug: "research-agent",
-    title: "Research Agent",
-    subtitle: "Autonomous literature review",
-    category: "AI Agent",
-    image: "https://picsum.photos/seed/agent1/640/400",
-    description:
-      "Placeholder description: an autonomous agent that searches, reads, and summarizes academic literature against a research question.",
-    techStack: ["TypeScript", "LLM tool-use", "Vector search"],
-    role: "Sole engineer",
-    timeframe: "2026",
-    links: [{ label: "Repository", href: "#" }, { label: "Demo", href: "#" }],
-  },
-  {
     slug: "dxf-panel-parser",
     title: "DXF 분전반 도면 파서",
     subtitle: "VLM 기반 회로표 자동 추출 파이프라인",
@@ -284,47 +231,6 @@ export const projects: Project[] = [
         ],
       },
     },
-  },
-  {
-    slug: "tool-router",
-    title: "Tool Router",
-    subtitle: "Dynamic tool selection layer",
-    category: "AI Agent",
-    image: "https://picsum.photos/seed/agent3/640/400",
-    description:
-      "Placeholder description: routes an agent's next action to the correct tool implementation based on intent classification.",
-    techStack: ["TypeScript", "LLM tool-use"],
-  },
-  {
-    slug: "portfolio-blog",
-    title: "Portfolio Blog",
-    subtitle: "This site, built with Next.js",
-    category: "Side Project",
-    image: "https://picsum.photos/seed/side1/640/400",
-    description:
-      "Placeholder description: this site — a single-user portfolio and blog built with Next.js App Router, Tailwind, and motion.",
-    techStack: ["Next.js", "TypeScript", "Tailwind CSS"],
-    links: [{ label: "Repository", href: "#" }],
-  },
-  {
-    slug: "habit-tracker",
-    title: "Habit Tracker",
-    subtitle: "Minimal daily streak app",
-    category: "Side Project",
-    image: "https://picsum.photos/seed/side2/640/400",
-    description:
-      "Placeholder description: a minimal daily habit tracker focused on streak visibility and zero-friction logging.",
-    techStack: ["React Native"],
-  },
-  {
-    slug: "recipe-box",
-    title: "Recipe Box",
-    subtitle: "Family recipes, searchable",
-    category: "Side Project",
-    image: "https://picsum.photos/seed/side3/640/400",
-    description:
-      "Placeholder description: a searchable archive of family recipes with unit conversion and serving-size scaling.",
-    techStack: ["Next.js", "SQLite"],
   },
 ]
 
