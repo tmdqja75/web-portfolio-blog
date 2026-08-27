@@ -8,6 +8,7 @@ import {
   type Variants,
 } from "motion/react"
 import Image from "next/image"
+import { useEffect, useRef } from "react"
 import type { IconBaseProps, IconType } from "react-icons"
 import {
   SiApacheairflow,
@@ -141,6 +142,79 @@ const stagger: Variants = {
   show: { transition: { staggerChildren: 0.08 } },
 }
 
+const SNAP_STICK_MS = 350
+const SNAP_TRANSITION_MS = 600
+
+function useSnapScroll(containerRef: React.RefObject<HTMLElement | null>) {
+  useEffect(() => {
+    const container = containerRef.current
+    if (!container) return
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
+
+    const sections = Array.from(
+      container.querySelectorAll<HTMLElement>("[data-snap]")
+    )
+    if (sections.length === 0) return
+
+    let locked = false
+
+    function activeIndex() {
+      const top = container!.scrollTop
+      for (let i = 0; i < sections.length; i++) {
+        if (top < sections[i].offsetTop + sections[i].offsetHeight - 10) return i
+      }
+      return sections.length
+    }
+
+    function scrollToIndex(index: number) {
+      const target = sections[index]
+      if (!target) return
+      locked = true
+      // Let the browser's compositor drive the scroll instead of hand-rolling
+      // it with rAF + scrollTop — a main-thread tween fights Framer Motion's
+      // concurrent reveal animations and stutters.
+      container!.scrollTo({ top: target.offsetTop, behavior: "smooth" })
+
+      let settled = false
+      function unlock() {
+        if (settled) return
+        settled = true
+        container!.removeEventListener("scrollend", unlock)
+        setTimeout(() => {
+          locked = false
+        }, SNAP_STICK_MS)
+      }
+      container!.addEventListener("scrollend", unlock, { once: true })
+      // Safety net for browsers without "scrollend" support.
+      setTimeout(unlock, SNAP_TRANSITION_MS)
+    }
+
+    function onWheel(e: WheelEvent) {
+      if (locked) {
+        e.preventDefault()
+        return
+      }
+      if (Math.abs(e.deltaY) < 10) return
+      const idx = activeIndex()
+      if (e.deltaY > 0 && idx < sections.length - 1) {
+        e.preventDefault()
+        scrollToIndex(idx + 1)
+      } else if (e.deltaY < 0) {
+        if (idx === sections.length) {
+          e.preventDefault()
+          scrollToIndex(sections.length - 1)
+        } else if (idx > 0) {
+          e.preventDefault()
+          scrollToIndex(idx - 1)
+        }
+      }
+    }
+
+    container.addEventListener("wheel", onWheel, { passive: false })
+    return () => container.removeEventListener("wheel", onWheel)
+  }, [containerRef])
+}
+
 function Section({ children }: { children: React.ReactNode }) {
   return (
     <motion.section
@@ -229,8 +303,14 @@ function TechCard({ tech }: { tech: (typeof stack)[number] }) {
 }
 
 export default function About() {
+  const mainRef = useRef<HTMLElement>(null)
+  useSnapScroll(mainRef)
+
   return (
-    <main className="font-kr h-dvh snap-y snap-mandatory overflow-y-scroll bg-black text-white/90 selection:bg-white selection:text-black">
+    <main
+      ref={mainRef}
+      className="font-kr h-dvh snap-y snap-mandatory overflow-y-scroll bg-black text-white/90 selection:bg-white selection:text-black"
+    >
       {/* Hero */}
       <section
         data-snap
