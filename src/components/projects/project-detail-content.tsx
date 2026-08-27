@@ -11,6 +11,8 @@ import { ChatbotPipelineDiagram } from "@/components/projects/chatbot-pipeline-d
 import { ChatbotAnalysisDiagram } from "@/components/projects/chatbot-analysis-diagram"
 import { ChatbotLatencyDiagram } from "@/components/projects/chatbot-latency-diagram"
 import { ChatbotArchitectureDiagram } from "@/components/projects/chatbot-architecture-diagram"
+import { MlopsArchitectureDiagram } from "@/components/projects/mlops-architecture-diagram"
+import { MlopsLeadtimeDiagram } from "@/components/projects/mlops-leadtime-diagram"
 
 const PAAR_EYEBROW = { problem: "PROBLEM", analysis: "ANALYSIS", action: "ACTION", result: "RESULT" } as const
 
@@ -20,6 +22,10 @@ type PAARDiagramKey = "analysis" | "action" | "result"
 // projects don't accidentally share another project's illustrations. A section can
 // point at one diagram or a list of diagrams stacked in order.
 const PAAR_DIAGRAM_BY_PROJECT: Record<string, Partial<Record<PAARDiagramKey, ComponentType | ComponentType[]>>> = {
+  "aws-mlops-platform": {
+    action: MlopsArchitectureDiagram,
+    result: MlopsLeadtimeDiagram,
+  },
   "dxf-panel-parser": {
     analysis: AnalysisDiagram,
     action: PipelineDiagram,

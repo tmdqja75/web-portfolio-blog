@@ -37,57 +37,76 @@ export type Project = {
 
 export const projects: Project[] = [
   {
-    slug: "model-registry",
-    title: "Model Registry",
-    subtitle: "Versioned model lifecycle management",
+    slug: "aws-mlops-platform",
+    title: "AWS 기반 MLOps 플랫폼",
+    subtitle: "혼자 운영하고 팀이 함께 쓰는 모델 배포 표준",
     category: "MLOps",
-    image: "https://picsum.photos/seed/mlops1/640/400",
+    image: "/projects/aws-mlops-platform-banner.png",
     description:
-      "Placeholder description: a centralized registry for tracking model versions, lineage, and promotion status across training and serving environments.",
-    techStack: ["Python", "MLflow", "PostgreSQL", "Docker"],
-    role: "Sole engineer",
-    timeframe: "2025",
-    links: [{ label: "Repository", href: "#" }],
-    metrics: [
-      { value: "3x", label: "faster rollback" },
-      { value: "40%", label: "fewer promotion errors" },
+      "모델 실험은 각자 로컬 환경에 흩어져 있었고 운영 추론은 Lambda 코드를 사람이 직접 고쳐 배포하던 시기였습니다. 팀원 두 명이 퇴사하면서 플랫폼 구축을 사실상 혼자 맡게 됐고, SageMaker와 단일 EC2 다중 컨테이너 구성을 검토했지만 1인 운영 부담과 장애 전파 범위가 걸림돌이었습니다. BentoML로 서비스 패키징을 표준화하고 ECS Fargate로 배포 단위를 나눈 뒤, MLflow(실험·아티팩트)와 DynamoDB(건물별 배포 구성)의 역할을 분리하고 Prometheus·Grafana로 서빙 상태를 먼저 확인하는 구조를 만들었습니다. 수동 배포에 약 30분이 걸리던 것이 GitHub Actions 실배포 60건 기준 중앙값 4.71분으로 줄었고, 지금은 다른 데이터 사이언티스트 2명도 이 경로로 자신의 모델을 배포하고 있습니다.",
+    techStack: [
+      "Python",
+      "MLflow",
+      "BentoML",
+      "Docker",
+      "GitHub Actions",
+      "AWS ECS",
+      "DynamoDB",
+      "Prometheus",
+      "Grafana",
     ],
-  },
-  {
-    slug: "feature-store",
-    title: "Feature Store",
-    subtitle: "Low-latency feature serving",
-    category: "MLOps",
-    image: "https://picsum.photos/seed/mlops2/640/400",
-    description:
-      "Placeholder description: a low-latency online feature store backing real-time inference, with an offline store for training-time consistency.",
-    techStack: ["Python", "Redis", "DynamoDB"],
-    role: "Sole engineer",
-    timeframe: "2025",
-  },
-  {
-    slug: "training-pipeline",
-    title: "Training Pipeline",
-    subtitle: "Distributed training orchestration",
-    category: "MLOps",
-    image: "https://picsum.photos/seed/mlops3/640/400",
-    description:
-      "Placeholder description: orchestrates distributed training jobs across a GPU cluster, with automatic checkpointing and failure recovery.",
-    techStack: ["Python", "Kubernetes", "PyTorch"],
-    metrics: [{ value: "2.5x", label: "training throughput" }],
-  },
-  {
-    slug: "research-agent",
-    title: "Research Agent",
-    subtitle: "Autonomous literature review",
-    category: "AI Agent",
-    image: "https://picsum.photos/seed/agent1/640/400",
-    description:
-      "Placeholder description: an autonomous agent that searches, reads, and summarizes academic literature against a research question.",
-    techStack: ["TypeScript", "LLM tool-use", "Vector search"],
-    role: "Sole engineer",
-    timeframe: "2026",
-    links: [{ label: "Repository", href: "#" }, { label: "Demo", href: "#" }],
+    role: "MLOps 플랫폼 설계·구현·운영",
+    timeframe: "2024.11 이후 (초기 구축 4~5개월)",
+    metrics: [
+      { value: "30분→4.71분", label: "배포 리드타임 (Before 회고 추정, After 실배포 중앙값 60건)" },
+      { value: "84.3% 단축", label: "GitHub Actions 기반 변경 감지·ECR·ECS CD" },
+      { value: "팀원 2명 재사용", label: "각자의 BentoML 서비스를 공통 경로로 배포" },
+    ],
+    paar: {
+      problem: {
+        heading: "직접 고친 배포, 뒤늦게 드러난 장애",
+        bullets: [
+          "데이터 사이언티스트마다 로컬에서 따로 실험해 파라미터와 성능 지표를 한곳에서 비교하기 어려웠음",
+          "전처리·재학습 모델·비즈니스 규칙이 바뀔 때마다 Lambda 추론 코드를 사람이 직접 고쳐 다시 배포해야 했음",
+          "입력 데이터 불일치나 모델 추론 실패를 알려주는 중앙 모니터링이 없어 오류가 웹 UI 정확도에 영향을 준 뒤에야 디버깅을 시작했음",
+          "팀원 두 명이 퇴사해 플랫폼 구축을 사실상 혼자 맡으면서, 한 사람이 감당할 수 있는 표준 경로가 필요해졌음",
+        ],
+        stats: [
+          { value: "약 30분", label: "기존 수동 배포(회고 추정)" },
+          { value: "1명", label: "플랫폼 구축·운영 담당" },
+          { value: "사후 감지", label: "기존 장애 대응 방식" },
+        ],
+      },
+      analysis: {
+        heading: "완전관리형 대신 내가 감당할 표준",
+        bullets: [
+          "SageMaker를 실제로 도입해봤지만 팀원 2명이 퇴사한 뒤 혼자 설정·운영하기엔 복잡성과 부담이 과했음",
+          "단일 EC2에 여러 Docker 서비스를 올리는 방식도 시도했으나 디스크 포화나 원인 불명의 호스트 장애가 모든 모델 서비스를 함께 멈추게 하는 공통 실패 지점이 됐음",
+          "모델별 FastAPI와 커스텀 Dockerfile도 검토했지만 의존성 패키징·모델 로딩·오류 응답·빌드 규칙을 매번 새로 구현해야 해 1인 운영에 불리했음",
+          "BentoML을 서비스 정의와 컨테이너 패키징의 표준 계약으로 삼고 ECS Fargate로 모델 서비스를 독립 배포 단위로 격리해 장애 전파 범위를 줄였음",
+          "MLflow(실험·아티팩트)와 DynamoDB(건물별 배포 구성), Prometheus·Grafana(EC2 자체 호스팅)로 계층을 나눴음. 유연한 스키마는 시간이 지나며 타입 드리프트를 허용했고, 자체 호스팅 모니터링은 단일 호스트 운영 책임을 그대로 남겼음",
+        ],
+      },
+      action: {
+        heading: "기록·패키징·배포·관측을 한 경로로",
+        bullets: [
+          "MLflow를 ECS에 배포하고 RDS 백엔드와 S3 아티팩트 저장소를 연결해 학습 코드의 실험 로깅 규칙을 공통화했음",
+          "BentoML 서비스 템플릿과 scikit-learn Pipeline 전처리, 공통 API·오류 응답, Prometheus 메트릭 규칙을 설계했음",
+          "변경된 앱 탐지, 컨테이너 빌드, ECR 푸시, ALB 라우팅 검증, ECS 서비스 갱신까지 GitHub Actions로 자동화했음",
+          "Prometheus·Grafana를 EC2 DS 서버에서 운영하며 건물 식별 라벨과 커스텀 지표를 추가하고 Slack 알림으로 연결했음",
+          "모델 알고리즘·건물별 비즈니스 로직·DynamoDB 조회 코드는 각 담당자가 맡고, 본인은 플랫폼 계층 전체를 설계·구현·운영했음",
+        ],
+      },
+      result: {
+        heading: "회고 추정 30분에서 실측 4.71분으로",
+        bullets: [
+          "수동 Lambda 배포 약 30분(회고 추정)에서 GitHub Actions 실배포 중앙값 4.71분으로 줄었음",
+          "성공한 워크플로 중 소요 2분 이상을 실배포로 분류해 60건을 집계했고, 그중 55건이 3~6분 안에 끝났음",
+          "30분과 중앙값을 비교하면 배포 리드타임은 84.3% 줄고 속도는 6.4배가 됐음",
+          "다른 데이터 사이언티스트 2명이 같은 경로로 자신의 BentoML 서비스를 배포하고 있음",
+        ],
+      },
+    },
   },
   {
     slug: "dxf-panel-parser",
@@ -284,47 +303,6 @@ export const projects: Project[] = [
         ],
       },
     },
-  },
-  {
-    slug: "tool-router",
-    title: "Tool Router",
-    subtitle: "Dynamic tool selection layer",
-    category: "AI Agent",
-    image: "https://picsum.photos/seed/agent3/640/400",
-    description:
-      "Placeholder description: routes an agent's next action to the correct tool implementation based on intent classification.",
-    techStack: ["TypeScript", "LLM tool-use"],
-  },
-  {
-    slug: "portfolio-blog",
-    title: "Portfolio Blog",
-    subtitle: "This site, built with Next.js",
-    category: "Side Project",
-    image: "https://picsum.photos/seed/side1/640/400",
-    description:
-      "Placeholder description: this site — a single-user portfolio and blog built with Next.js App Router, Tailwind, and motion.",
-    techStack: ["Next.js", "TypeScript", "Tailwind CSS"],
-    links: [{ label: "Repository", href: "#" }],
-  },
-  {
-    slug: "habit-tracker",
-    title: "Habit Tracker",
-    subtitle: "Minimal daily streak app",
-    category: "Side Project",
-    image: "https://picsum.photos/seed/side2/640/400",
-    description:
-      "Placeholder description: a minimal daily habit tracker focused on streak visibility and zero-friction logging.",
-    techStack: ["React Native"],
-  },
-  {
-    slug: "recipe-box",
-    title: "Recipe Box",
-    subtitle: "Family recipes, searchable",
-    category: "Side Project",
-    image: "https://picsum.photos/seed/side3/640/400",
-    description:
-      "Placeholder description: a searchable archive of family recipes with unit conversion and serving-size scaling.",
-    techStack: ["Next.js", "SQLite"],
   },
 ]
 

@@ -8,6 +8,7 @@ import {
   type Variants,
 } from "motion/react"
 import Image from "next/image"
+import { useEffect, useRef } from "react"
 import type { IconBaseProps, IconType } from "react-icons"
 import {
   SiApacheairflow,
@@ -16,8 +17,6 @@ import {
   SiDocker,
   SiFastapi,
   SiGrafana,
-  SiLangchain,
-  SiLanggraph,
   SiMlflow,
   SiModelcontextprotocol,
   SiPostgresql,
@@ -25,6 +24,7 @@ import {
   SiPython,
 } from "react-icons/si"
 import { FaAws } from "react-icons/fa6"
+import { RiNewspaperFill, RiRobot2Fill } from "react-icons/ri"
 import TransitionLink from "@/components/ui/transition-link"
 
 function SiHermesagent(props: IconBaseProps) {
@@ -74,26 +74,27 @@ const stack: {
   badge?: boolean
   badgeBg?: string
   badgeIconColor?: string
+  badgeIconSize?: string
 }[] = [
   { name: "Python", category: "언어", icon: SiPython, color: "#3776AB" },
   { name: "FastAPI", category: "백엔드", icon: SiFastapi, color: "#009688" },
   {
     name: "LangChain",
     category: "오케스트레이션",
-    icon: SiLangchain,
-    color: "#80C8FF",
-    badge: true,
-    badgeBg: "#80C8FF",
-    badgeIconColor: "#030710",
+    icon: "/icons/langchain.svg",
+    color: "#7FC8FF",
   },
   {
     name: "LangGraph",
     category: "오케스트레이션",
-    icon: SiLanggraph,
-    color: "#80C8FF",
-    badge: true,
-    badgeBg: "#80C8FF",
-    badgeIconColor: "#030710",
+    icon: "/icons/langgraph.svg",
+    color: "#7FC8FF",
+  },
+  {
+    name: "DeepAgents",
+    category: "오케스트레이션",
+    icon: "/icons/deepagents.svg",
+    color: "#7FC8FF",
   },
   { name: "Airflow", category: "오케스트레이션", icon: SiApacheairflow, color: "#017CEE" },
   {
@@ -116,6 +117,7 @@ const stack: {
     icon: SiHermesagent,
     color: "#FFFFFF",
     badge: true,
+    badgeIconSize: "h-9 w-9",
   },
   { name: "PostgreSQL", category: "데이터", icon: SiPostgresql, color: "#4169E1" },
   { name: "AWS", category: "인프라", icon: FaAws, color: "#FF9900" },
@@ -141,14 +143,88 @@ const stagger: Variants = {
   show: { transition: { staggerChildren: 0.08 } },
 }
 
+const SNAP_STICK_MS = 350
+const SNAP_TRANSITION_MS = 600
+
+function useSnapScroll(containerRef: React.RefObject<HTMLElement | null>) {
+  useEffect(() => {
+    const container = containerRef.current
+    if (!container) return
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
+
+    const sections = Array.from(
+      container.querySelectorAll<HTMLElement>("[data-snap]")
+    )
+    if (sections.length === 0) return
+
+    let locked = false
+
+    function activeIndex() {
+      const top = container!.scrollTop
+      for (let i = 0; i < sections.length; i++) {
+        if (top < sections[i].offsetTop + sections[i].offsetHeight - 10) return i
+      }
+      return sections.length
+    }
+
+    function scrollToIndex(index: number) {
+      const target = sections[index]
+      if (!target) return
+      locked = true
+      // Let the browser's compositor drive the scroll instead of hand-rolling
+      // it with rAF + scrollTop — a main-thread tween fights Framer Motion's
+      // concurrent reveal animations and stutters.
+      container!.scrollTo({ top: target.offsetTop, behavior: "smooth" })
+
+      let settled = false
+      function unlock() {
+        if (settled) return
+        settled = true
+        container!.removeEventListener("scrollend", unlock)
+        setTimeout(() => {
+          locked = false
+        }, SNAP_STICK_MS)
+      }
+      container!.addEventListener("scrollend", unlock, { once: true })
+      // Safety net for browsers without "scrollend" support.
+      setTimeout(unlock, SNAP_TRANSITION_MS)
+    }
+
+    function onWheel(e: WheelEvent) {
+      if (locked) {
+        e.preventDefault()
+        return
+      }
+      if (Math.abs(e.deltaY) < 10) return
+      const idx = activeIndex()
+      if (e.deltaY > 0 && idx < sections.length - 1) {
+        e.preventDefault()
+        scrollToIndex(idx + 1)
+      } else if (e.deltaY < 0) {
+        if (idx === sections.length) {
+          e.preventDefault()
+          scrollToIndex(sections.length - 1)
+        } else if (idx > 0) {
+          e.preventDefault()
+          scrollToIndex(idx - 1)
+        }
+      }
+    }
+
+    container.addEventListener("wheel", onWheel, { passive: false })
+    return () => container.removeEventListener("wheel", onWheel)
+  }, [containerRef])
+}
+
 function Section({ children }: { children: React.ReactNode }) {
   return (
     <motion.section
+      data-snap
       variants={stagger}
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, amount: 0.2 }}
-      className="border-t border-white/10 px-6 py-20 md:px-12 md:py-24 lg:py-32"
+      className="flex min-h-dvh snap-start flex-col justify-center border-t border-white/10 px-6 py-20 [scroll-snap-stop:always] md:px-12 md:py-24 lg:py-32"
     >
       <div className="mx-auto w-full max-w-5xl">{children}</div>
     </motion.section>
@@ -204,10 +280,13 @@ function TechCard({ tech }: { tech: (typeof stack)[number] }) {
       ) : tech.badge ? (
         <div
           aria-hidden
-          className="pointer-events-none absolute right-4 top-1/2 flex h-14 w-14 -translate-y-1/2 items-center justify-center rounded-lg"
+          className="pointer-events-none absolute right-4 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-[9.6px]"
           style={{ backgroundColor: tech.badgeBg ?? "#FFFFFF" }}
         >
-          <tech.icon className="h-9 w-9" style={{ color: tech.badgeIconColor ?? "#000000" }} />
+          <tech.icon
+            className={tech.badgeIconSize ?? "h-7 w-7"}
+            style={{ color: tech.badgeIconColor ?? "#000000" }}
+          />
         </div>
       ) : (
         <tech.icon
@@ -225,10 +304,19 @@ function TechCard({ tech }: { tech: (typeof stack)[number] }) {
 }
 
 export default function About() {
+  const mainRef = useRef<HTMLElement>(null)
+  useSnapScroll(mainRef)
+
   return (
-    <main className="font-kr min-h-screen bg-black text-white/90 selection:bg-white selection:text-black">
+    <main
+      ref={mainRef}
+      className="font-kr h-dvh snap-y snap-mandatory overflow-y-scroll bg-black text-white/90 selection:bg-white selection:text-black"
+    >
       {/* Hero */}
-      <section className="relative flex min-h-screen flex-col justify-center px-6 md:px-12">
+      <section
+        data-snap
+        className="relative flex min-h-dvh snap-start flex-col justify-center px-6 [scroll-snap-stop:always] md:px-12"
+      >
         <motion.div
           initial="hidden"
           animate="show"
@@ -265,7 +353,7 @@ export default function About() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.2, duration: 0.8 }}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2"
+          className="absolute bottom-28 left-1/2 -translate-x-1/2"
         >
           <motion.span
             aria-hidden
@@ -343,14 +431,28 @@ export default function About() {
         </motion.div>
       </Section>
 
-      {/* Bottom CTA */}
-      <div className="flex justify-center border-t border-white/10 px-6 py-20 md:py-24">
+      {/* Floating CTA cluster → projects / blog, stays fixed while the page scroll-snaps.
+          Blog stays first in the DOM (so its hover reaches the projects pill via
+          peer-hover, which only cascades to later siblings) but is reordered to
+          sit visually on the right via flex `order`. */}
+      <div className="fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-3">
+        <TransitionLink
+          href="/blog"
+          aria-label="블로그 보기"
+          className="peer group order-2 flex h-14 w-14 shrink-0 items-center justify-center gap-3 overflow-hidden rounded-full border border-white/20 bg-black/60 px-0 text-lg text-white backdrop-blur-sm transition-all duration-300 ease-out hover:w-44 hover:px-6"
+        >
+          <RiNewspaperFill aria-hidden className="h-5 w-5 shrink-0" />
+          <span className="hidden whitespace-nowrap group-hover:inline">
+            블로그 보기
+          </span>
+        </TransitionLink>
+
         <TransitionLink
           href="/projects"
-          className="group inline-flex items-center gap-3 rounded-full border border-white/20 px-8 py-4 text-lg text-white transition-colors hover:bg-white hover:text-black"
+          className="order-1 flex h-14 w-44 shrink-0 items-center justify-center gap-3 overflow-hidden rounded-full border border-white/20 bg-black/60 px-8 text-lg text-white backdrop-blur-sm transition-all duration-300 ease-out hover:bg-white hover:text-black peer-hover:w-14 peer-hover:bg-black/60 peer-hover:px-0 peer-hover:text-white peer-hover:[&>span]:hidden"
         >
-          프로젝트 보기
-          <span className="transition-transform group-hover:translate-x-1">→</span>
+          <RiRobot2Fill aria-hidden className="h-5 w-5 shrink-0" />
+          <span className="whitespace-nowrap">프로젝트 보기</span>
         </TransitionLink>
       </div>
 
