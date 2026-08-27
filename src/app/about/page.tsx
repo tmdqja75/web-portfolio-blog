@@ -24,6 +24,7 @@ import {
   SiPython,
 } from "react-icons/si"
 import { FaAws } from "react-icons/fa6"
+import { RiNewspaperFill, RiRobot2Fill } from "react-icons/ri"
 import TransitionLink from "@/components/ui/transition-link"
 
 function SiHermesagent(props: IconBaseProps) {
@@ -430,14 +431,28 @@ export default function About() {
         </motion.div>
       </Section>
 
-      {/* Bottom CTA */}
-      <div className="flex justify-center border-t border-white/10 px-6 py-20 md:py-24">
+      {/* Floating CTA cluster → projects / blog, stays fixed while the page scroll-snaps.
+          Blog stays first in the DOM (so its hover reaches the projects pill via
+          peer-hover, which only cascades to later siblings) but is reordered to
+          sit visually on the right via flex `order`. */}
+      <div className="fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-3">
+        <TransitionLink
+          href="/blog"
+          aria-label="블로그 보기"
+          className="peer group order-2 flex h-14 w-14 shrink-0 items-center justify-center gap-3 overflow-hidden rounded-full border border-white/20 bg-black/60 px-0 text-lg text-white backdrop-blur-sm transition-all duration-300 ease-out hover:w-44 hover:px-6"
+        >
+          <RiNewspaperFill aria-hidden className="h-5 w-5 shrink-0" />
+          <span className="hidden whitespace-nowrap group-hover:inline">
+            블로그 보기
+          </span>
+        </TransitionLink>
+
         <TransitionLink
           href="/projects"
-          className="group inline-flex items-center gap-3 rounded-full border border-white/20 px-8 py-4 text-lg text-white transition-colors hover:bg-white hover:text-black"
+          className="order-1 flex h-14 w-44 shrink-0 items-center justify-center gap-3 overflow-hidden rounded-full border border-white/20 bg-black/60 px-8 text-lg text-white backdrop-blur-sm transition-all duration-300 ease-out hover:bg-white hover:text-black peer-hover:w-14 peer-hover:bg-black/60 peer-hover:px-0 peer-hover:text-white peer-hover:[&>span]:hidden"
         >
-          프로젝트 보기
-          <span className="transition-transform group-hover:translate-x-1">→</span>
+          <RiRobot2Fill aria-hidden className="h-5 w-5 shrink-0" />
+          <span className="whitespace-nowrap">프로젝트 보기</span>
         </TransitionLink>
       </div>
 
