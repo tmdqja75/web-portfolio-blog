@@ -144,11 +144,12 @@ const stagger: Variants = {
 function Section({ children }: { children: React.ReactNode }) {
   return (
     <motion.section
+      data-snap
       variants={stagger}
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, amount: 0.2 }}
-      className="border-t border-white/10 px-6 py-20 md:px-12 md:py-24 lg:py-32"
+      className="flex min-h-dvh snap-start flex-col justify-center border-t border-white/10 px-6 py-20 [scroll-snap-stop:always] md:px-12 md:py-24 lg:py-32"
     >
       <div className="mx-auto w-full max-w-5xl">{children}</div>
     </motion.section>
@@ -229,9 +230,12 @@ function TechCard({ tech }: { tech: (typeof stack)[number] }) {
 
 export default function About() {
   return (
-    <main className="font-kr min-h-screen bg-black text-white/90 selection:bg-white selection:text-black">
+    <main className="font-kr h-dvh snap-y snap-mandatory overflow-y-scroll bg-black text-white/90 selection:bg-white selection:text-black">
       {/* Hero */}
-      <section className="relative flex min-h-screen flex-col justify-center px-6 md:px-12">
+      <section
+        data-snap
+        className="relative flex min-h-dvh snap-start flex-col justify-center px-6 [scroll-snap-stop:always] md:px-12"
+      >
         <motion.div
           initial="hidden"
           animate="show"
@@ -268,7 +272,7 @@ export default function About() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.2, duration: 0.8 }}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2"
+          className="absolute bottom-28 left-1/2 -translate-x-1/2"
         >
           <motion.span
             aria-hidden
