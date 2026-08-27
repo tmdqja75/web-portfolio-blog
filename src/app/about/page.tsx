@@ -16,8 +16,6 @@ import {
   SiDocker,
   SiFastapi,
   SiGrafana,
-  SiLangchain,
-  SiLanggraph,
   SiMlflow,
   SiModelcontextprotocol,
   SiPostgresql,
@@ -74,26 +72,27 @@ const stack: {
   badge?: boolean
   badgeBg?: string
   badgeIconColor?: string
+  badgeIconSize?: string
 }[] = [
   { name: "Python", category: "언어", icon: SiPython, color: "#3776AB" },
   { name: "FastAPI", category: "백엔드", icon: SiFastapi, color: "#009688" },
   {
     name: "LangChain",
     category: "오케스트레이션",
-    icon: SiLangchain,
-    color: "#80C8FF",
-    badge: true,
-    badgeBg: "#80C8FF",
-    badgeIconColor: "#030710",
+    icon: "/icons/langchain.svg",
+    color: "#7FC8FF",
   },
   {
     name: "LangGraph",
     category: "오케스트레이션",
-    icon: SiLanggraph,
-    color: "#80C8FF",
-    badge: true,
-    badgeBg: "#80C8FF",
-    badgeIconColor: "#030710",
+    icon: "/icons/langgraph.svg",
+    color: "#7FC8FF",
+  },
+  {
+    name: "DeepAgents",
+    category: "오케스트레이션",
+    icon: "/icons/deepagents.svg",
+    color: "#7FC8FF",
   },
   { name: "Airflow", category: "오케스트레이션", icon: SiApacheairflow, color: "#017CEE" },
   {
@@ -116,6 +115,7 @@ const stack: {
     icon: SiHermesagent,
     color: "#FFFFFF",
     badge: true,
+    badgeIconSize: "h-9 w-9",
   },
   { name: "PostgreSQL", category: "데이터", icon: SiPostgresql, color: "#4169E1" },
   { name: "AWS", category: "인프라", icon: FaAws, color: "#FF9900" },
@@ -204,10 +204,13 @@ function TechCard({ tech }: { tech: (typeof stack)[number] }) {
       ) : tech.badge ? (
         <div
           aria-hidden
-          className="pointer-events-none absolute right-4 top-1/2 flex h-14 w-14 -translate-y-1/2 items-center justify-center rounded-lg"
+          className="pointer-events-none absolute right-4 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-[9.6px]"
           style={{ backgroundColor: tech.badgeBg ?? "#FFFFFF" }}
         >
-          <tech.icon className="h-9 w-9" style={{ color: tech.badgeIconColor ?? "#000000" }} />
+          <tech.icon
+            className={tech.badgeIconSize ?? "h-7 w-7"}
+            style={{ color: tech.badgeIconColor ?? "#000000" }}
+          />
         </div>
       ) : (
         <tech.icon
