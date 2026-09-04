@@ -165,6 +165,44 @@ export function ProjectDetailContent({ project }: { project: Project }) {
           </div>
         )}
 
+        {project.presentation && (
+          <section
+            className="mt-10 border-t border-[#ebebeb] pt-8 dark:border-zinc-800"
+            aria-labelledby="presentation-heading"
+          >
+            <span className="text-xs font-semibold tracking-[1.5px] text-[#888888] dark:text-zinc-500">PRESENTATION</span>
+            <h2
+              id="presentation-heading"
+              className="mt-1 text-lg font-semibold text-[#171717] dark:text-white"
+              style={{ letterSpacing: "-0.6px" }}
+            >
+              {project.presentation.title}
+            </h2>
+            <p className="mt-1 text-sm text-[#888888] dark:text-zinc-500">
+              직접 제작한 {project.presentation.pageCount}페이지 워크숍 자료
+            </p>
+            <div className="mt-5 overflow-hidden rounded-xl border border-[#ebebeb] dark:border-zinc-800">
+              <iframe
+                src={project.presentation.src}
+                title={project.presentation.title}
+                loading="lazy"
+                className="h-[70vh] min-h-[28rem] w-full sm:h-[48rem]"
+              />
+            </div>
+            <p className="mt-3 text-sm text-[#888888] dark:text-zinc-500">
+              PDF가 표시되지 않나요?{" "}
+              <a
+                href={project.presentation.src}
+                target="_blank"
+                rel="noreferrer"
+                className="underline underline-offset-4"
+              >
+                새 탭에서 자료 보기
+              </a>
+            </p>
+          </section>
+        )}
+
         {project.paar ? (
           <div>
             <PAARSection
