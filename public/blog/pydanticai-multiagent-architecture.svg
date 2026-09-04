@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" font-family="Helvetica, Arial, sans-serif">
+  <style>
+    .flow { stroke-dasharray: 6 5; }
+    @media (prefers-reduced-motion: no-preference) {
+      .flow { animation: flow-dash 1s linear infinite; }
+      @keyframes flow-dash { to { stroke-dashoffset: -22; } }
+    }
+  </style>
+
+  <rect width="1200" height="700" fill="#ffffff"/>
+
+  <!-- column headers -->
+  <text x="650" y="40" text-anchor="middle" font-size="16" font-weight="bold" fill="#1e5b2c">Tool Agent</text>
+  <text x="1030" y="40" text-anchor="middle" font-size="16" font-weight="bold" fill="#b3830a">Source (Context)</text>
+
+  <!-- Main agent, vertically centered on the row block -->
+  <rect x="50" y="245" width="250" height="130" rx="10" fill="#dbe9fb" stroke="#2b5fa8" stroke-width="2.5"/>
+  <text x="175" y="282" text-anchor="middle" font-size="18" font-weight="bold" fill="#12335c">Main Agent</text>
+  <text x="175" y="308" text-anchor="middle" font-size="13" fill="#2b5fa8">알람 수신 → 온콜 판단</text>
+  <text x="175" y="334" text-anchor="middle" font-size="13" fill="#2b5fa8">도구: ask(target_agent, query)</text>
+  <text x="175" y="360" text-anchor="middle" font-size="13" fill="#2b5fa8">쿼리 문법 모름, 역할 한 줄씩만 앎</text>
+
+  <!-- Main Agent -> Tool Agent: evenly spaced stems, rounded 90-degree elbows -->
+  <g fill="none" stroke="#2b5fa8" stroke-width="2" stroke-linecap="round">
+    <path class="flow" d="M300,267 L326,267 Q340,267 340,253 L340,104 Q340,90 354,90 L560,90" marker-end="url(#a3)"/>
+    <path class="flow" d="M300,288 L366,288 Q380,288 380,274 L380,214 Q380,200 394,200 L560,200" marker-end="url(#a3)"/>
+    <path class="flow" d="M300,310 L560,310" marker-end="url(#a3)"/>
+    <path class="flow" d="M300,332 L366,332 Q380,332 380,346 L380,406 Q380,420 394,420 L560,420" marker-end="url(#a3)"/>
+    <path class="flow" d="M300,353 L326,353 Q340,353 340,367 L340,516 Q340,530 354,530 L560,530" marker-end="url(#a3)"/>
+  </g>
+
+  <!-- Tool Agent boxes + Tool Agent -> Source arrows -->
+  <g>
+    <!-- monitoring -->
+    <rect x="560" y="68" width="180" height="44" rx="8" fill="#e6f4ea" stroke="#2e8b45"/>
+    <text x="650" y="95" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e5b2c">모니터링 Agent</text>
+    <path class="flow" d="M740,90 L900,90" stroke="#b3830a" stroke-width="1.8" fill="none" stroke-linecap="round" marker-end="url(#a3o)"/>
+    <rect x="900" y="68" width="260" height="44" rx="8" fill="#fdf1d3" stroke="#b3830a"/>
+    <text x="1030" y="87" text-anchor="middle" font-size="13" fill="#6b4c05">GET /metrics?range=1h</text>
+    <text x="1030" y="105" text-anchor="middle" font-size="11" fill="#6b4c05">메트릭·로그</text>
+
+    <!-- deploy -->
+    <rect x="560" y="178" width="180" height="44" rx="8" fill="#e6f4ea" stroke="#2e8b45"/>
+    <text x="650" y="205" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e5b2c">배포툴 Agent</text>
+    <path class="flow" d="M740,200 L900,200" stroke="#b3830a" stroke-width="1.8" fill="none" stroke-linecap="round" marker-end="url(#a3o)"/>
+    <rect x="900" y="178" width="260" height="44" rx="8" fill="#fdf1d3" stroke="#b3830a"/>
+    <text x="1030" y="197" text-anchor="middle" font-size="13" fill="#6b4c05">GET /deployments?from=…&amp;to=…</text>
+    <text x="1030" y="215" text-anchor="middle" font-size="11" fill="#6b4c05">배포 이력</text>
+
+    <!-- slack -->
+    <rect x="560" y="288" width="180" height="44" rx="8" fill="#e6f4ea" stroke="#2e8b45"/>
+    <text x="650" y="315" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e5b2c">슬랙 Agent</text>
+    <path class="flow" d="M740,310 L900,310" stroke="#b3830a" stroke-width="1.8" fill="none" stroke-linecap="round" marker-end="url(#a3o)"/>
+    <rect x="900" y="288" width="260" height="44" rx="8" fill="#fdf1d3" stroke="#b3830a"/>
+    <text x="1030" y="307" text-anchor="middle" font-size="13" fill="#6b4c05">search.messages q="장애" OR 공지</text>
+    <text x="1030" y="325" text-anchor="middle" font-size="11" fill="#6b4c05">Slack 검색</text>
+
+    <!-- ticket -->
+    <rect x="560" y="398" width="180" height="44" rx="8" fill="#e6f4ea" stroke="#2e8b45"/>
+    <text x="650" y="425" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e5b2c">티켓 Agent</text>
+    <path class="flow" d="M740,420 L900,420" stroke="#b3830a" stroke-width="1.8" fill="none" stroke-linecap="round" marker-end="url(#a3o)"/>
+    <rect x="900" y="398" width="260" height="44" rx="8" fill="#fdf1d3" stroke="#b3830a"/>
+    <text x="1030" y="417" text-anchor="middle" font-size="13" fill="#6b4c05">GET /tickets/search?q=&lt;host&gt;</text>
+    <text x="1030" y="435" text-anchor="middle" font-size="11" fill="#6b4c05">티켓 검색</text>
+
+    <!-- news -->
+    <rect x="560" y="508" width="180" height="44" rx="8" fill="#e6f4ea" stroke="#2e8b45"/>
+    <text x="650" y="535" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e5b2c">뉴스 Agent</text>
+    <path class="flow" d="M740,530 L900,530" stroke="#b3830a" stroke-width="1.8" fill="none" stroke-linecap="round" marker-end="url(#a3o)"/>
+    <rect x="900" y="508" width="260" height="44" rx="8" fill="#fdf1d3" stroke="#b3830a"/>
+    <text x="1030" y="527" text-anchor="middle" font-size="13" fill="#6b4c05">GET /news/search?q="지진"</text>
+    <text x="1030" y="545" text-anchor="middle" font-size="11" fill="#6b4c05">뉴스 검색</text>
+  </g>
+
+  <rect x="50" y="580" width="1110" height="90" rx="8" fill="#f6f6f6" stroke="#999" stroke-dasharray="4,3"/>
+  <text x="605" y="606" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">역할 분리</text>
+  <text x="605" y="632" text-anchor="middle" font-size="14" fill="#333">Main Agent는 "판단 기준"과 "각 툴이 무엇을 가져올 수 있는지"만 안다. 쿼리 문법은 전혀 모른다.</text>
+  <text x="605" y="656" text-anchor="middle" font-size="14" fill="#333">Tool Agent는 자연어를 자기 쿼리로 바꾸는 방법만 안다. 서로의 세계를 몰라도 되는 구조다.</text>
+
+  <defs>
+    <marker id="a3" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#2b5fa8"/></marker>
+    <marker id="a3o" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#b3830a"/></marker>
+  </defs>
+</svg>

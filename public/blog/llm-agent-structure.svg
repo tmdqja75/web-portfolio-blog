@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 640" font-family="Helvetica, Arial, sans-serif">
+  <style>
+    .flow { stroke-dasharray: 6 5; }
+    @media (prefers-reduced-motion: no-preference) {
+      .flow { animation: flow-dash 1s linear infinite; }
+      @keyframes flow-dash { to { stroke-dashoffset: -22; } }
+    }
+  </style>
+
+  <rect width="1200" height="640" fill="#ffffff"/>
+
+  <!-- connecting arrows -->
+  <g class="flow" fill="none" stroke="#9ca3af" stroke-width="2.5" stroke-linecap="round">
+    <!-- User request <-> Agent -->
+    <path d="M360,315 L490,315" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+    <!-- Agent -> Planning -->
+    <path d="M600,260 L600,131 Q600,115 616,115 L820,115" marker-end="url(#arrow)"/>
+    <!-- Agent <-> Memory -->
+    <path d="M710,315 L820,315" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+    <!-- Tools -> Agent -->
+    <path d="M820,515 L616,515 Q600,515 600,499 L600,370" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- User request -->
+  <rect x="70" y="260" width="290" height="110" rx="14" fill="#fff7ed" stroke="#d97706" stroke-width="2.5"/>
+  <text x="215" y="325" text-anchor="middle" font-size="38" font-weight="600" fill="#171717">User request</text>
+
+  <!-- Agent -->
+  <rect x="490" y="260" width="220" height="110" rx="14" fill="#ecfdf5" stroke="#16a34a" stroke-width="2.5"/>
+  <text x="600" y="325" text-anchor="middle" font-size="38" font-weight="600" fill="#171717">Agent</text>
+
+  <!-- Planning -->
+  <rect x="820" y="68" width="310" height="94" rx="14" fill="#fff1f2" stroke="#e11d48" stroke-width="2.5"/>
+  <g transform="translate(852,99)" stroke="#e11d48" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4,28 L4,20 L20,4 L28,12 L12,28 Z"/>
+    <path d="M17,7 L25,15"/>
+  </g>
+  <text x="912" y="127" font-size="34" font-weight="600" fill="#171717">Planning</text>
+
+  <!-- Memory -->
+  <rect x="820" y="268" width="310" height="94" rx="14" fill="#fff1f2" stroke="#e11d48" stroke-width="2.5"/>
+  <g transform="translate(852,299)" stroke="#e11d48" stroke-width="2.6" fill="none" stroke-linecap="round">
+    <rect x="4" y="3" width="24" height="6" rx="3"/>
+    <rect x="4" y="13" width="24" height="6" rx="3"/>
+    <rect x="4" y="23" width="24" height="6" rx="3"/>
+  </g>
+  <text x="912" y="327" font-size="34" font-weight="600" fill="#171717">Memory</text>
+
+  <!-- Tools -->
+  <rect x="820" y="468" width="310" height="94" rx="14" fill="#fff1f2" stroke="#e11d48" stroke-width="2.5"/>
+  <g transform="translate(852,499)" stroke="#e11d48" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4,6 L26,28"/>
+    <path d="M26,6 L4,28"/>
+    <circle cx="5" cy="5" r="3"/>
+    <circle cx="27" cy="5" r="3"/>
+  </g>
+  <text x="912" y="527" font-size="34" font-weight="600" fill="#171717">Tools</text>
+
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto-start-reverse">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#9ca3af"/>
+    </marker>
+  </defs>
+</svg>

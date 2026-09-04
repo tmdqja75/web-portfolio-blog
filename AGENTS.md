@@ -72,6 +72,42 @@ the generic template wording ("왜 필요했나" / "무엇을 검토했나" / ..
   AI tell (it's a normal resume/portfolio convention) — don't flatten it into prose.
 - `dxf-panel-parser` in `data.ts` is the worked example for all of the above.
 
+### Blog post SVG diagrams
+
+Diagrams embedded in `content/blog/*.md` are standalone SVG files referenced via markdown
+image syntax (`![alt](/blog/<name>.svg)`), stored in `public/blog/` — not `motion.svg` React
+components (those are PAAR-only, see above). `.post-body img` in `globals.css` already handles
+responsive sizing and rounded corners, so no extra markup is needed. Conventions:
+
+**Arrow style**
+- Arrows should have a "flowing" animated effect when dash effect is requested (moving dash
+  pattern along the line).
+- Arrows connecting elements should bend at 90 degrees (orthogonal/elbow routing) instead of
+  running diagonally.
+- Each bend/corner in an arrow should have a slight radius — rounded corners, not sharp right
+  angles.
+
+**Layout**
+- When several arrow stems leave the element, they should be evenly spaced along its edge (not
+  clustered together).
+- Arrow shapes/bend points should adjust to match wherever the stems and targets end up (i.e.,
+  recompute the elbow geometry rather than keeping fixed bend coordinates).
+
+**Content scope**
+- No title or subtitle text inside the SVG itself (that context lives in the surrounding blog
+  prose instead).
+
+**Typography**
+- Text/labels sized large overall.
+
+Implementation notes: the flow animation is a `<style>` block inside the SVG itself
+(`stroke-dasharray` + a `stroke-dashoffset` keyframe), wrapped in
+`@media (prefers-reduced-motion: no-preference)` so it works even loaded through a plain
+`<img>` tag and respects reduced-motion. Rounded elbow corners are quadratic Béziers (`Q
+cornerX,cornerY endX,endY`) with the straight segments backed off by the radius before/after
+each corner, not a stroke-based corner radius. `public/blog/pydanticai-multiagent-architecture.svg`
+(used in `pydanticai-after-pycon-korea.md`) is the worked example.
+
 ### Page transitions
 
 - `src/app/template.tsx` — remounts on every navigation; wrapper `#page-transition` plays the `page-fade-in` keyframe (defined in `globals.css`) for enter fades.
