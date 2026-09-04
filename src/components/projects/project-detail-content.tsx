@@ -181,12 +181,12 @@ export function ProjectDetailContent({ project }: { project: Project }) {
             <p className="mt-1 text-sm text-[#888888] dark:text-zinc-500">
               직접 제작한 {project.presentation.pageCount}페이지 워크숍 자료
             </p>
-            <div className="mt-5 overflow-hidden rounded-xl border border-[#ebebeb] dark:border-zinc-800">
+            <div className="relative mt-5 aspect-video overflow-hidden rounded-xl border border-[#ebebeb] dark:border-zinc-800">
               <iframe
                 src={project.presentation.src}
                 title={project.presentation.title}
                 loading="lazy"
-                className="h-[70vh] min-h-[28rem] w-full sm:h-[48rem]"
+                className="absolute inset-0 h-full w-full"
               />
             </div>
             <p className="mt-3 text-sm text-[#888888] dark:text-zinc-500">
