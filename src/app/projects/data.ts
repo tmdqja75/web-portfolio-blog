@@ -1,5 +1,11 @@
 export type ProjectLink = { label: string; href: string }
 
+export type ProjectPresentation = {
+  src: string
+  title: string
+  pageCount: number
+}
+
 export type ProjectMetric = { value: string; label: string }
 
 // PAAR = Problem / Analysis / Action / Result — see job-app/paar skill.
@@ -33,6 +39,7 @@ export type Project = {
   metrics?: ProjectMetric[]
   diagramImage?: string
   paar?: ProjectPAAR
+  presentation?: ProjectPresentation
 }
 
 export const projects: Project[] = [
@@ -300,6 +307,69 @@ export const projects: Project[] = [
           "리서치 1주 분산과 작성 1시간 수작업을 실행당 평균 27분짜리 자동 파이프라인으로 대체",
           "SEO 리스티클 문제의 원인 진단과 수정은 완료했으나, 개선 후 비율은 재측정이 필요한 상태로 남겨둠",
           "현재도 실제로 매주 수요일 발행에 쓰이고 있음",
+        ],
+      },
+    },
+  },
+  {
+    slug: "claude-code-codex-training",
+    title: "사내 Coding Agent 활용 교육",
+    subtitle: "컨텍스트 엔지니어링을 중심으로 설계한 Claude Code·Codex 워크숍",
+    category: "AI Agent",
+    image: "/projects/claude-code-codex-training-banner.png",
+    description:
+      "Claude Code와 Codex 같은 Coding Agent를 안전하고 재현 가능하게 쓰기 위한 사내 워크숍이다. 회사와 팀장 요청으로 시작했고, 교육 콘텐츠 구성과 44페이지 자료 제작, 진행을 단독으로 맡았다.",
+    techStack: ["Claude Code", "Codex", "MCP", "Subagents", "Skills", "Context Engineering"],
+    role: "기획·자료 제작·진행 단독 담당",
+    timeframe: "2026",
+    metrics: [
+      { value: "44페이지", label: "직접 제작한 발표 자료" },
+      { value: "1회 워크숍", label: "사내 개발자·데이터 사이언티스트 대상 진행" },
+      { value: "5~15명", label: "참석 대상 규모" },
+    ],
+    presentation: {
+      src: "/projects/claude-code-codex-training.pdf",
+      title: "Claude Code / Codex: Coding Agent 능력치 최대한 끌어올리기",
+      pageCount: 44,
+    },
+    paar: {
+      problem: {
+        heading: "설치보다 먼저 필요한 사용 기준",
+        bullets: [
+          "회사가 Claude Code·Codex 같은 Coding Agent의 도입과 확산을 검토하면서, 개발자와 데이터 사이언티스트가 실제 업무에 적용할 수 있는 교육이 필요했음",
+          "워크숍 진행은 회사와 팀장 요청으로 시작했지만, 무엇을 어떤 순서로 가르칠지와 자료 구성은 직접 맡았음",
+          "도구 설치와 명령어만으로는 맥락이 부족한 요청, 길어지는 대화, 권한이 넓은 도구 설정에서 생길 수 있는 문제를 다루기 어려웠음",
+        ],
+        stats: [
+          { value: "1회", label: "사내 워크숍" },
+          { value: "5~15명", label: "개발자·데이터 사이언티스트 대상" },
+          { value: "2026", label: "진행 시기" },
+        ],
+      },
+      analysis: {
+        heading: "설치법 대신 컨텍스트 엔지니어링",
+        bullets: [
+          "LLM이 토큰을 순차 생성하는 방식과 환각이 생기는 이유부터 설명해 Coding Agent의 동작 원리를 먼저 맞췄음",
+          "맥락 없는 명령과 길어지는 대화가 결과 품질에 미치는 영향을 바탕으로, Agent를 잘 쓰는 일은 컨텍스트 창을 채우는 일이라는 관점으로 교육을 구성했음",
+          "Memory, MCP, Subagents, Skills, Plugins, Plan Mode가 메인 컨텍스트 창을 구성하거나 아끼는 방식을 비교해 설명했음",
+          "API 키 노출, MCP 권한 범위, `--dangerously-skip-permissions`처럼 실사용 중 놓치기 쉬운 보안 문제를 별도 주제로 다뤘음",
+        ],
+      },
+      action: {
+        heading: "44페이지에 원리와 실사용을 묶다",
+        bullets: [
+          "LLM·Agent 기초, 컨텍스트 엔지니어링, Claude Code 핵심 컴포넌트, 실사용 케이스, 팁과 주의사항까지 이어지는 44페이지 발표 자료를 직접 설계·제작했음",
+          "개발자 사례에서는 GitHub Issue를 Skills, Memory, Plan Mode로 해결하고 PR을 만드는 흐름을, 비개발자 사례에서는 MCP, Subagents, Skills를 조합한 리서치 흐름을 시연했음",
+          "Codex에서 대응되는 설정 파일과 구성 차이도 정리해 Claude Code 사용자가 다른 Coding Agent로 옮겨갈 때의 기준을 제공했음",
+          "컨텍스트와 설정 파일을 팀에 공유할 때 민감정보를 제외하고 MCP는 읽기 권한부터 부여하는 실전 원칙을 담았음",
+        ],
+      },
+      result: {
+        heading: "자료는 남았고, 성과 지표는 없다",
+        bullets: [
+          "사내 개발자·데이터 사이언티스트를 대상으로 1회 워크숍을 진행하고, 공개 가능한 44페이지 자료를 직접 제작했음",
+          "워크숍 이후 비공식 구두 피드백은 있었지만 설문, 사용률, 생산성, 도입 효과를 추적한 정량 지표는 없음",
+          "따라서 이 사례는 제품 도입 성과가 아니라 Developer Enablement를 위한 교육 설계·자료 제작·진행 경험으로 제시함",
         ],
       },
     },
