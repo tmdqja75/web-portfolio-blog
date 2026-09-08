@@ -7,13 +7,12 @@ const navigationItems: {
   name: string
   href?: string
   externalHref?: string
-  emailHref?: string
 }[] = [
   { name: "About", href: "/" },
   { name: "Projects", href: "/projects" },
   { name: "Blog", href: "/blog" },
   { name: "Newsletter", externalHref: "https://maily.so/automata" },
-  { name: "Contact", emailHref: "mailto:tmdqja75@gmail.com" },
+  { name: "Contact", href: "/contact" },
 ]
 
 const navItemClassName =
@@ -29,16 +28,12 @@ export default function SiteHeader() {
               <TransitionLink href={item.href}>
                 <TextRoll className={navItemClassName}>{item.name}</TextRoll>
               </TransitionLink>
-            ) : item.externalHref ? (
+            ) : (
               <a
                 href={item.externalHref}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <TextRoll className={navItemClassName}>{item.name}</TextRoll>
-              </a>
-            ) : (
-              <a href={item.emailHref}>
                 <TextRoll className={navItemClassName}>{item.name}</TextRoll>
               </a>
             )}
