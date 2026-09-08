@@ -1,6 +1,6 @@
 "use client"
 
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 
 import { cn } from "@/lib/utils"
 
@@ -16,10 +16,15 @@ export default function TransitionLink({
   className?: string
 }) {
   const router = useRouter()
+  const pathname = usePathname()
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
     e.preventDefault()
+    // Navigating to the current page is a no-op route change: PageTransition's
+    // remount (which normally replays the fade-in and clears this opacity) never
+    // happens, so the fade-out below would leave the page stuck invisible.
+    if (href === pathname) return
     const page = document.getElementById("page-transition")
     if (page) {
       page.style.transition = `opacity ${FADE_MS}ms ease`
