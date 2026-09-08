@@ -8,7 +8,7 @@ import {
   type Variants,
 } from "motion/react"
 import Image from "next/image"
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import type { IconType } from "react-icons"
 import {
   SiApacheairflow,
@@ -27,6 +27,7 @@ import { FaAws } from "react-icons/fa6"
 import { RiNewspaperFill, RiRobot2Fill } from "react-icons/ri"
 import TransitionLink from "@/components/ui/transition-link"
 import { HermesAgentIcon } from "@/components/icons/hermes-agent"
+import { cn } from "@/lib/utils"
 
 const introText =
   "LLM을 신뢰할 수 있는 소프트웨어로 바꾸는 일에 집중합니다. 프롬프트 한 줄이 아니라, 도구를 쓰고 스스로 판단하며 실패를 복구하는 시스템을 설계합니다."
@@ -285,7 +286,31 @@ function TechCard({ tech }: { tech: (typeof stack)[number] }) {
 
 export default function Home() {
   const mainRef = useRef<HTMLElement>(null)
+  const atBottomRef = useRef(false)
+  const [ctaGlow, setCtaGlow] = useState(false)
   useSnapScroll(mainRef)
+
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
+    const timer = setTimeout(() => setCtaGlow(true), 1000)
+    return () => clearTimeout(timer)
+  }, [])
+
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
+    const container = mainRef.current
+    if (!container) return
+    function onScroll() {
+      const { scrollTop, scrollHeight, clientHeight } = container!
+      const atBottom = scrollTop + clientHeight >= scrollHeight - 4
+      // Edge-triggered: replay the glow each time the user arrives at the
+      // bottom, but not on every scroll event while already sitting there.
+      if (atBottom && !atBottomRef.current) setCtaGlow(true)
+      atBottomRef.current = atBottom
+    }
+    container.addEventListener("scroll", onScroll, { passive: true })
+    return () => container.removeEventListener("scroll", onScroll)
+  }, [])
 
   return (
     <main
@@ -429,21 +454,17 @@ export default function Home() {
 
         <TransitionLink
           href="/projects"
-          className="order-1 flex h-14 w-44 shrink-0 items-center justify-center gap-3 overflow-hidden rounded-full border border-white/20 bg-black/60 px-8 text-lg text-white backdrop-blur-sm transition-all duration-300 ease-out hover:bg-white hover:text-black peer-hover:w-14 peer-hover:bg-black/60 peer-hover:px-0 peer-hover:text-white peer-hover:[&>span]:hidden"
+          onAnimationEnd={() => setCtaGlow(false)}
+          className={cn(
+            "order-1 flex h-14 w-44 shrink-0 items-center justify-center gap-3 overflow-hidden rounded-full border border-white/20 bg-black/60 px-8 text-lg text-white backdrop-blur-sm transition-all duration-300 ease-out hover:bg-white hover:text-black peer-hover:w-14 peer-hover:bg-black/60 peer-hover:px-0 peer-hover:text-white peer-hover:[&>span]:hidden",
+            ctaGlow && "cta-glow"
+          )}
         >
           <RiRobot2Fill aria-hidden className="h-5 w-5 shrink-0" />
           <span className="whitespace-nowrap">프로젝트 보기</span>
         </TransitionLink>
       </div>
 
-      {/* Footer */}
-      <footer className="border-t border-white/10 px-6 py-12 md:px-12">
-        <div className="mx-auto w-full max-w-5xl">
-          <p className="font-mono text-xs text-white/30">
-            © 2026 하승범. 에이전트를 만드는, 에이전트 엔지니어가 만든 페이지.
-          </p>
-        </div>
-      </footer>
     </main>
   )
 }
