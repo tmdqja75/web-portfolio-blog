@@ -436,22 +436,6 @@ export default function Home() {
         </TransitionLink>
       </div>
 
-      {/* Floating arrow → projects */}
-      <TransitionLink
-        href="/projects"
-        aria-label="프로젝트 페이지로 이동"
-        className="fixed top-1/2 right-6 z-50 hidden -translate-y-1/2 md:block"
-      >
-        <motion.span
-          aria-hidden
-          animate={{ x: [0, 8, 0] }}
-          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-          className="flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-black/40 font-mono text-xl text-white/60 backdrop-blur-sm transition-colors hover:border-white hover:text-white"
-        >
-          →
-        </motion.span>
-      </TransitionLink>
-
       {/* Footer */}
       <footer className="border-t border-white/10 px-6 py-12 md:px-12">
         <div className="mx-auto w-full max-w-5xl">
