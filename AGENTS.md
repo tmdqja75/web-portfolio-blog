@@ -72,6 +72,40 @@ the generic template wording ("왜 필요했나" / "무엇을 검토했나" / ..
   AI tell (it's a normal resume/portfolio convention) — don't flatten it into prose.
 - `dxf-panel-parser` in `data.ts` is the worked example for all of the above.
 
+### Blog post writing
+
+Posts are `content/blog/<slug>.md`, parsed by `src/lib/blog.ts` (`gray-matter` frontmatter +
+`marked`). Frontmatter:
+
+```yaml
+---
+title: "Post title, quoted"
+date: 2025-10-25          # YYYY-MM-DD, unquoted
+tag: Agent                 # single word, reuse the existing set: Agent, MLOps, ML, Conference
+summary: "One-sentence hook, quoted"
+draft: false                # true hides it from getAllPosts() until ready to publish
+---
+```
+
+- No H1 and don't restate the title/summary in the body — `blog/[slug]/page.tsx` already
+  renders `meta.title` as the page `<h1>` and `meta.summary` as the subhead above the body.
+- `##` (H2) marks major sections and is the only heading level collected into the
+  `ReadingRail` table-of-contents, so every H2 should be a real navigable section. Use `###`
+  for sub-points that shouldn't appear in the rail.
+- Opening with a plain intro paragraph before the first `##`, or opening directly with an
+  image/the first `##`, are both used in existing posts — no fixed rule which.
+- Images: `![alt](/blog/<file>)`, stored in `public/blog/`, named
+  `<post-slug>-<description>.<ext>`. Alt text should be Korean and descriptive (see
+  `pydanticai-after-pycon-korea.md`'s SVG alt as the model to follow, not the bare
+  `alt text`/`sm-endpoint` placeholders in older posts). An italic caption line (`*caption*`)
+  directly below an image is optional, used occasionally.
+- Diagrams-as-SVG follow the "Blog post SVG diagrams" conventions below.
+- Korean prose, `**bold**` for key terms/names on first use, numbered lists for sequential
+  steps, bullet lists for flat feature/pros-cons lists. Run through the `korean-humanizer`
+  skill before shipping — same em-dash tell called out for PAAR bullets applies here.
+- Reading time (`minutes`) is auto-computed (~500 Korean chars/min, code fences excluded) —
+  not hand-authored.
+
 ### Blog post SVG diagrams
 
 Diagrams embedded in `content/blog/*.md` are standalone SVG files referenced via markdown
