@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
 import { motion } from "motion/react"
+import { RiExternalLinkLine } from "react-icons/ri"
 import TextRoll from "@/components/ui/text-roll"
 import TransitionLink from "@/components/ui/transition-link"
 
@@ -55,8 +56,10 @@ export default function SiteHeader() {
                   href={item.externalHref}
                   target="_blank"
                   rel="noopener noreferrer"
+                  className="flex items-center gap-1"
                 >
                   <TextRoll className={navItemClassName}>{item.name}</TextRoll>
+                  <RiExternalLinkLine className="size-4 shrink-0" aria-hidden />
                 </a>
               )}
               <div className="h-0.5 w-full">
