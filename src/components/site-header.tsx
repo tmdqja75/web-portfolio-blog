@@ -16,7 +16,7 @@ const navigationItems: {
   { name: "Projects", href: "/projects" },
   { name: "Blog", href: "/blog" },
   { name: "Newsletter", externalHref: "https://maily.so/automata" },
-  { name: "Contact", href: "/contact" },
+  { name: "Contact", href: "/#contact" },
 ]
 
 const navItemClassName =
@@ -32,6 +32,32 @@ export default function SiteHeader() {
 
   useEffect(() => {
     setActiveHref(pathname)
+  }, [pathname])
+
+  // Home page has its own scroll-snap sections (About content, then a
+  // Contact section) under one route, so pathname alone can't tell which
+  // one is in view — track it with an observer instead.
+  useEffect(() => {
+    if (pathname !== "/") return
+    let observer: IntersectionObserver | undefined
+    let raf = 0
+    function setup() {
+      const contactEl = document.getElementById("contact")
+      if (!contactEl) {
+        raf = requestAnimationFrame(setup)
+        return
+      }
+      observer = new IntersectionObserver(
+        ([entry]) => setActiveHref(entry.isIntersecting ? "/#contact" : "/"),
+        { threshold: 0.5 }
+      )
+      observer.observe(contactEl)
+    }
+    setup()
+    return () => {
+      cancelAnimationFrame(raf)
+      observer?.disconnect()
+    }
   }, [pathname])
 
   return (

@@ -16,6 +16,7 @@ import {
   SiClaudecode,
   SiDocker,
   SiFastapi,
+  SiGithub,
   SiGrafana,
   SiMlflow,
   SiModelcontextprotocol,
@@ -24,7 +25,12 @@ import {
   SiPython,
 } from "react-icons/si"
 import { FaAws } from "react-icons/fa6"
-import { RiNewspaperFill, RiRobot2Fill } from "react-icons/ri"
+import {
+  RiLinkedinBoxFill,
+  RiMailFill,
+  RiNewspaperFill,
+  RiRobot2Fill,
+} from "react-icons/ri"
 import TransitionLink from "@/components/ui/transition-link"
 import { HermesAgentIcon } from "@/components/icons/hermes-agent"
 import { cn } from "@/lib/utils"
@@ -107,6 +113,35 @@ const stack: {
   { name: "Grafana", category: "관측성", icon: SiGrafana, color: "#F46800" },
 ]
 
+const contactLinks: {
+  name: string
+  href: string
+  icon: IconType
+  iconColor?: string
+  external?: boolean
+}[] = [
+  { name: "Mail", href: "mailto:tmdqja75@gmail.com", icon: RiMailFill },
+  {
+    name: "GitHub",
+    href: "https://github.com/tmdqja75",
+    icon: SiGithub,
+    external: true,
+  },
+  {
+    name: "LinkedIn",
+    href: "https://www.linkedin.com/in/haseungbeom/",
+    icon: RiLinkedinBoxFill,
+    iconColor: "#0A66C2",
+    external: true,
+  },
+  {
+    name: "Newsletter",
+    href: "https://maily.so/automata",
+    icon: RiNewspaperFill,
+    external: true,
+  },
+]
+
 const rise: Variants = {
   hidden: { opacity: 0, y: 28 },
   show: {
@@ -119,6 +154,60 @@ const rise: Variants = {
 const stagger: Variants = {
   hidden: {},
   show: { transition: { staggerChildren: 0.08 } },
+}
+
+// Plain left-to-right reveal, one Latin character per frame.
+function substringFrames(text: string): string[] {
+  return Array.from({ length: text.length + 1 }, (_, i) => text.slice(0, i))
+}
+
+// Mirrors real 2-beolsik IME composition for "하승범": ㅎㅏㅅㅡㅇㅂㅓㅁ,
+// where a trailing consonant provisionally attaches as batchim (ㅎㅏ+ㅅ ->
+// 핫) until the next vowel arrives and reclaims it into a new syllable
+// (+ㅡ -> 하 스).
+const HERO_NAME_FRAMES = [
+  "",
+  "ㅎ",
+  "하",
+  "핫",
+  "하스",
+  "하승",
+  "하승ㅂ",
+  "하승버",
+  "하승범",
+]
+
+const HERO_EYEBROW_FRAMES = substringFrames("AI Engineer")
+
+// "입니다": ㅇㅣㅂㄴㅣㄷㅏ — ㅂ attaches as batchim of 이 (-> 입), then ㄴ
+// starts a new block since 입's batchim slot is full, then ㄷ provisionally
+// attaches as batchim of 니 (-> 닏) until ㅏ reclaims it into 다.
+const HERO_SUFFIX_FRAMES = ["", "ㅇ", "이", "입", "입ㄴ", "입니", "입닏", "입니다"]
+
+function useKoreanTyping(frames: string[], stepMs: number, startDelayMs: number) {
+  const [text, setText] = useState(() =>
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ? frames[frames.length - 1]
+      : frames[0]
+  )
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
+    let i = 0
+    let interval: ReturnType<typeof setInterval>
+    const startTimer = setTimeout(() => {
+      interval = setInterval(() => {
+        i++
+        setText(frames[i])
+        if (i >= frames.length - 1) clearInterval(interval)
+      }, stepMs)
+    }, startDelayMs)
+    return () => {
+      clearTimeout(startTimer)
+      clearInterval(interval)
+    }
+  }, [frames, stepMs, startDelayMs])
+  return text
 }
 
 const SNAP_STICK_MS = 350
@@ -194,9 +283,16 @@ function useSnapScroll(containerRef: React.RefObject<HTMLElement | null>) {
   }, [containerRef])
 }
 
-function Section({ children }: { children: React.ReactNode }) {
+function Section({
+  children,
+  id,
+}: {
+  children: React.ReactNode
+  id?: string
+}) {
   return (
     <motion.section
+      id={id}
       data-snap
       variants={stagger}
       initial="hidden"
@@ -285,6 +381,9 @@ export default function Home() {
   const mainRef = useRef<HTMLElement>(null)
   const atBottomRef = useRef(false)
   const [ctaGlow, setCtaGlow] = useState(false)
+  const heroEyebrow = useKoreanTyping(HERO_EYEBROW_FRAMES, 45, 400)
+  const heroName = useKoreanTyping(HERO_NAME_FRAMES, 60, 400)
+  const heroSuffix = useKoreanTyping(HERO_SUFFIX_FRAMES, 70, 400)
   useSnapScroll(mainRef)
 
   useEffect(() => {
@@ -311,6 +410,7 @@ export default function Home() {
 
   return (
     <main
+      id="page-scroll-root"
       ref={mainRef}
       className="font-kr h-dvh snap-y snap-mandatory overflow-y-scroll bg-black text-white/90 selection:bg-white selection:text-black"
     >
@@ -327,27 +427,36 @@ export default function Home() {
         >
           <motion.p
             variants={rise}
-            className="mb-12 font-mono text-xs tracking-[0.2em] text-white/40 uppercase"
+            className="mb-12 font-mono text-lg tracking-[0.2em] text-white/40 uppercase md:text-xl"
           >
             안녕하세요
           </motion.p>
           <motion.p
             variants={rise}
-            className="mb-2 font-mono text-lg tracking-[-0.01em] text-white/50 md:text-xl"
+            className="relative mb-2 font-mono text-lg tracking-[-0.01em] text-white/50 md:text-xl"
           >
-            AI Engineer
+            <span className="opacity-0">AI Engineer</span>
+            <span aria-hidden className="absolute inset-0">
+              {heroEyebrow || " "}
+            </span>
           </motion.p>
           <motion.h1
             variants={rise}
-            className="text-[clamp(56px,11vw,132px)] leading-[0.9] font-semibold tracking-[-0.04em]"
+            className="relative text-[clamp(56px,11vw,132px)] leading-[0.9] font-semibold tracking-[-0.04em]"
           >
-            하승범
+            <span className="opacity-0">하승범</span>
+            <span aria-hidden className="absolute inset-0">
+              {heroName || " "}
+            </span>
           </motion.h1>
           <motion.p
             variants={rise}
-            className="mt-6 font-mono text-lg tracking-[-0.01em] text-white/50 md:text-xl"
+            className="relative mt-6 font-mono text-lg tracking-[-0.01em] text-white/50 md:text-xl"
           >
-            입니다
+            <span className="opacity-0">입니다</span>
+            <span aria-hidden className="absolute inset-0">
+              {heroSuffix || " "}
+            </span>
           </motion.p>
         </motion.div>
 
@@ -403,33 +512,32 @@ export default function Home() {
       </Section>
 
       {/* Connect */}
-      <Section>
-        <Eyebrow>연락처</Eyebrow>
+      <Section id="contact">
         <motion.h2
           variants={rise}
-          className="max-w-3xl text-[clamp(28px,5vw,52px)] leading-[1.05] font-semibold tracking-[-0.03em]"
+          className="text-center text-[clamp(28px,5vw,52px)] leading-[1.05] font-semibold tracking-[-0.03em]"
         >
-          에이전트 아키텍처, 툴링, 혹은 풀어볼 만한 새로운 문제에 대해 언제든
-          편하게 이야기 나누고 싶습니다.
+          Get in touch
         </motion.h2>
         <motion.div
           variants={rise}
-          className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-4"
+          className="mt-12 flex flex-wrap items-center justify-center gap-3"
         >
-          <a
-            href="mailto:tmdqja75@gmail.com"
-            className="text-lg text-white/80 underline-offset-4 transition-colors hover:text-white hover:underline"
-          >
-            tmdqja75@gmail.com
-          </a>
-          <a
-            href="https://github.com/tmdqja75"
-            target="_blank"
-            rel="noreferrer"
-            className="text-lg text-white/80 underline-offset-4 transition-colors hover:text-white hover:underline"
-          >
-            GitHub
-          </a>
+          {contactLinks.map((link) => (
+            <a
+              key={link.name}
+              href={link.href}
+              {...(link.external ? { target: "_blank", rel: "noreferrer" } : {})}
+              className="flex h-14 items-center gap-3 rounded-full border border-white/20 px-6 text-base font-medium text-white transition-colors hover:bg-white/10"
+            >
+              <link.icon
+                aria-hidden
+                className="h-5 w-5 shrink-0"
+                style={link.iconColor ? { color: link.iconColor } : undefined}
+              />
+              {link.name}
+            </a>
+          ))}
         </motion.div>
       </Section>
 
