@@ -72,6 +72,76 @@ the generic template wording ("왜 필요했나" / "무엇을 검토했나" / ..
   AI tell (it's a normal resume/portfolio convention) — don't flatten it into prose.
 - `dxf-panel-parser` in `data.ts` is the worked example for all of the above.
 
+### Blog post writing
+
+Posts are `content/blog/<slug>.md`, parsed by `src/lib/blog.ts` (`gray-matter` frontmatter +
+`marked`). Frontmatter:
+
+```yaml
+---
+title: "Post title, quoted"
+date: 2025-10-25          # YYYY-MM-DD, unquoted
+tag: Agent                 # single word, reuse the existing set: Agent, MLOps, ML, Conference
+summary: "One-sentence hook, quoted"
+draft: false                # true hides it from getAllPosts() until ready to publish
+---
+```
+
+- No H1 and don't restate the title/summary in the body — `blog/[slug]/page.tsx` already
+  renders `meta.title` as the page `<h1>` and `meta.summary` as the subhead above the body.
+- `##` (H2) marks major sections and is the only heading level collected into the
+  `ReadingRail` table-of-contents, so every H2 should be a real navigable section. Use `###`
+  for sub-points that shouldn't appear in the rail.
+- Opening with a plain intro paragraph before the first `##`, or opening directly with an
+  image/the first `##`, are both used in existing posts — no fixed rule which.
+- Images: `![alt](/blog/<file>)`, stored in `public/blog/`, named
+  `<post-slug>-<description>.<ext>`. Alt text should be Korean and descriptive (see
+  `pydanticai-after-pycon-korea.md`'s SVG alt as the model to follow, not the bare
+  `alt text`/`sm-endpoint` placeholders in older posts). An italic caption line (`*caption*`)
+  directly below an image is optional, used occasionally.
+- Diagrams-as-SVG follow the "Blog post SVG diagrams" conventions below.
+- Korean prose, `**bold**` for key terms/names on first use, numbered lists for sequential
+  steps, bullet lists for flat feature/pros-cons lists. Run through the `korean-humanizer`
+  skill before shipping — same em-dash tell called out for PAAR bullets applies here.
+- Reading time (`minutes`) is auto-computed (~500 Korean chars/min, code fences excluded) —
+  not hand-authored.
+
+### Blog post SVG diagrams
+
+Diagrams embedded in `content/blog/*.md` are standalone SVG files referenced via markdown
+image syntax (`![alt](/blog/<name>.svg)`), stored in `public/blog/` — not `motion.svg` React
+components (those are PAAR-only, see above). `.post-body img` in `globals.css` already handles
+responsive sizing and rounded corners, so no extra markup is needed. Conventions:
+
+**Arrow style**
+- Arrows should have a "flowing" animated effect when dash effect is requested (moving dash
+  pattern along the line).
+- Arrows connecting elements should bend at 90 degrees (orthogonal/elbow routing) instead of
+  running diagonally.
+- Each bend/corner in an arrow should have a slight radius — rounded corners, not sharp right
+  angles.
+
+**Layout**
+- When several arrow stems leave the element, they should be evenly spaced along its edge (not
+  clustered together).
+- Arrow shapes/bend points should adjust to match wherever the stems and targets end up (i.e.,
+  recompute the elbow geometry rather than keeping fixed bend coordinates).
+
+**Content scope**
+- No title or subtitle text inside the SVG itself (that context lives in the surrounding blog
+  prose instead).
+
+**Typography**
+- Text/labels sized large overall.
+
+Implementation notes: the flow animation is a `<style>` block inside the SVG itself
+(`stroke-dasharray` + a `stroke-dashoffset` keyframe), wrapped in
+`@media (prefers-reduced-motion: no-preference)` so it works even loaded through a plain
+`<img>` tag and respects reduced-motion. Rounded elbow corners are quadratic Béziers (`Q
+cornerX,cornerY endX,endY`) with the straight segments backed off by the radius before/after
+each corner, not a stroke-based corner radius. `public/blog/pydanticai-multiagent-architecture.svg`
+(used in `pydanticai-after-pycon-korea.md`) is the worked example.
+
 ### Page transitions
 
 - `src/app/template.tsx` — remounts on every navigation; wrapper `#page-transition` plays the `page-fade-in` keyframe (defined in `globals.css`) for enter fades.
