@@ -29,9 +29,6 @@ import TransitionLink from "@/components/ui/transition-link"
 import { HermesAgentIcon } from "@/components/icons/hermes-agent"
 import { cn } from "@/lib/utils"
 
-const introText =
-  "LLM을 신뢰할 수 있는 소프트웨어로 바꾸는 일에 집중합니다. 프롬프트 한 줄이 아니라, 도구를 쓰고 스스로 판단하며 실패를 복구하는 시스템을 설계합니다."
-
 const timeline: { period: string; org: string; detail: string }[] = [
   {
     period: "2015 — 2021",
@@ -326,13 +323,19 @@ export default function Home() {
           initial="hidden"
           animate="show"
           variants={stagger}
-          className="mx-auto w-full max-w-5xl"
+          className="mx-auto flex w-full max-w-5xl flex-col items-center text-center"
         >
           <motion.p
             variants={rise}
-            className="mb-8 font-mono text-xs tracking-[0.2em] text-white/40 uppercase"
+            className="mb-12 font-mono text-xs tracking-[0.2em] text-white/40 uppercase"
           >
-            AI 에이전트 엔지니어
+            안녕하세요
+          </motion.p>
+          <motion.p
+            variants={rise}
+            className="mb-2 font-mono text-lg tracking-[-0.01em] text-white/50 md:text-xl"
+          >
+            AI Engineer
           </motion.p>
           <motion.h1
             variants={rise}
@@ -342,15 +345,9 @@ export default function Home() {
           </motion.h1>
           <motion.p
             variants={rise}
-            className="mt-3 font-mono text-lg tracking-[-0.01em] text-white/50 md:text-xl"
+            className="mt-6 font-mono text-lg tracking-[-0.01em] text-white/50 md:text-xl"
           >
-            Ha Seungbeom
-          </motion.p>
-          <motion.p
-            variants={rise}
-            className="mt-10 max-w-2xl text-lg leading-relaxed text-white/70 md:text-xl"
-          >
-            {introText}
+            입니다
           </motion.p>
         </motion.div>
 
