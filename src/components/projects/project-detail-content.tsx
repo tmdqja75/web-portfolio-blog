@@ -11,8 +11,10 @@ import { ChatbotPipelineDiagram } from "@/components/projects/chatbot-pipeline-d
 import { ChatbotAnalysisDiagram } from "@/components/projects/chatbot-analysis-diagram"
 import { ChatbotLatencyDiagram } from "@/components/projects/chatbot-latency-diagram"
 import { ChatbotArchitectureDiagram } from "@/components/projects/chatbot-architecture-diagram"
+import { ChatbotV2AnalysisDiagram } from "@/components/projects/chatbot-v2-analysis-diagram"
 import { MlopsArchitectureDiagram } from "@/components/projects/mlops-architecture-diagram"
 import { MlopsLeadtimeDiagram } from "@/components/projects/mlops-leadtime-diagram"
+import { NewsletterArchitectureDiagram } from "@/components/projects/newsletter-architecture-diagram"
 
 const PAAR_EYEBROW = { problem: "PROBLEM", analysis: "ANALYSIS", action: "ACTION", result: "RESULT" } as const
 
@@ -35,6 +37,12 @@ const PAAR_DIAGRAM_BY_PROJECT: Record<string, Partial<Record<PAARDiagramKey, Com
     analysis: ChatbotAnalysisDiagram,
     action: [ChatbotPipelineDiagram, ChatbotArchitectureDiagram],
     result: ChatbotLatencyDiagram,
+  },
+  "savee-chatbot-api-v2": {
+    analysis: ChatbotV2AnalysisDiagram,
+  },
+  "newsletter-automation": {
+    action: NewsletterArchitectureDiagram,
   },
 }
 
