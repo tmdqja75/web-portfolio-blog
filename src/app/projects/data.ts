@@ -240,6 +240,75 @@ export const projects: Project[] = [
     },
   },
   {
+    slug: "savee-chatbot-api-v2",
+    title: "세이비 챗봇 API V2",
+    subtitle: "21개 대시보드로 확장한 semantic routing과 품질·보안 인프라",
+    category: "AI Agent",
+    image: "https://picsum.photos/seed/savee-chatbot-api-v2/640/400",
+    description:
+      "21개 대시보드 중 어디를 봐야 할지 헤매는 사용자를 위해 챗봇이 질문과 관련된 화면으로 직접 연동해주는 semantic routing을 직접 발굴해 확장했고, 세션 영속화·에이전트 평가 시스템·DSPy 프롬프트 최적화·role/tier 기반 접근 제어까지 품질·보안 인프라를 단독으로 구축했습니다. 저신뢰 라우팅 정확도를 50%에서 100%(holdout)로 올리고, semantic routing 오분류를 60%(25건→10건) 줄였습니다.",
+    techStack: [
+      "Python",
+      "LangGraph",
+      "FastAPI",
+      "WebSocket",
+      "PostgreSQL",
+      "DSPy",
+      "MLflow",
+      "Langfuse",
+      "AWS ECS",
+    ],
+    role: "백엔드/에이전트/인프라 단독 개발, 프론트엔드 1명·PM 1명과 협업",
+    timeframe: "2026.05–2026.08 (dev 브랜치 QA 중, main 미배포)",
+    metrics: [
+      { value: "50%→100%", label: "저신뢰(threshold 0.47 미만) 라우팅 정확도, DSPy bootstrap holdout 측정" },
+      { value: "오분류 25→10건(60%↓)", label: "158개 라벨링 쿼리, wrong-route 5배 페널티 준 weighted F1로 threshold 재설계" },
+      { value: "접근 제어 0→매트릭스", label: "6단계 권한×3플랜 티어×14카테고리를 fail-closed로 강제" },
+    ],
+    paar: {
+      problem: {
+        heading: "3개월 손 놓았던 챗봇, 대시보드 21개를 다시 들여다보다",
+        bullets: [
+          "V1 출시 후 다른 업무 우선순위에 밀려 2월 말부터 5월 말까지 약 3개월 손대지 못하다가, 지시가 아니라 직접 판단으로 재개",
+          "Savee 대시보드가 21개나 있어 사용자가 원하는 정보를 확인하려 할 때 어느 탭부터 봐야 할지 몰라 헤매는 문제를 직접 인지",
+          "방치했으면 잃었을 것: 채팅 세션 미저장으로 대화가 이어지지 않는 근본 결함, 5개 LLM 의사결정 지점의 회귀를 감으로만 판단하던 상태, role/tier가 파이프라인 어디에도 반영되지 않아 생기는 접근 제어 보안 위험",
+        ],
+        stats: [
+          { value: "21개", label: "사용자가 헤매던 대시보드 화면" },
+          { value: "3개월", label: "손대지 못한 공백 (2~5월)" },
+          { value: "0", label: "권한·티어를 반영한 접근 제어" },
+        ],
+      },
+      analysis: {
+        heading: "오답과 fallback을 같은 값으로 치지 않기로 했다",
+        bullets: [
+          "LLM 프롬프트 분류(호출 비용)와 키워드/룰 매칭(자연어 다양성 못 커버)을 기각하고 임베딩 코사인 유사도 라우팅 채택",
+          "text-embedding-3-small(55%)과 -large(91%)를 비교, 비용은 6.5배지만 하루 10만 쿼리 가정 시 월 $3 차이라 large 채택",
+          "표준 F1(threshold 0.33)이 오답과 모른다는 fallback을 같은 비용으로 취급한다는 걸 발견하고, wrong-route에 5배 페널티를 준 weighted F1로 threshold 0.47을 다시 구함",
+          "LangGraph 내장 체크포인터는 프론트가 쓸 세션 조회 API 형태가 아니라 기각하고, 커스텀 chat_users/chat_sessions 스키마와 REST API를 직접 설계",
+          "권한 체크를 websocket 미들웨어가 아니라 그래프 내부 노드(resolve_access_context)에 둬 기존 분류 인프라를 재사용하고, 두 레포에 이중 게이트(fail-closed)를 설치",
+        ],
+      },
+      action: {
+        heading: "라우팅·세션 영속화·품질 인프라, 세 축을 혼자 구현",
+        bullets: [
+          "21개 라우트로 semantic routing을 확장하고, 저신뢰 구간은 DSPy 폴백 3지점(P0-relevance/classification, P1-fallback)을 MLflow 후보→챔피언 승격 워크플로우로 서빙 전환",
+          "chat-history v2(커스텀 스키마+REST API), LLM 세션 타이틀 자동 생성, 단건/batch 세션 삭제로 대화 영속화를 완성",
+          "5개 LLM 의사결정 지점을 검증하는 오프라인 평가 시스템(evals), role/tier 기반 fail-closed 접근 제어, LangGraph v1 마이그레이션, JSON 구조화 로깅, CI/CD 빌드 캐싱까지 품질·보안·운영 인프라를 정리",
+        ],
+      },
+      result: {
+        heading: "저신뢰 라우팅 50%→100%, 오분류 60%↓",
+        bullets: [
+          "저신뢰(threshold 0.47 미만) 라우팅 정확도 50%→100%로 개선 (evals 프레임워크, DSPy bootstrap holdout split 측정)",
+          "semantic routing 오분류 25건→10건(60%↓), 158개 라벨링 쿼리·weighted F1 threshold 0.47 기준. 대신 fallback이 1건→43건으로 늘어나는 트레이드오프를 감수",
+          "DSPy 모델을 요청 경로 대신 FastAPI lifespan에서 1회만 로드하도록 바꿔, 요청당 약 40초였던 콜드스타트 지연을 구조적으로 제거",
+          "접근 제어 커버리지를 0에서 6단계 권한×3플랜 티어×14카테고리 매트릭스로 fail-closed 강제. evals 회귀 사례, 접근 제어 배포 후 실사용 감사, chat-history 사용량은 아직 측정하지 않아 수치화하지 않음",
+        ],
+      },
+    },
+  },
+  {
     slug: "newsletter-automation",
     title: "오토마타 뉴스레터 자동화",
     subtitle: "LangGraph 멀티에이전트 기반 AI 뉴스레터 자동 발행 시스템",
