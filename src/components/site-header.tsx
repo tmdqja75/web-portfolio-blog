@@ -17,12 +17,12 @@ const navigationItems: {
 ]
 
 const navItemClassName =
-  "text-sm font-semibold tracking-[-0.02em] uppercase transition-colors sm:text-base"
+  "text-base font-semibold tracking-[-0.02em] uppercase transition-colors sm:text-lg"
 
 export default function SiteHeader() {
   return (
     <header className="fixed inset-x-0 top-0 z-10 border-b border-black/5 bg-zinc-50/80 backdrop-blur dark:border-white/10 dark:bg-black/80">
-      <nav className="mx-auto flex max-w-5xl flex-wrap items-center justify-center gap-x-6 gap-y-2 px-6 py-3">
+      <nav className="mx-auto flex max-w-5xl flex-wrap items-center justify-center gap-x-10 gap-y-4 px-6 pt-5 pb-4">
         {navigationItems.map((item) => (
           <div key={item.name} className="flex items-start">
             {item.href ? (
