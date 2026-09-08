@@ -437,7 +437,7 @@ export default function Home() {
           Blog stays first in the DOM (so its hover reaches the projects pill via
           peer-hover, which only cascades to later siblings) but is reordered to
           sit visually on the right via flex `order`. */}
-      <div className="fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-3">
+      <div className="fixed bottom-10 left-1/2 z-50 flex -translate-x-1/2 items-center gap-3">
         <TransitionLink
           href="/blog"
           aria-label="블로그 보기"
