@@ -8,13 +8,6 @@ export default async function BlogPage() {
 
   return (
     <main className="relative min-h-screen w-full bg-zinc-50 px-6 pb-24 dark:bg-black">
-      <TransitionLink
-        href="/"
-        className="fixed top-6 left-6 z-10 flex h-7 items-center rounded-[6px] bg-[#171717] px-2 text-sm font-medium text-white dark:bg-white dark:text-[#171717]"
-      >
-        ← Back
-      </TransitionLink>
-
       <div className="mx-auto max-w-5xl pt-24">
         <h1
           className="pb-8 font-sans text-2xl font-semibold text-[#171717] dark:text-white"

@@ -1,5 +1,11 @@
 export type ProjectLink = { label: string; href: string }
 
+export type ProjectPresentation = {
+  src: string
+  title: string
+  pageCount: number
+}
+
 export type ProjectMetric = { value: string; label: string }
 
 // PAAR = Problem / Analysis / Action / Result — see job-app/paar skill.
@@ -33,61 +39,81 @@ export type Project = {
   metrics?: ProjectMetric[]
   diagramImage?: string
   paar?: ProjectPAAR
+  presentation?: ProjectPresentation
 }
 
 export const projects: Project[] = [
   {
-    slug: "model-registry",
-    title: "Model Registry",
-    subtitle: "Versioned model lifecycle management",
+    slug: "aws-mlops-platform",
+    title: "AWS 기반 MLOps 플랫폼",
+    subtitle: "혼자 운영하고 팀이 함께 쓰는 모델 배포 표준",
     category: "MLOps",
-    image: "https://picsum.photos/seed/mlops1/640/400",
+    image: "/projects/aws-mlops-platform-banner.png",
     description:
-      "Placeholder description: a centralized registry for tracking model versions, lineage, and promotion status across training and serving environments.",
-    techStack: ["Python", "MLflow", "PostgreSQL", "Docker"],
-    role: "Sole engineer",
-    timeframe: "2025",
-    links: [{ label: "Repository", href: "#" }],
-    metrics: [
-      { value: "3x", label: "faster rollback" },
-      { value: "40%", label: "fewer promotion errors" },
+      "모델 실험은 각자 로컬 환경에 흩어져 있었고 운영 추론은 Lambda 코드를 사람이 직접 고쳐 배포하던 시기였습니다. 팀원 두 명이 퇴사하면서 플랫폼 구축을 사실상 혼자 맡게 됐고, SageMaker와 단일 EC2 다중 컨테이너 구성을 검토했지만 1인 운영 부담과 장애 전파 범위가 걸림돌이었습니다. BentoML로 서비스 패키징을 표준화하고 ECS Fargate로 배포 단위를 나눈 뒤, MLflow(실험·아티팩트)와 DynamoDB(건물별 배포 구성)의 역할을 분리하고 Prometheus·Grafana로 서빙 상태를 먼저 확인하는 구조를 만들었습니다. 수동 배포에 약 30분이 걸리던 것이 GitHub Actions 실배포 60건 기준 중앙값 4.71분으로 줄었고, 지금은 다른 데이터 사이언티스트 2명도 이 경로로 자신의 모델을 배포하고 있습니다.",
+    techStack: [
+      "Python",
+      "MLflow",
+      "BentoML",
+      "Docker",
+      "GitHub Actions",
+      "AWS ECS",
+      "DynamoDB",
+      "Prometheus",
+      "Grafana",
     ],
-  },
-  {
-    slug: "feature-store",
-    title: "Feature Store",
-    subtitle: "Low-latency feature serving",
-    category: "MLOps",
-    image: "https://picsum.photos/seed/mlops2/640/400",
-    description:
-      "Placeholder description: a low-latency online feature store backing real-time inference, with an offline store for training-time consistency.",
-    techStack: ["Python", "Redis", "DynamoDB"],
-    role: "Sole engineer",
-    timeframe: "2025",
-  },
-  {
-    slug: "training-pipeline",
-    title: "Training Pipeline",
-    subtitle: "Distributed training orchestration",
-    category: "MLOps",
-    image: "https://picsum.photos/seed/mlops3/640/400",
-    description:
-      "Placeholder description: orchestrates distributed training jobs across a GPU cluster, with automatic checkpointing and failure recovery.",
-    techStack: ["Python", "Kubernetes", "PyTorch"],
-    metrics: [{ value: "2.5x", label: "training throughput" }],
-  },
-  {
-    slug: "research-agent",
-    title: "Research Agent",
-    subtitle: "Autonomous literature review",
-    category: "AI Agent",
-    image: "https://picsum.photos/seed/agent1/640/400",
-    description:
-      "Placeholder description: an autonomous agent that searches, reads, and summarizes academic literature against a research question.",
-    techStack: ["TypeScript", "LLM tool-use", "Vector search"],
-    role: "Sole engineer",
-    timeframe: "2026",
-    links: [{ label: "Repository", href: "#" }, { label: "Demo", href: "#" }],
+    role: "MLOps 플랫폼 설계·구현·운영",
+    timeframe: "2024.11 이후 (초기 구축 4~5개월)",
+    metrics: [
+      { value: "30분→4.71분", label: "배포 리드타임 (Before 회고 추정, After 실배포 중앙값 60건)" },
+      { value: "84.3% 단축", label: "GitHub Actions 기반 변경 감지·ECR·ECS CD" },
+      { value: "팀원 2명 재사용", label: "각자의 BentoML 서비스를 공통 경로로 배포" },
+    ],
+    paar: {
+      problem: {
+        heading: "직접 고친 배포, 뒤늦게 드러난 장애",
+        bullets: [
+          "데이터 사이언티스트마다 로컬에서 따로 실험해 파라미터와 성능 지표를 한곳에서 비교하기 어려웠음",
+          "전처리·재학습 모델·비즈니스 규칙이 바뀔 때마다 Lambda 추론 코드를 사람이 직접 고쳐 다시 배포해야 했음",
+          "입력 데이터 불일치나 모델 추론 실패를 알려주는 중앙 모니터링이 없어 오류가 웹 UI 정확도에 영향을 준 뒤에야 디버깅을 시작했음",
+          "팀원 두 명이 퇴사해 플랫폼 구축을 사실상 혼자 맡으면서, 한 사람이 감당할 수 있는 표준 경로가 필요해졌음",
+        ],
+        stats: [
+          { value: "약 30분", label: "기존 수동 배포(회고 추정)" },
+          { value: "1명", label: "플랫폼 구축·운영 담당" },
+          { value: "사후 감지", label: "기존 장애 대응 방식" },
+        ],
+      },
+      analysis: {
+        heading: "완전관리형 대신 내가 감당할 표준",
+        bullets: [
+          "SageMaker를 실제로 도입해봤지만 팀원 2명이 퇴사한 뒤 혼자 설정·운영하기엔 복잡성과 부담이 과했음",
+          "단일 EC2에 여러 Docker 서비스를 올리는 방식도 시도했으나 디스크 포화나 원인 불명의 호스트 장애가 모든 모델 서비스를 함께 멈추게 하는 공통 실패 지점이 됐음",
+          "모델별 FastAPI와 커스텀 Dockerfile도 검토했지만 의존성 패키징·모델 로딩·오류 응답·빌드 규칙을 매번 새로 구현해야 해 1인 운영에 불리했음",
+          "BentoML을 서비스 정의와 컨테이너 패키징의 표준 계약으로 삼고 ECS Fargate로 모델 서비스를 독립 배포 단위로 격리해 장애 전파 범위를 줄였음",
+          "MLflow(실험·아티팩트)와 DynamoDB(건물별 배포 구성), Prometheus·Grafana(EC2 자체 호스팅)로 계층을 나눴음. 유연한 스키마는 시간이 지나며 타입 드리프트를 허용했고, 자체 호스팅 모니터링은 단일 호스트 운영 책임을 그대로 남겼음",
+        ],
+      },
+      action: {
+        heading: "기록·패키징·배포·관측을 한 경로로",
+        bullets: [
+          "MLflow를 ECS에 배포하고 RDS 백엔드와 S3 아티팩트 저장소를 연결해 학습 코드의 실험 로깅 규칙을 공통화했음",
+          "BentoML 서비스 템플릿과 scikit-learn Pipeline 전처리, 공통 API·오류 응답, Prometheus 메트릭 규칙을 설계했음",
+          "변경된 앱 탐지, 컨테이너 빌드, ECR 푸시, ALB 라우팅 검증, ECS 서비스 갱신까지 GitHub Actions로 자동화했음",
+          "Prometheus·Grafana를 EC2 DS 서버에서 운영하며 건물 식별 라벨과 커스텀 지표를 추가하고 Slack 알림으로 연결했음",
+          "모델 알고리즘·건물별 비즈니스 로직·DynamoDB 조회 코드는 각 담당자가 맡고, 본인은 플랫폼 계층 전체를 설계·구현·운영했음",
+        ],
+      },
+      result: {
+        heading: "회고 추정 30분에서 실측 4.71분으로",
+        bullets: [
+          "수동 Lambda 배포 약 30분(회고 추정)에서 GitHub Actions 실배포 중앙값 4.71분으로 줄었음",
+          "성공한 워크플로 중 소요 2분 이상을 실배포로 분류해 60건을 집계했고, 그중 55건이 3~6분 안에 끝났음",
+          "30분과 중앙값을 비교하면 배포 리드타임은 84.3% 줄고 속도는 6.4배가 됐음",
+          "다른 데이터 사이언티스트 2명이 같은 경로로 자신의 BentoML 서비스를 배포하고 있음",
+        ],
+      },
+    },
   },
   {
     slug: "dxf-panel-parser",
@@ -214,45 +240,208 @@ export const projects: Project[] = [
     },
   },
   {
-    slug: "tool-router",
-    title: "Tool Router",
-    subtitle: "Dynamic tool selection layer",
+    slug: "savee-chatbot-api-v2",
+    title: "세이비 챗봇 API V2",
+    subtitle: "21개 대시보드로 확장한 semantic routing과 품질·보안 인프라",
     category: "AI Agent",
-    image: "https://picsum.photos/seed/agent3/640/400",
+    image: "https://picsum.photos/seed/savee-chatbot-api-v2/640/400",
     description:
-      "Placeholder description: routes an agent's next action to the correct tool implementation based on intent classification.",
-    techStack: ["TypeScript", "LLM tool-use"],
+      "21개 대시보드 중 어디를 봐야 할지 헤매는 사용자를 위해 챗봇이 질문과 관련된 화면으로 직접 연동해주는 semantic routing을 직접 발굴해 확장했고, 세션 영속화·에이전트 평가 시스템·DSPy 프롬프트 최적화·role/tier 기반 접근 제어까지 품질·보안 인프라를 단독으로 구축했습니다. 저신뢰 라우팅 정확도를 50%에서 100%(holdout)로 올리고, semantic routing 오분류를 60%(25건→10건) 줄였습니다.",
+    techStack: [
+      "Python",
+      "LangGraph",
+      "FastAPI",
+      "WebSocket",
+      "PostgreSQL",
+      "DSPy",
+      "MLflow",
+      "Langfuse",
+      "AWS ECS",
+    ],
+    role: "백엔드/에이전트/인프라 단독 개발, 프론트엔드 1명·PM 1명과 협업",
+    timeframe: "2026.05–2026.08 (dev 브랜치 QA 중, main 미배포)",
+    metrics: [
+      { value: "50%→100%", label: "저신뢰(threshold 0.47 미만) 라우팅 정확도, DSPy bootstrap holdout 측정" },
+      { value: "오분류 25→10건(60%↓)", label: "158개 라벨링 쿼리, wrong-route 5배 페널티 준 weighted F1로 threshold 재설계" },
+      { value: "접근 제어 0→매트릭스", label: "6단계 권한×3플랜 티어×14카테고리를 fail-closed로 강제" },
+    ],
+    paar: {
+      problem: {
+        heading: "3개월 손 놓았던 챗봇, 대시보드 21개를 다시 들여다보다",
+        bullets: [
+          "V1 출시 후 다른 업무 우선순위에 밀려 2월 말부터 5월 말까지 약 3개월 손대지 못하다가, 지시가 아니라 직접 판단으로 재개",
+          "Savee 대시보드가 21개나 있어 사용자가 원하는 정보를 확인하려 할 때 어느 탭부터 봐야 할지 몰라 헤매는 문제를 직접 인지",
+          "방치했으면 잃었을 것: 채팅 세션 미저장으로 대화가 이어지지 않는 근본 결함, 5개 LLM 의사결정 지점의 회귀를 감으로만 판단하던 상태, role/tier가 파이프라인 어디에도 반영되지 않아 생기는 접근 제어 보안 위험",
+        ],
+        stats: [
+          { value: "21개", label: "사용자가 헤매던 대시보드 화면" },
+          { value: "3개월", label: "손대지 못한 공백 (2~5월)" },
+          { value: "0", label: "권한·티어를 반영한 접근 제어" },
+        ],
+      },
+      analysis: {
+        heading: "오답과 fallback을 같은 값으로 치지 않기로 했다",
+        bullets: [
+          "LLM 프롬프트 분류(호출 비용)와 키워드/룰 매칭(자연어 다양성 못 커버)을 기각하고 임베딩 코사인 유사도 라우팅 채택",
+          "text-embedding-3-small(55%)과 -large(91%)를 비교, 비용은 6.5배지만 하루 10만 쿼리 가정 시 월 $3 차이라 large 채택",
+          "표준 F1(threshold 0.33)이 오답과 모른다는 fallback을 같은 비용으로 취급한다는 걸 발견하고, wrong-route에 5배 페널티를 준 weighted F1로 threshold 0.47을 다시 구함",
+          "LangGraph 내장 체크포인터는 프론트가 쓸 세션 조회 API 형태가 아니라 기각하고, 커스텀 chat_users/chat_sessions 스키마와 REST API를 직접 설계",
+          "권한 체크를 websocket 미들웨어가 아니라 그래프 내부 노드(resolve_access_context)에 둬 기존 분류 인프라를 재사용하고, 두 레포에 이중 게이트(fail-closed)를 설치",
+        ],
+      },
+      action: {
+        heading: "라우팅·세션 영속화·품질 인프라, 세 축을 혼자 구현",
+        bullets: [
+          "21개 라우트로 semantic routing을 확장하고, 저신뢰 구간은 DSPy 폴백 3지점(P0-relevance/classification, P1-fallback)을 MLflow 후보→챔피언 승격 워크플로우로 서빙 전환",
+          "chat-history v2(커스텀 스키마+REST API), LLM 세션 타이틀 자동 생성, 단건/batch 세션 삭제로 대화 영속화를 완성",
+          "5개 LLM 의사결정 지점을 검증하는 오프라인 평가 시스템(evals), role/tier 기반 fail-closed 접근 제어, LangGraph v1 마이그레이션, JSON 구조화 로깅, CI/CD 빌드 캐싱까지 품질·보안·운영 인프라를 정리",
+        ],
+      },
+      result: {
+        heading: "저신뢰 라우팅 50%→100%, 오분류 60%↓",
+        bullets: [
+          "저신뢰(threshold 0.47 미만) 라우팅 정확도 50%→100%로 개선 (evals 프레임워크, DSPy bootstrap holdout split 측정)",
+          "semantic routing 오분류 25건→10건(60%↓), 158개 라벨링 쿼리·weighted F1 threshold 0.47 기준. 대신 fallback이 1건→43건으로 늘어나는 트레이드오프를 감수",
+          "DSPy 모델을 요청 경로 대신 FastAPI lifespan에서 1회만 로드하도록 바꿔, 요청당 약 40초였던 콜드스타트 지연을 구조적으로 제거",
+          "접근 제어 커버리지를 0에서 6단계 권한×3플랜 티어×14카테고리 매트릭스로 fail-closed 강제. evals 회귀 사례, 접근 제어 배포 후 실사용 감사, chat-history 사용량은 아직 측정하지 않아 수치화하지 않음",
+        ],
+      },
+    },
   },
   {
-    slug: "portfolio-blog",
-    title: "Portfolio Blog",
-    subtitle: "This site, built with Next.js",
-    category: "Side Project",
-    image: "https://picsum.photos/seed/side1/640/400",
+    slug: "newsletter-automation",
+    title: "오토마타 뉴스레터 자동화",
+    subtitle: "LangGraph 멀티에이전트 기반 AI 뉴스레터 자동 발행 시스템",
+    category: "AI Agent",
+    image: "/projects/newsletter-automation-banner.png",
     description:
-      "Placeholder description: this site — a single-user portfolio and blog built with Next.js App Router, Tailwind, and motion.",
-    techStack: ["Next.js", "TypeScript", "Tailwind CSS"],
-    links: [{ label: "Repository", href: "#" }],
+      "매주 수요일 발행하는 AI 뉴스레터의 리서치와 작성에 부담을 느껴 자동화를 시작했지만, 오픈엔드 에이전트에게 전부 맡기는 방식은 실제 운영에서 토픽 품질을 보장하지 못했습니다. 검색과 랭킹은 결정론적 파이프라인으로 옮기고 토픽 선정에는 Human-in-the-Loop 승인 단계를 남기는 구조로 다시 설계했습니다. 현재도 실제로 매주 발행 중이며, LangSmith로 실측한 실행당 평균 소요 시간은 27분, 비용은 1.06달러입니다.",
+    techStack: [
+      "Python",
+      "LangGraph",
+      "deepagents",
+      "Claude API",
+      "Tavily API",
+      "GitHub API",
+      "LangSmith",
+    ],
+    role: "단독 개발 (Claude Code 협업)",
+    timeframe: "2026.01–2026.08 (진행 중)",
+    links: [
+      { label: "Repository", href: "https://github.com/tmdqja75/newsletter-automation-gpters" },
+    ],
+    metrics: [
+      { value: "27분·$1.06", label: "실행당 평균 (LangSmith 실측 12회, 범위 7~66분·$0.71~$1.54)" },
+      { value: "오픈엔드→결정론적+HITL", label: "토픽 품질 저하를 겪은 뒤 에이전트 아키텍처 재설계" },
+      { value: "실제 발행 중", label: "매주 수요일 실사용 시스템" },
+    ],
+    paar: {
+      problem: {
+        heading: "리서치 1주, 작성 1시간, 매주 반복",
+        bullets: [
+          "매주 수요일 발행하는 AI 뉴스레터를 위해 리서치가 한 주에 걸쳐 분산되고, 작성에도 별도로 한 시간이 들어 개인 시간 부담이 컸음",
+          "ChatGPT로 초안을 쓰면 톤이 어색해 결국 손으로 다듬어야 했고, 바쁜 주에는 발행이 밀리기도 함",
+          "지시받은 업무가 아니라 뉴스레터 운영자 본인이 직접 겪은 문제라 자발적으로 착수",
+        ],
+        stats: [
+          { value: "주 1회", label: "발행 주기" },
+          { value: "1주+1h", label: "리서치+작성 소요(수동)" },
+          { value: "7개월", label: "개발 기간(파트타임)" },
+        ],
+      },
+      analysis: {
+        heading: "완전 자동화 대신 결정론적 파이프라인과 HITL",
+        bullets: [
+          "오픈엔드 LLM 리서치 루프 기각. 실행마다 결과가 달라 재현이 불가능하고 비용도 예측할 수 없었음",
+          "8카테고리·12쿼리 고정 검색 플랜에 정규화, 중복 제거, 날짜 필터, 점수 랭킹을 더한 결정론적 파이프라인 채택",
+          "완전 자동 토픽 선정은 실운영에서 품질 저하를 겪어 기각하고, LangGraph interrupt 기반 HITL 승인 단계로 전환",
+          "실운영 결과 20개 중 16개가 SEO 리스티클로 채워지는 문제를 직접 확인하고 원인 5가지를 역추적해 해결",
+          "리서치 결과가 사용자에게 닿기까지 LLM이 네 번 재전사하며 화면 번호와 실제 URL 매핑이 어긋날 수 있는 구조적 버그를 발견해 매핑 로직을 전부 Python으로 옮김",
+        ],
+      },
+      action: {
+        heading: "Orchestrator가 조율하는 멀티에이전트 파이프라인",
+        bullets: [
+          "run_weekly_research가 검색과 랭킹을 파이썬 함수로 결정론적으로 처리하고, Orchestrator는 결과 파일 경로만 전달받는 구조로 설계",
+          "HITL 모드에서는 request_topic_selection 도구 안에서 interrupt를 호출해 후보를 보여주고 Command(resume)으로 재개",
+          "선택된 토픽마다 article-writer 서브에이전트를 병렬 호출해 리서치 보강, 팩트 기반 작성, 톤 교정을 한 번에 처리",
+          "GitHub Search API와 Trending 스크래핑, PyTorch-KR 포럼(Discourse API)을 새 리서치 소스로 추가",
+          "LangSmith로 에이전트 트레이스를 모니터링하고 run_metrics.json에 실행별 토큰 사용량과 소요 시간을 기록",
+        ],
+      },
+      result: {
+        heading: "LangSmith 실측, 평균 27분·$1.06",
+        bullets: [
+          "프로덕션 실행 12회 기준 평균 27분(범위 7~66분), $1.06(범위 $0.71~$1.54)으로 실측",
+          "리서치 1주 분산과 작성 1시간 수작업을 실행당 평균 27분짜리 자동 파이프라인으로 대체",
+          "SEO 리스티클 문제의 원인 진단과 수정은 완료했으나, 개선 후 비율은 재측정이 필요한 상태로 남겨둠",
+          "현재도 실제로 매주 수요일 발행에 쓰이고 있음",
+        ],
+      },
+    },
   },
   {
-    slug: "habit-tracker",
-    title: "Habit Tracker",
-    subtitle: "Minimal daily streak app",
-    category: "Side Project",
-    image: "https://picsum.photos/seed/side2/640/400",
+    slug: "claude-code-codex-training",
+    title: "사내 Coding Agent 활용 교육",
+    subtitle: "컨텍스트 엔지니어링을 중심으로 설계한 Claude Code·Codex 워크숍",
+    category: "AI Agent",
+    image: "/projects/claude-code-codex-training-banner.png",
     description:
-      "Placeholder description: a minimal daily habit tracker focused on streak visibility and zero-friction logging.",
-    techStack: ["React Native"],
-  },
-  {
-    slug: "recipe-box",
-    title: "Recipe Box",
-    subtitle: "Family recipes, searchable",
-    category: "Side Project",
-    image: "https://picsum.photos/seed/side3/640/400",
-    description:
-      "Placeholder description: a searchable archive of family recipes with unit conversion and serving-size scaling.",
-    techStack: ["Next.js", "SQLite"],
+      "Claude Code와 Codex 같은 Coding Agent를 안전하고 재현 가능하게 쓰기 위한 사내 워크숍이다. 회사와 팀장 요청으로 시작했고, 교육 콘텐츠 구성과 44페이지 자료 제작, 진행을 단독으로 맡았다.",
+    techStack: ["Claude Code", "Codex", "MCP", "Subagents", "Skills", "Context Engineering"],
+    role: "기획·자료 제작·진행 단독 담당",
+    timeframe: "2026",
+    metrics: [
+      { value: "44페이지", label: "직접 제작한 발표 자료" },
+      { value: "1회 워크숍", label: "사내 개발자·데이터 사이언티스트 대상 진행" },
+      { value: "5~15명", label: "참석 대상 규모" },
+    ],
+    presentation: {
+      src: "/projects/claude-code-codex-training.pdf",
+      title: "Claude Code / Codex: Coding Agent 능력치 최대한 끌어올리기",
+      pageCount: 44,
+    },
+    paar: {
+      problem: {
+        heading: "설치보다 먼저 필요한 사용 기준",
+        bullets: [
+          "회사가 Claude Code·Codex 같은 Coding Agent의 도입과 확산을 검토하면서, 개발자와 데이터 사이언티스트가 실제 업무에 적용할 수 있는 교육이 필요했음",
+          "워크숍 진행은 회사와 팀장 요청으로 시작했지만, 무엇을 어떤 순서로 가르칠지와 자료 구성은 직접 맡았음",
+          "도구 설치와 명령어만으로는 맥락이 부족한 요청, 길어지는 대화, 권한이 넓은 도구 설정에서 생길 수 있는 문제를 다루기 어려웠음",
+        ],
+        stats: [
+          { value: "1회", label: "사내 워크숍" },
+          { value: "5~15명", label: "개발자·데이터 사이언티스트 대상" },
+          { value: "2026", label: "진행 시기" },
+        ],
+      },
+      analysis: {
+        heading: "설치법 대신 컨텍스트 엔지니어링",
+        bullets: [
+          "LLM이 토큰을 순차 생성하는 방식과 환각이 생기는 이유부터 설명해 Coding Agent의 동작 원리를 먼저 맞췄음",
+          "맥락 없는 명령과 길어지는 대화가 결과 품질에 미치는 영향을 바탕으로, Agent를 잘 쓰는 일은 컨텍스트 창을 채우는 일이라는 관점으로 교육을 구성했음",
+          "Memory, MCP, Subagents, Skills, Plugins, Plan Mode가 메인 컨텍스트 창을 구성하거나 아끼는 방식을 비교해 설명했음",
+          "API 키 노출, MCP 권한 범위, `--dangerously-skip-permissions`처럼 실사용 중 놓치기 쉬운 보안 문제를 별도 주제로 다뤘음",
+        ],
+      },
+      action: {
+        heading: "44페이지에 원리와 실사용을 묶다",
+        bullets: [
+          "LLM·Agent 기초, 컨텍스트 엔지니어링, Claude Code 핵심 컴포넌트, 실사용 케이스, 팁과 주의사항까지 이어지는 44페이지 발표 자료를 직접 설계·제작했음",
+          "개발자 사례에서는 GitHub Issue를 Skills, Memory, Plan Mode로 해결하고 PR을 만드는 흐름을, 비개발자 사례에서는 MCP, Subagents, Skills를 조합한 리서치 흐름을 시연했음",
+          "Codex에서 대응되는 설정 파일과 구성 차이도 정리해 Claude Code 사용자가 다른 Coding Agent로 옮겨갈 때의 기준을 제공했음",
+          "컨텍스트와 설정 파일을 팀에 공유할 때 민감정보를 제외하고 MCP는 읽기 권한부터 부여하는 실전 원칙을 담았음",
+        ],
+      },
+      result: {
+        heading: "자료는 남았고, 성과 지표는 없다",
+        bullets: [
+          "사내 개발자·데이터 사이언티스트를 대상으로 1회 워크숍을 진행하고, 공개 가능한 44페이지 자료를 직접 제작했음",
+          "워크숍 이후 비공식 구두 피드백은 있었지만 설문, 사용률, 생산성, 도입 효과를 추적한 정량 지표는 없음",
+          "따라서 이 사례는 제품 도입 성과가 아니라 Developer Enablement를 위한 교육 설계·자료 제작·진행 경험으로 제시함",
+        ],
+      },
+    },
   },
 ]
 

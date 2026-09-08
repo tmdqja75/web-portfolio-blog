@@ -11,6 +11,10 @@ import { ChatbotPipelineDiagram } from "@/components/projects/chatbot-pipeline-d
 import { ChatbotAnalysisDiagram } from "@/components/projects/chatbot-analysis-diagram"
 import { ChatbotLatencyDiagram } from "@/components/projects/chatbot-latency-diagram"
 import { ChatbotArchitectureDiagram } from "@/components/projects/chatbot-architecture-diagram"
+import { ChatbotV2AnalysisDiagram } from "@/components/projects/chatbot-v2-analysis-diagram"
+import { MlopsArchitectureDiagram } from "@/components/projects/mlops-architecture-diagram"
+import { MlopsLeadtimeDiagram } from "@/components/projects/mlops-leadtime-diagram"
+import { NewsletterArchitectureDiagram } from "@/components/projects/newsletter-architecture-diagram"
 
 const PAAR_EYEBROW = { problem: "PROBLEM", analysis: "ANALYSIS", action: "ACTION", result: "RESULT" } as const
 
@@ -20,6 +24,10 @@ type PAARDiagramKey = "analysis" | "action" | "result"
 // projects don't accidentally share another project's illustrations. A section can
 // point at one diagram or a list of diagrams stacked in order.
 const PAAR_DIAGRAM_BY_PROJECT: Record<string, Partial<Record<PAARDiagramKey, ComponentType | ComponentType[]>>> = {
+  "aws-mlops-platform": {
+    action: MlopsArchitectureDiagram,
+    result: MlopsLeadtimeDiagram,
+  },
   "dxf-panel-parser": {
     analysis: AnalysisDiagram,
     action: PipelineDiagram,
@@ -29,6 +37,12 @@ const PAAR_DIAGRAM_BY_PROJECT: Record<string, Partial<Record<PAARDiagramKey, Com
     analysis: ChatbotAnalysisDiagram,
     action: [ChatbotPipelineDiagram, ChatbotArchitectureDiagram],
     result: ChatbotLatencyDiagram,
+  },
+  "savee-chatbot-api-v2": {
+    analysis: ChatbotV2AnalysisDiagram,
+  },
+  "newsletter-automation": {
+    action: NewsletterArchitectureDiagram,
   },
 }
 
@@ -157,6 +171,44 @@ export function ProjectDetailContent({ project }: { project: Project }) {
               ))}
             </ul>
           </div>
+        )}
+
+        {project.presentation && (
+          <section
+            className="mt-10 border-t border-[#ebebeb] pt-8 dark:border-zinc-800"
+            aria-labelledby="presentation-heading"
+          >
+            <span className="text-xs font-semibold tracking-[1.5px] text-[#888888] dark:text-zinc-500">PRESENTATION</span>
+            <h2
+              id="presentation-heading"
+              className="mt-1 text-lg font-semibold text-[#171717] dark:text-white"
+              style={{ letterSpacing: "-0.6px" }}
+            >
+              {project.presentation.title}
+            </h2>
+            <p className="mt-1 text-sm text-[#888888] dark:text-zinc-500">
+              직접 제작한 {project.presentation.pageCount}페이지 워크숍 자료
+            </p>
+            <div className="relative mt-5 aspect-video overflow-hidden rounded-xl border border-[#ebebeb] dark:border-zinc-800">
+              <iframe
+                src={project.presentation.src}
+                title={project.presentation.title}
+                loading="lazy"
+                className="absolute inset-0 h-full w-full"
+              />
+            </div>
+            <p className="mt-3 text-sm text-[#888888] dark:text-zinc-500">
+              PDF가 표시되지 않나요?{" "}
+              <a
+                href={project.presentation.src}
+                target="_blank"
+                rel="noreferrer"
+                className="underline underline-offset-4"
+              >
+                새 탭에서 자료 보기
+              </a>
+            </p>
+          </section>
         )}
 
         {project.paar ? (
