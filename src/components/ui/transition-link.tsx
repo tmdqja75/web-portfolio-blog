@@ -10,15 +10,18 @@ export default function TransitionLink({
   href,
   children,
   className,
-}: {
+  onClick,
+  ...rest
+}: React.ComponentPropsWithoutRef<"a"> & {
   href: string
   children: React.ReactNode
-  className?: string
 }) {
   const router = useRouter()
   const pathname = usePathname()
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    onClick?.(e)
+    if (e.defaultPrevented) return
     if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
     e.preventDefault()
     // Navigating to the current page is a no-op route change: PageTransition's
@@ -36,7 +39,7 @@ export default function TransitionLink({
   }
 
   return (
-    <a href={href} onClick={handleClick} className={cn(className)}>
+    <a href={href} onClick={handleClick} className={cn(className)} {...rest}>
       {children}
     </a>
   )
