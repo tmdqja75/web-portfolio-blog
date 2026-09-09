@@ -33,6 +33,7 @@ import {
 } from "react-icons/ri"
 import TransitionLink from "@/components/ui/transition-link"
 import { HermesAgentIcon } from "@/components/icons/hermes-agent"
+import { OceanBackground } from "@/components/ocean-background"
 import { cn } from "@/lib/utils"
 
 const timeline: { period: string; org: string; detail: string }[] = [
@@ -339,7 +340,7 @@ function TechCard({ tech }: { tech: (typeof stack)[number] }) {
       variants={rise}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative flex flex-col gap-1 overflow-hidden bg-black p-6"
+      className="relative flex flex-col gap-1 overflow-hidden rounded-xl border border-white/10 bg-white/0 p-6 backdrop-blur-md"
       style={{ backgroundImage }}
     >
       {typeof tech.icon === "string" ? (
@@ -412,8 +413,11 @@ export default function Home() {
     <main
       id="page-scroll-root"
       ref={mainRef}
-      className="font-kr h-dvh snap-y snap-mandatory overflow-y-scroll bg-black text-white/90 selection:bg-white selection:text-black"
+      className="font-kr relative h-dvh snap-y snap-mandatory overflow-y-scroll text-white/90 selection:bg-white selection:text-black"
     >
+      <OceanBackground />
+      <div className="fixed inset-0 -z-10 bg-black/55" />
+
       {/* Hero */}
       <section
         data-snap
@@ -479,32 +483,34 @@ export default function Home() {
 
       {/* Timeline */}
       <Section>
-        <Eyebrow>이력</Eyebrow>
-        <div className="flex flex-col gap-12 md:gap-16">
-          {timeline.map((item) => (
-            <motion.div
-              key={item.period}
-              variants={rise}
-              className="grid gap-3 md:grid-cols-[180px_1fr] md:gap-12"
-            >
-              <p className="font-mono text-sm text-white/40">{item.period}</p>
-              <div>
-                <h3 className="text-2xl font-semibold tracking-[-0.02em] md:text-3xl">
-                  {item.org}
-                </h3>
-                <p className="mt-3 max-w-xl leading-relaxed text-white/60">
-                  {item.detail}
-                </p>
-              </div>
-            </motion.div>
-          ))}
+        <div className="rounded-xl border border-white/10 bg-white/0 p-8 backdrop-blur-md md:p-12">
+          <Eyebrow>이력</Eyebrow>
+          <div className="flex flex-col gap-12 md:gap-16">
+            {timeline.map((item) => (
+              <motion.div
+                key={item.period}
+                variants={rise}
+                className="grid gap-3 md:grid-cols-[180px_1fr] md:gap-12"
+              >
+                <p className="font-mono text-sm text-white/40">{item.period}</p>
+                <div>
+                  <h3 className="text-2xl font-semibold tracking-[-0.02em] md:text-3xl">
+                    {item.org}
+                  </h3>
+                  <p className="mt-3 max-w-xl leading-relaxed text-white/60">
+                    {item.detail}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </Section>
 
       {/* Tech stack */}
       <Section>
         <Eyebrow>기술 스택</Eyebrow>
-        <div className="grid grid-cols-2 gap-px overflow-hidden rounded-lg bg-black sm:grid-cols-3 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
           {stack.map((tech) => (
             <TechCard key={tech.name} tech={tech} />
           ))}
@@ -545,11 +551,11 @@ export default function Home() {
           Blog stays first in the DOM (so its hover reaches the projects pill via
           peer-hover, which only cascades to later siblings) but is reordered to
           sit visually on the right via flex `order`. */}
-      <div className="fixed bottom-10 left-1/2 z-50 flex -translate-x-1/2 items-center gap-3">
+      <div className="fixed bottom-24 left-1/2 z-50 flex -translate-x-1/2 items-center gap-3 sm:bottom-10">
         <TransitionLink
           href="/blog"
           aria-label="블로그 보기"
-          className="peer group order-2 flex h-14 w-14 shrink-0 items-center justify-center gap-3 overflow-hidden rounded-full border border-white/20 bg-black/60 px-0 text-lg text-white backdrop-blur-sm transition-all duration-300 ease-out hover:w-44 hover:px-6"
+          className="peer group order-2 flex h-14 w-14 shrink-0 items-center justify-center gap-3 overflow-hidden rounded-full border border-black/10 bg-white px-0 text-lg text-black transition-all duration-300 ease-out hover:w-44 hover:border-white/20 hover:bg-black hover:px-6 hover:text-white"
         >
           <RiNewspaperFill aria-hidden className="h-5 w-5 shrink-0" />
           <span className="hidden whitespace-nowrap group-hover:inline">
@@ -561,7 +567,7 @@ export default function Home() {
           href="/projects"
           onAnimationEnd={() => setCtaGlow(false)}
           className={cn(
-            "order-1 flex h-14 w-44 shrink-0 items-center justify-center gap-3 overflow-hidden rounded-full border border-white/20 bg-black/60 px-8 text-lg text-white backdrop-blur-sm transition-all duration-300 ease-out hover:bg-white hover:text-black peer-hover:w-14 peer-hover:bg-black/60 peer-hover:px-0 peer-hover:text-white peer-hover:[&>span]:hidden",
+            "order-1 flex h-14 w-44 shrink-0 items-center justify-center gap-3 overflow-hidden rounded-full border border-black/10 bg-white px-8 text-lg text-black transition-all duration-300 ease-out hover:border-white/20 hover:bg-black hover:text-white peer-hover:w-14 peer-hover:px-0 peer-hover:[&>span]:hidden",
             ctaGlow && "cta-glow"
           )}
         >
