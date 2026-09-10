@@ -115,10 +115,10 @@ const stack: {
   { name: "Python", group: "Backend", icon: SiPython, color: "#3776AB" },
   { name: "FastAPI", group: "Backend", icon: SiFastapi, color: "#009688" },
   { name: "PostgreSQL", group: "Backend", icon: SiPostgresql, color: "#4169E1" },
+  { name: "BentoML", group: "Backend", icon: SiBentoml, color: "#FFFFFF" },
   { name: "Airflow", group: "Infrastructure", icon: SiApacheairflow, color: "#017CEE" },
   { name: "AWS", group: "Infrastructure", icon: FaAws, color: "#FF9900" },
   { name: "Docker", group: "Infrastructure", icon: SiDocker, color: "#2496ED" },
-  { name: "BentoML", group: "Infrastructure", icon: SiBentoml, color: "#FFFFFF" },
   { name: "MLflow", group: "Infrastructure", icon: SiMlflow, color: "#0194E2" },
   { name: "LangFuse", group: "Observability", icon: "/icons/langfuse.svg", color: "#0A60B5" },
   { name: "Prometheus", group: "Observability", icon: SiPrometheus, color: "#E6522C" },
@@ -464,7 +464,7 @@ export default function Home() {
           variants={rise}
           className="text-center text-[clamp(28px,5vw,52px)] leading-[1.05] font-semibold tracking-[-0.03em]"
         >
-          Get in touch
+          Lets Get in touch!
         </motion.h2>
         <motion.div
           variants={rise}
