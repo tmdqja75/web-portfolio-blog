@@ -2,13 +2,19 @@
 
 import { Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
+import dynamic from "next/dynamic"
 import { AnimatePresence, motion, useReducedMotion } from "motion/react"
 
 import { cn } from "@/lib/utils"
 import { ProjectCard } from "@/components/projects/project-card"
-import { ProjectDetailOverlay } from "@/components/projects/project-detail-overlay"
-import { OceanBackground } from "@/components/ocean-background"
 import { categories, getCategoryProjects, getProject } from "./data"
+
+const OceanBackground = dynamic(() => import("@/components/ocean-background"), {
+  ssr: false,
+})
+const ProjectDetailOverlay = dynamic(() =>
+  import("@/components/projects/project-detail-overlay").then((m) => m.ProjectDetailOverlay)
+)
 
 export default function ProjectsPage() {
   return (

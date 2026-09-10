@@ -45,112 +45,197 @@ const SIM_FORMAT: GPUTextureFormat = "rgba32float";
 const HDR_FORMAT: GPUTextureFormat = "rgba16float";
 const TRANSPARENT = [0, 0, 0, 0] as const;
 
+interface SharedOcean {
+  gpu: Gpu;
+  output: Surface;
+  graph: OceanGraph;
+  // The canvas currently receiving frames, or null while no <OceanBackground>
+  // is mounted anywhere. Pausing here (instead of tearing the whole thing
+  // down) is what lets a later mount skip device init and pipeline
+  // compilation entirely.
+  activeCanvas: HTMLCanvasElement | null;
+  // Count of outstanding attach() calls without a matching release(). Pausing
+  // must key off this, not "does this release's canvas match activeCanvas" —
+  // React Strict Mode's dev-only mount→cleanup→mount double-invoke fires two
+  // overlapping attach()/release() pairs against the *same* canvas, and a
+  // canvas-identity check can't tell the phantom cleanup apart from the
+  // still-mounted instance, so it can pause the real one.
+  refCount: number;
+  unsubscribeResize: (() => void) | undefined;
+  resizeFrame: number;
+  resizeGeneration: number;
+}
+
+// One WebGPU device + compiled pipeline graph, kept alive for the life of the
+// tab instead of being torn down on every unmount — so navigating between
+// `/` and `/projects` doesn't replay shader compilation (and the loading
+// splash) on every visit; only the very first mount ever pays that cost.
+// ponytail: never disposed once created, even while on pages without the
+// ocean. Add an idle-timeout teardown if that GPU/VRAM footprint ever
+// matters for this small a page set.
+let shared: SharedOcean | undefined;
+let sharedInit: Promise<SharedOcean> | undefined;
+
 export function createRenderer({ canvas }: RendererOptions) {
-  let disposed = false;
-  let gpu: Gpu | undefined;
-  let output: Surface | undefined;
-  let graph: OceanGraph | undefined;
-  let unsubscribeResize: (() => void) | undefined;
-  let resizeFrame = 0;
-  let resizeGeneration = 0;
+  let detached = false;
+  // The raw attach() promise, kept separate from `ready` below. dispose()
+  // chains its release() off *this* promise (not off `ready`) so release
+  // fires exactly once, whenever attach() actually settles — whether
+  // dispose() is called before attach() starts, mid-flight, or long after
+  // it resolved. Calling release() eagerly and *also* deferring it (the
+  // previous approach) double-decrements refCount whenever attach()'s own
+  // refCount++ already ran synchronously before dispose() got a chance to
+  // run — the exact case React Strict Mode's dev-only double-invoked
+  // mount→cleanup→mount produces on every navigation, which was pausing the
+  // real mounted instance's shared GPU state out from under it.
+  const attached = attach(canvas);
 
-  function dispose(): void {
-    if (disposed) return;
-    disposed = true;
-    resizeGeneration++;
-    runCleanups([
-      () => {
-        if (resizeFrame) cancelAnimationFrame(resizeFrame);
-      },
-      () => unsubscribeResize?.(),
-      () => gpu?.dispose(),
-    ]);
-  }
-
-  function fail(error: unknown): never {
-    try {
-      dispose();
-    } catch {
-      // Teardown must not replace the render, resize, or preparation failure.
-    }
+  const ready = attached.catch((error: unknown) => {
+    shared = undefined;
+    sharedInit = undefined;
     throw error;
-  }
-
-  const rebuild = async (generation: number) => {
-    if (disposed || !gpu || !output || !graph) return;
-    if (sameSize(graph.scene.size, output.size)) return;
-    const next = await createGraph(
-      gpu,
-      output,
-      `fft-ocean-resize-${generation}`
-    );
-    if (disposed) return;
-    if (generation !== resizeGeneration) {
-      try {
-        destroyGraph(next);
-      } catch {
-        // A newer resize owns the renderer; this stale graph is best-effort only.
-      }
-      return;
-    }
-    const previous = graph;
-    graph = next;
-    destroyGraph(previous);
-  };
-
-  const scheduleResize = () => {
-    if (disposed || resizeFrame) return;
-    const generation = ++resizeGeneration;
-    resizeFrame = requestAnimationFrame(async () => {
-      resizeFrame = 0;
-      try {
-        await rebuild(generation);
-      } catch (error) {
-        if (!disposed && generation === resizeGeneration) fail(error);
-      }
-    });
-  };
-
-  const initialize = async () => {
-    const { init } = await import("vgpu");
-    if (disposed) return;
-    const nextGpu = await init();
-    if (disposed) {
-      nextGpu.dispose();
-      return;
-    }
-
-    gpu = nextGpu;
-    output = surface(gpu, canvas, { dpr: [1, 1.6] });
-    graph = await createGraph(gpu, output, "fft-ocean-live");
-    if (disposed) return;
-
-    unsubscribeResize = output.onResize(scheduleResize);
-
-    const time = clock(gpu);
-    frameLoop(
-      gpu,
-      (currentFrame) => {
-        if (disposed || !graph || !output) return;
-        try {
-          setDynamics(graph, time.time * OCEAN_TUNING.simulation.timeScale);
-          renderGraph(currentFrame, graph, output);
-        } catch (error) {
-          fail(error);
-        }
-      },
-      // Ambient wave motion reads as smooth well under display refresh rate;
-      // uncapped, a 120Hz+ display redoes the full FFT/bloom/particle pipeline
-      // twice as often as a 60Hz one for no visible benefit.
-      { fps: 30 }
-    );
-  };
-
-  const ready = initialize().catch((error: unknown) => {
-    if (!disposed) fail(error);
   });
 
+  function dispose(): void {
+    if (detached) return;
+    detached = true;
+    attached.then(release, release);
+  }
+
   return { ready, dispose };
+}
+
+async function attach(canvas: HTMLCanvasElement): Promise<void> {
+  if (!shared) {
+    if (!sharedInit) sharedInit = bootstrap(canvas);
+    shared = await sharedInit;
+  }
+  shared.refCount++;
+  if (shared.activeCanvas !== canvas) {
+    await rebind(shared, canvas);
+  }
+}
+
+function release(): void {
+  if (!shared) return;
+  shared.refCount--;
+  if (shared.refCount > 0) return;
+  // Cancel any pending resize rebuild first — onResize fires immediately on
+  // subscription, so one is always scheduled, and it would otherwise touch
+  // `output.size` after the dispose() below and crash on a disposed surface.
+  if (shared.resizeFrame) {
+    cancelAnimationFrame(shared.resizeFrame);
+    shared.resizeFrame = 0;
+  }
+  shared.unsubscribeResize?.();
+  shared.unsubscribeResize = undefined;
+  shared.activeCanvas = null;
+  try {
+    shared.output.dispose();
+  } catch {
+    // Best-effort: the canvas is already unmounting either way.
+  }
+}
+
+function failShared(error: unknown): never {
+  const broken = shared;
+  shared = undefined;
+  sharedInit = undefined;
+  try {
+    broken?.gpu.dispose();
+  } catch {
+    // Teardown must not replace the original render/rebuild failure.
+  }
+  throw error;
+}
+
+async function bootstrap(canvas: HTMLCanvasElement): Promise<SharedOcean> {
+  const { init } = await import("vgpu");
+  const gpu = await init();
+  const output = surface(gpu, canvas, { dpr: [1, 1.6] });
+  const graph = await createGraph(gpu, output, "fft-ocean-live");
+
+  const state: SharedOcean = {
+    gpu,
+    output,
+    graph,
+    activeCanvas: canvas,
+    refCount: 0,
+    unsubscribeResize: undefined,
+    resizeFrame: 0,
+    resizeGeneration: 0,
+  };
+  state.unsubscribeResize = output.onResize(() => scheduleResize(state));
+
+  const time = clock(gpu);
+  frameLoop(
+    gpu,
+    (currentFrame) => {
+      if (!state.activeCanvas) return; // no <OceanBackground> mounted right now
+      try {
+        setDynamics(
+          state.graph,
+          time.time * OCEAN_TUNING.simulation.timeScale
+        );
+        renderGraph(currentFrame, state.graph, state.output);
+      } catch (error) {
+        failShared(error);
+      }
+    },
+    // Ambient wave motion reads as smooth well under display refresh rate;
+    // uncapped, a 120Hz+ display redoes the full FFT/bloom/particle pipeline
+    // twice as often as a 60Hz one for no visible benefit.
+    { fps: 30 }
+  );
+
+  return state;
+}
+
+async function rebind(
+  state: SharedOcean,
+  canvas: HTMLCanvasElement
+): Promise<void> {
+  state.unsubscribeResize?.();
+  const output = surface(state.gpu, canvas, { dpr: [1, 1.6] });
+  state.output = output;
+  state.activeCanvas = canvas;
+  state.unsubscribeResize = output.onResize(() => scheduleResize(state));
+  if (!sameSize(state.graph.scene.size, output.size)) {
+    await rebuild(state, ++state.resizeGeneration);
+  }
+}
+
+async function rebuild(state: SharedOcean, generation: number): Promise<void> {
+  if (sameSize(state.graph.scene.size, state.output.size)) return;
+  const next = await createGraph(
+    state.gpu,
+    state.output,
+    `fft-ocean-resize-${generation}`
+  );
+  if (generation !== state.resizeGeneration) {
+    try {
+      destroyGraph(next);
+    } catch {
+      // A newer resize/rebind owns the renderer; this stale graph is best-effort only.
+    }
+    return;
+  }
+  const previous = state.graph;
+  state.graph = next;
+  destroyGraph(previous);
+}
+
+function scheduleResize(state: SharedOcean): void {
+  if (state.resizeFrame) return;
+  const generation = ++state.resizeGeneration;
+  state.resizeFrame = requestAnimationFrame(async () => {
+    state.resizeFrame = 0;
+    try {
+      await rebuild(state, generation);
+    } catch (error) {
+      if (generation === state.resizeGeneration) failShared(error);
+    }
+  });
 }
 
 export async function createGraph(
