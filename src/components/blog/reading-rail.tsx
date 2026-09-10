@@ -10,10 +10,12 @@ export default function ReadingRail({ headings }: { headings: Heading[] }) {
   const [active, setActive] = useState(headings[0]?.id ?? "")
 
   useEffect(() => {
+    const container = document.getElementById("page-scroll-root")
+    if (!container) return
     let ticking = false
     const update = () => {
-      const max = document.documentElement.scrollHeight - window.innerHeight
-      setProgress(max > 0 ? Math.min(1, window.scrollY / max) : 1)
+      const max = container.scrollHeight - container.clientHeight
+      setProgress(max > 0 ? Math.min(1, container.scrollTop / max) : 1)
       ticking = false
     }
     const onScroll = () => {
@@ -22,8 +24,8 @@ export default function ReadingRail({ headings }: { headings: Heading[] }) {
       requestAnimationFrame(update)
     }
     update()
-    window.addEventListener("scroll", onScroll, { passive: true })
-    return () => window.removeEventListener("scroll", onScroll)
+    container.addEventListener("scroll", onScroll, { passive: true })
+    return () => container.removeEventListener("scroll", onScroll)
   }, [])
 
   useEffect(() => {

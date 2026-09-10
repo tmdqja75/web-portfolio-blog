@@ -9,9 +9,6 @@ import { cn } from "@/lib/utils"
 import { ProjectCard } from "@/components/projects/project-card"
 import { categories, getCategoryProjects, getProject } from "./data"
 
-const OceanBackground = dynamic(() => import("@/components/ocean-background"), {
-  ssr: false,
-})
 const ProjectDetailOverlay = dynamic(() =>
   import("@/components/projects/project-detail-overlay").then((m) => m.ProjectDetailOverlay)
 )
@@ -40,10 +37,7 @@ function ProjectsPageInner() {
   }
 
   return (
-    <main className="relative min-h-screen w-full px-6 pb-24">
-      <OceanBackground />
-      <div className="fixed inset-0 -z-10 bg-black/55" />
-
+    <main id="page-scroll-root" className="relative h-dvh w-full overflow-y-scroll px-6 pb-24">
       <div className="mx-auto max-w-5xl pt-24">
         <h1
           className="px-0 pb-8 font-sans text-2xl font-semibold text-white"
