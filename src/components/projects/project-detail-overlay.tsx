@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "motion/react"
 import type { Project } from "@/app/projects/data"
 import { getCategoryProjects } from "@/app/projects/data"
 import { ProjectDetailContent } from "./project-detail-content"
+import { ProjectBanner } from "@/components/projects/project-banner"
 
 export function ProjectDetailOverlay({ project }: { project: Project }) {
   const router = useRouter()
@@ -100,7 +101,7 @@ export function ProjectDetailOverlay({ project }: { project: Project }) {
           tabIndex={-1}
           role="dialog"
           aria-modal="true"
-          className="relative my-12 w-full max-w-3xl rounded-xl bg-white p-8 pb-24 outline-none dark:bg-[#0a0a0a]"
+          className="relative my-12 w-full max-w-3xl overflow-hidden rounded-xl border border-black/10 outline-none dark:border-white/10"
         >
           <button
             onClick={close}
@@ -109,7 +110,7 @@ export function ProjectDetailOverlay({ project }: { project: Project }) {
           >
             ✕
           </button>
-          <ProjectDetailContent project={project} />
+          <ProjectDetailContent project={project} inModal />
 
           {navigable.length > 1 && (
             <div className="fixed inset-x-0 bottom-6 z-30 flex justify-center gap-2">
@@ -118,11 +119,12 @@ export function ProjectDetailOverlay({ project }: { project: Project }) {
                   key={p.slug}
                   onClick={() => goTo(p.slug)}
                   aria-label={p.title}
-                  className={`h-12 w-12 shrink-0 overflow-hidden rounded-[6px] bg-cover bg-center ring-2 transition-all ${
+                  className={`h-12 w-12 shrink-0 overflow-hidden rounded-[6px] ring-2 transition-all ${
                     p.slug === project.slug ? "ring-[#171717] dark:ring-white" : "ring-transparent opacity-60"
                   }`}
-                  style={{ backgroundImage: `url(${p.image})` }}
-                />
+                >
+                  <ProjectBanner project={p} compact />
+                </button>
               ))}
             </div>
           )}

@@ -36,7 +36,8 @@ Single-user portfolio/blog. Two top-level pages plus a projects detail route:
 - `src/app/projects/page.tsx` — client component (wrapped in `Suspense` since it reads `useSearchParams`). Filterable grid (not a carousel): category buttons write `?category=` to the URL, `AnimatePresence`/`motion` fades cards in/out on filter change. Project data comes from `src/app/projects/data.ts` (`categories`, `getCategoryProjects`, `getProject`), not an inline array.
 - `src/app/projects/[slug]/page.tsx` — full-page project detail (direct nav / refresh / no-JS fallback).
 - `src/app/projects/@modal/(.)[slug]/page.tsx` + `default.tsx` — parallel/intercepted route: clicking a card from `/projects` opens the same detail as an overlay modal (`ProjectDetailOverlay`) without leaving the grid; `src/app/projects/layout.tsx` renders `{children}` and `{modal}` side by side per Next's parallel-routes convention.
-- `src/components/projects/project-card.tsx` — grid card, shares a `layoutId` (`card-image-<slug>` / `card-title-<slug>`) with the overlay for the morph transition.
+- `src/components/projects/project-card.tsx` — grid card. It renders `ProjectBanner` above the card copy, so cards and detail pages share the same project visual.
+- `src/components/projects/project-banner.tsx` — reusable 16:9 transparent-glass banner. `PROJECT_BANNER_ICONS` maps each project slug to exactly two representative icons; the non-compact banner always uses the same `gap-10` center-row spacing. The V2 DSPy mark is `public/icons/dspy.png`.
 - `src/components/projects/project-detail-overlay.tsx` — modal chrome: focus trap (Tab cycles within the panel), Escape/backdrop-click to close (`router.back()`), prev/next via arrow keys and a thumbnail rail, all gated through `getCategoryProjects` so navigation stays within the active filter.
 - `src/components/projects/project-detail-content.tsx` — body shared between the full page and the overlay.
 

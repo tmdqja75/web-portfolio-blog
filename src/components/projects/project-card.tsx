@@ -4,6 +4,7 @@ import Link from "next/link"
 import { motion, useReducedMotion } from "motion/react"
 
 import type { Project } from "@/app/projects/data"
+import { ProjectBanner } from "@/components/projects/project-banner"
 
 export function ProjectCard({
   project,
@@ -20,12 +21,9 @@ export function ProjectCard({
       <motion.div
         whileHover={{ scale: 1.03 }}
         transition={shouldReduceMotion ? { duration: 0.15 } : { duration: 0.2 }}
-        className="relative aspect-[16/9] overflow-hidden rounded-xl shadow-sm"
+        className="relative aspect-[16/9] overflow-hidden rounded-xl"
       >
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${project.image})` }}
-        />
+        <ProjectBanner project={project} />
 
         <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/70 via-black/20 to-transparent p-4">
           <h3 className="text-base font-semibold text-white" style={{ letterSpacing: "-0.28px" }}>
