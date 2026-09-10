@@ -1,6 +1,5 @@
 "use client"
 
-import { AnimatePresence, motion } from "motion/react"
 import { useEffect, useRef, useState } from "react"
 import { FaCode, FaWrench } from "react-icons/fa6"
 import { RiRobot2Fill } from "react-icons/ri"
@@ -9,17 +8,12 @@ import { cn } from "@/lib/utils"
 
 // Skip the splash flash on connections fast enough that it would never be seen.
 const LOADER_DELAY_MS = 200
-const SPLASH_ICON_INTERVAL_MS = 500
+const SPLASH_ICON_INTERVAL_MS = 300
 const SPLASH_ICONS = [FaWrench, RiRobot2Fill, FaCode]
 
-/** Cycles the three brand icons underneath the splash text every 500ms. */
+/** Cycles the three brand icons underneath the splash text every 300ms. */
 function SplashIcon() {
   const [index, setIndex] = useState(0)
-  const [reducedMotion] = useState(
-    () =>
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-  )
 
   useEffect(() => {
     const interval = setInterval(
@@ -31,23 +25,7 @@ function SplashIcon() {
 
   const Icon = SPLASH_ICONS[index]
 
-  if (reducedMotion) {
-    return <Icon className="h-8 w-8 text-white/60" />
-  }
-
-  return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={index}
-        initial={{ opacity: 0, scale: 0.85 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.85 }}
-        transition={{ duration: 0.2 }}
-      >
-        <Icon className="h-8 w-8 text-white/60" />
-      </motion.div>
-    </AnimatePresence>
-  )
+  return <Icon className="h-8 w-8 text-white/60" />
 }
 
 /** Fixed full-viewport WebGPU ocean, pinned behind page content regardless of scroll. */
