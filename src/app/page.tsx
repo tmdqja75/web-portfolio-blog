@@ -55,9 +55,16 @@ const timeline: { period: string; org: string; detail: string }[] = [
   },
 ]
 
+const STACK_GROUPS = [
+  "Agent systems",
+  "Backend",
+  "Infrastructure",
+  "Observability",
+] as const
+
 const stack: {
   name: string
-  category: string
+  group: (typeof STACK_GROUPS)[number]
   icon: IconType | string
   color: string
   badge?: boolean
@@ -65,57 +72,57 @@ const stack: {
   badgeIconColor?: string
   badgeIconSize?: string
 }[] = [
-  { name: "Python", category: "언어", icon: SiPython, color: "#3776AB" },
-  { name: "FastAPI", category: "백엔드", icon: SiFastapi, color: "#009688" },
   {
     name: "LangChain",
-    category: "오케스트레이션",
+    group: "Agent systems",
     icon: "/icons/langchain.svg",
     color: "#7FC8FF",
   },
   {
     name: "LangGraph",
-    category: "오케스트레이션",
+    group: "Agent systems",
     icon: "/icons/langgraph.svg",
     color: "#7FC8FF",
   },
   {
     name: "DeepAgents",
-    category: "오케스트레이션",
+    group: "Agent systems",
     icon: "/icons/deepagents.svg",
     color: "#7FC8FF",
   },
-  { name: "Airflow", category: "오케스트레이션", icon: SiApacheairflow, color: "#017CEE" },
   {
     name: "DSPy",
-    category: "프레임워크",
+    group: "Agent systems",
     icon: "/icons/dspy.png",
     color: "#EF4036",
   },
   {
     name: "MCP",
-    category: "프로토콜",
+    group: "Agent systems",
     icon: SiModelcontextprotocol,
     color: "#FFFFFF",
     badge: true,
   },
-  { name: "Claude Code", category: "에이전트", icon: SiClaudecode, color: "#D97757" },
+  { name: "Claude Code", group: "Agent systems", icon: SiClaudecode, color: "#D97757" },
   {
     name: "Hermes Agent",
-    category: "에이전트",
+    group: "Agent systems",
     icon: HermesAgentIcon,
     color: "#FFFFFF",
     badge: true,
     badgeIconSize: "h-9 w-9",
   },
-  { name: "PostgreSQL", category: "데이터", icon: SiPostgresql, color: "#4169E1" },
-  { name: "AWS", category: "인프라", icon: FaAws, color: "#FF9900" },
-  { name: "Docker", category: "인프라", icon: SiDocker, color: "#2496ED" },
-  { name: "BentoML", category: "서빙", icon: SiBentoml, color: "#FF6E42" },
-  { name: "MLflow", category: "모델링", icon: SiMlflow, color: "#0194E2" },
-  { name: "LangFuse", category: "관측성", icon: "/icons/langfuse.svg", color: "#0A60B5" },
-  { name: "Prometheus", category: "관측성", icon: SiPrometheus, color: "#E6522C" },
-  { name: "Grafana", category: "관측성", icon: SiGrafana, color: "#F46800" },
+  { name: "Python", group: "Backend", icon: SiPython, color: "#3776AB" },
+  { name: "FastAPI", group: "Backend", icon: SiFastapi, color: "#009688" },
+  { name: "PostgreSQL", group: "Backend", icon: SiPostgresql, color: "#4169E1" },
+  { name: "Airflow", group: "Infrastructure", icon: SiApacheairflow, color: "#017CEE" },
+  { name: "AWS", group: "Infrastructure", icon: FaAws, color: "#FF9900" },
+  { name: "Docker", group: "Infrastructure", icon: SiDocker, color: "#2496ED" },
+  { name: "BentoML", group: "Infrastructure", icon: SiBentoml, color: "#FF6E42" },
+  { name: "MLflow", group: "Infrastructure", icon: SiMlflow, color: "#0194E2" },
+  { name: "LangFuse", group: "Observability", icon: "/icons/langfuse.svg", color: "#0A60B5" },
+  { name: "Prometheus", group: "Observability", icon: SiPrometheus, color: "#E6522C" },
+  { name: "Grafana", group: "Observability", icon: SiGrafana, color: "#F46800" },
 ]
 
 const contactLinks: {
@@ -344,7 +351,7 @@ function TechCard({ tech }: { tech: (typeof stack)[number] }) {
       variants={rise}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative flex flex-col gap-1 overflow-hidden rounded-xl border border-white/10 bg-white/0 p-6 backdrop-blur-md"
+      className="relative flex flex-col gap-1 overflow-hidden rounded-xl border border-white/10 bg-white/0 p-4 backdrop-blur-md"
       style={{ backgroundImage }}
     >
       {typeof tech.icon === "string" ? (
@@ -377,7 +384,6 @@ function TechCard({ tech }: { tech: (typeof stack)[number] }) {
       <span className="text-lg font-medium tracking-[-0.01em]">
         {tech.name}
       </span>
-      <span className="font-mono text-xs text-white/40">{tech.category}</span>
     </motion.div>
   )
 }
@@ -514,9 +520,18 @@ export default function Home() {
       {/* Tech stack */}
       <Section>
         <Eyebrow>기술 스택</Eyebrow>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-          {stack.map((tech) => (
-            <TechCard key={tech.name} tech={tech} />
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          {STACK_GROUPS.map((group) => (
+            <div key={group} className="flex flex-col gap-3">
+              <h3 className="mb-1 font-mono text-xs tracking-[0.2em] text-white/40 uppercase">
+                {group}
+              </h3>
+              {stack
+                .filter((tech) => tech.group === group)
+                .map((tech) => (
+                  <TechCard key={tech.name} tech={tech} />
+                ))}
+            </div>
           ))}
         </div>
       </Section>
