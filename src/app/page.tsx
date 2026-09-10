@@ -8,6 +8,7 @@ import {
   type Variants,
 } from "motion/react"
 import Image from "next/image"
+import dynamic from "next/dynamic"
 import { useEffect, useRef, useState } from "react"
 import type { IconType } from "react-icons"
 import {
@@ -33,8 +34,11 @@ import {
 } from "react-icons/ri"
 import TransitionLink from "@/components/ui/transition-link"
 import { HermesAgentIcon } from "@/components/icons/hermes-agent"
-import { OceanBackground } from "@/components/ocean-background"
 import { cn } from "@/lib/utils"
+
+const OceanBackground = dynamic(() => import("@/components/ocean-background"), {
+  ssr: false,
+})
 
 const timeline: { period: string; org: string; detail: string }[] = [
   {
@@ -51,9 +55,16 @@ const timeline: { period: string; org: string; detail: string }[] = [
   },
 ]
 
+const STACK_GROUPS = [
+  "Agent systems",
+  "Backend",
+  "Infrastructure",
+  "Observability",
+] as const
+
 const stack: {
   name: string
-  category: string
+  group: (typeof STACK_GROUPS)[number]
   icon: IconType | string
   color: string
   badge?: boolean
@@ -61,57 +72,57 @@ const stack: {
   badgeIconColor?: string
   badgeIconSize?: string
 }[] = [
-  { name: "Python", category: "언어", icon: SiPython, color: "#3776AB" },
-  { name: "FastAPI", category: "백엔드", icon: SiFastapi, color: "#009688" },
   {
     name: "LangChain",
-    category: "오케스트레이션",
+    group: "Agent systems",
     icon: "/icons/langchain.svg",
     color: "#7FC8FF",
   },
   {
     name: "LangGraph",
-    category: "오케스트레이션",
+    group: "Agent systems",
     icon: "/icons/langgraph.svg",
     color: "#7FC8FF",
   },
   {
     name: "DeepAgents",
-    category: "오케스트레이션",
+    group: "Agent systems",
     icon: "/icons/deepagents.svg",
     color: "#7FC8FF",
   },
-  { name: "Airflow", category: "오케스트레이션", icon: SiApacheairflow, color: "#017CEE" },
   {
     name: "DSPy",
-    category: "프레임워크",
+    group: "Agent systems",
     icon: "/icons/dspy.png",
     color: "#EF4036",
   },
   {
     name: "MCP",
-    category: "프로토콜",
+    group: "Agent systems",
     icon: SiModelcontextprotocol,
     color: "#FFFFFF",
     badge: true,
   },
-  { name: "Claude Code", category: "에이전트", icon: SiClaudecode, color: "#D97757" },
+  { name: "Claude Code", group: "Agent systems", icon: SiClaudecode, color: "#D97757" },
   {
     name: "Hermes Agent",
-    category: "에이전트",
+    group: "Agent systems",
     icon: HermesAgentIcon,
     color: "#FFFFFF",
     badge: true,
     badgeIconSize: "h-9 w-9",
   },
-  { name: "PostgreSQL", category: "데이터", icon: SiPostgresql, color: "#4169E1" },
-  { name: "AWS", category: "인프라", icon: FaAws, color: "#FF9900" },
-  { name: "Docker", category: "인프라", icon: SiDocker, color: "#2496ED" },
-  { name: "BentoML", category: "서빙", icon: SiBentoml, color: "#FF6E42" },
-  { name: "MLflow", category: "모델링", icon: SiMlflow, color: "#0194E2" },
-  { name: "LangFuse", category: "관측성", icon: "/icons/langfuse.svg", color: "#0A60B5" },
-  { name: "Prometheus", category: "관측성", icon: SiPrometheus, color: "#E6522C" },
-  { name: "Grafana", category: "관측성", icon: SiGrafana, color: "#F46800" },
+  { name: "Python", group: "Backend", icon: SiPython, color: "#3776AB" },
+  { name: "FastAPI", group: "Backend", icon: SiFastapi, color: "#009688" },
+  { name: "PostgreSQL", group: "Backend", icon: SiPostgresql, color: "#4169E1" },
+  { name: "BentoML", group: "Backend", icon: SiBentoml, color: "#FFFFFF" },
+  { name: "Airflow", group: "Infrastructure", icon: SiApacheairflow, color: "#017CEE" },
+  { name: "AWS", group: "Infrastructure", icon: FaAws, color: "#FF9900" },
+  { name: "Docker", group: "Infrastructure", icon: SiDocker, color: "#2496ED" },
+  { name: "MLflow", group: "Infrastructure", icon: SiMlflow, color: "#0194E2" },
+  { name: "LangFuse", group: "Observability", icon: "/icons/langfuse.svg", color: "#0A60B5" },
+  { name: "Prometheus", group: "Observability", icon: SiPrometheus, color: "#E6522C" },
+  { name: "Grafana", group: "Observability", icon: SiGrafana, color: "#F46800" },
 ]
 
 const contactLinks: {
@@ -211,79 +222,6 @@ function useKoreanTyping(frames: string[], stepMs: number, startDelayMs: number)
   return text
 }
 
-const SNAP_STICK_MS = 350
-const SNAP_TRANSITION_MS = 600
-
-function useSnapScroll(containerRef: React.RefObject<HTMLElement | null>) {
-  useEffect(() => {
-    const container = containerRef.current
-    if (!container) return
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
-
-    const sections = Array.from(
-      container.querySelectorAll<HTMLElement>("[data-snap]")
-    )
-    if (sections.length === 0) return
-
-    let locked = false
-
-    function activeIndex() {
-      const top = container!.scrollTop
-      for (let i = 0; i < sections.length; i++) {
-        if (top < sections[i].offsetTop + sections[i].offsetHeight - 10) return i
-      }
-      return sections.length
-    }
-
-    function scrollToIndex(index: number) {
-      const target = sections[index]
-      if (!target) return
-      locked = true
-      // Let the browser's compositor drive the scroll instead of hand-rolling
-      // it with rAF + scrollTop — a main-thread tween fights Framer Motion's
-      // concurrent reveal animations and stutters.
-      container!.scrollTo({ top: target.offsetTop, behavior: "smooth" })
-
-      let settled = false
-      function unlock() {
-        if (settled) return
-        settled = true
-        container!.removeEventListener("scrollend", unlock)
-        setTimeout(() => {
-          locked = false
-        }, SNAP_STICK_MS)
-      }
-      container!.addEventListener("scrollend", unlock, { once: true })
-      // Safety net for browsers without "scrollend" support.
-      setTimeout(unlock, SNAP_TRANSITION_MS)
-    }
-
-    function onWheel(e: WheelEvent) {
-      if (locked) {
-        e.preventDefault()
-        return
-      }
-      if (Math.abs(e.deltaY) < 10) return
-      const idx = activeIndex()
-      if (e.deltaY > 0 && idx < sections.length - 1) {
-        e.preventDefault()
-        scrollToIndex(idx + 1)
-      } else if (e.deltaY < 0) {
-        if (idx === sections.length) {
-          e.preventDefault()
-          scrollToIndex(sections.length - 1)
-        } else if (idx > 0) {
-          e.preventDefault()
-          scrollToIndex(idx - 1)
-        }
-      }
-    }
-
-    container.addEventListener("wheel", onWheel, { passive: false })
-    return () => container.removeEventListener("wheel", onWheel)
-  }, [containerRef])
-}
-
 function Section({
   children,
   id,
@@ -294,12 +232,11 @@ function Section({
   return (
     <motion.section
       id={id}
-      data-snap
       variants={stagger}
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, amount: 0.2 }}
-      className="flex min-h-dvh snap-start flex-col justify-center border-t border-white/10 px-6 py-20 [scroll-snap-stop:always] md:px-12 md:py-24 lg:py-32"
+      className="flex min-h-dvh flex-col justify-center px-6 py-20 md:px-12 md:py-24 lg:py-32"
     >
       <div className="mx-auto w-full max-w-5xl">{children}</div>
     </motion.section>
@@ -340,7 +277,7 @@ function TechCard({ tech }: { tech: (typeof stack)[number] }) {
       variants={rise}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative flex flex-col gap-1 overflow-hidden rounded-xl border border-white/10 bg-white/0 p-6 backdrop-blur-md"
+      className="relative flex flex-col gap-1 overflow-hidden rounded-xl border border-white/10 bg-white/0 p-4 backdrop-blur-md"
       style={{ backgroundImage }}
     >
       {typeof tech.icon === "string" ? (
@@ -373,7 +310,6 @@ function TechCard({ tech }: { tech: (typeof stack)[number] }) {
       <span className="text-lg font-medium tracking-[-0.01em]">
         {tech.name}
       </span>
-      <span className="font-mono text-xs text-white/40">{tech.category}</span>
     </motion.div>
   )
 }
@@ -385,7 +321,6 @@ export default function Home() {
   const heroEyebrow = useKoreanTyping(HERO_EYEBROW_FRAMES, 45, 400)
   const heroName = useKoreanTyping(HERO_NAME_FRAMES, 60, 400)
   const heroSuffix = useKoreanTyping(HERO_SUFFIX_FRAMES, 70, 400)
-  useSnapScroll(mainRef)
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
@@ -413,16 +348,13 @@ export default function Home() {
     <main
       id="page-scroll-root"
       ref={mainRef}
-      className="font-kr relative h-dvh snap-y snap-mandatory overflow-y-scroll text-white/90 selection:bg-white selection:text-black"
+      className="font-kr relative h-dvh overflow-y-scroll text-white/90 selection:bg-white selection:text-black"
     >
       <OceanBackground />
       <div className="fixed inset-0 -z-10 bg-black/55" />
 
       {/* Hero */}
-      <section
-        data-snap
-        className="relative flex min-h-dvh snap-start flex-col justify-center px-6 [scroll-snap-stop:always] md:px-12"
-      >
+      <section className="relative flex min-h-dvh flex-col justify-center px-6 md:px-12">
         <motion.div
           initial="hidden"
           animate="show"
@@ -510,9 +442,18 @@ export default function Home() {
       {/* Tech stack */}
       <Section>
         <Eyebrow>기술 스택</Eyebrow>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-          {stack.map((tech) => (
-            <TechCard key={tech.name} tech={tech} />
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          {STACK_GROUPS.map((group) => (
+            <div key={group} className="flex flex-col gap-3">
+              <h3 className="mb-1 font-mono text-xs tracking-[0.2em] text-white/40 uppercase">
+                {group}
+              </h3>
+              {stack
+                .filter((tech) => tech.group === group)
+                .map((tech) => (
+                  <TechCard key={tech.name} tech={tech} />
+                ))}
+            </div>
           ))}
         </div>
       </Section>
@@ -523,7 +464,7 @@ export default function Home() {
           variants={rise}
           className="text-center text-[clamp(28px,5vw,52px)] leading-[1.05] font-semibold tracking-[-0.03em]"
         >
-          Get in touch
+          Lets Get in touch!
         </motion.h2>
         <motion.div
           variants={rise}

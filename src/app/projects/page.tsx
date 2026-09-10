@@ -2,11 +2,19 @@
 
 import { Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
+import dynamic from "next/dynamic"
 import { AnimatePresence, motion, useReducedMotion } from "motion/react"
 
 import { cn } from "@/lib/utils"
 import { ProjectCard } from "@/components/projects/project-card"
-import { categories, getCategoryProjects } from "./data"
+import { categories, getCategoryProjects, getProject } from "./data"
+
+const OceanBackground = dynamic(() => import("@/components/ocean-background"), {
+  ssr: false,
+})
+const ProjectDetailOverlay = dynamic(() =>
+  import("@/components/projects/project-detail-overlay").then((m) => m.ProjectDetailOverlay)
+)
 
 export default function ProjectsPage() {
   return (
@@ -22,6 +30,7 @@ function ProjectsPageInner() {
   const shouldReduceMotion = useReducedMotion()
   const activeCategory = searchParams.get("category")
   const visibleProjects = getCategoryProjects(activeCategory)
+  const activeProject = getProject(searchParams.get("project") ?? "")
 
   const setCategory = (category: string | null) => {
     const params = new URLSearchParams(searchParams)
@@ -31,10 +40,13 @@ function ProjectsPageInner() {
   }
 
   return (
-    <main className="relative min-h-screen w-full bg-zinc-50 px-6 pb-24 dark:bg-black">
+    <main className="relative min-h-screen w-full px-6 pb-24">
+      <OceanBackground />
+      <div className="fixed inset-0 -z-10 bg-black/55" />
+
       <div className="mx-auto max-w-5xl pt-24">
         <h1
-          className="px-0 pb-8 font-sans text-2xl font-semibold text-[#171717] dark:text-white"
+          className="px-0 pb-8 font-sans text-2xl font-semibold text-white"
           style={{ letterSpacing: "-0.96px", lineHeight: "32px" }}
         >
           Projects
@@ -46,8 +58,8 @@ function ProjectsPageInner() {
             className={cn(
               "cursor-pointer rounded-[6px] px-3 py-1.5 text-sm font-medium transition-colors",
               !activeCategory
-                ? "bg-[#171717] text-white dark:bg-white dark:text-[#171717]"
-                : "bg-zinc-200 text-[#171717] hover:bg-zinc-300 dark:bg-zinc-800 dark:text-white dark:hover:bg-zinc-700"
+                ? "bg-white text-[#171717]"
+                : "border border-white/15 bg-white/5 text-white/70 backdrop-blur-md hover:bg-white/10"
             )}
           >
             All
@@ -59,8 +71,8 @@ function ProjectsPageInner() {
               className={cn(
                 "cursor-pointer rounded-[6px] px-3 py-1.5 text-sm font-medium transition-colors",
                 activeCategory === category
-                  ? "bg-[#171717] text-white dark:bg-white dark:text-[#171717]"
-                  : "bg-zinc-200 text-[#171717] hover:bg-zinc-300 dark:bg-zinc-800 dark:text-white dark:hover:bg-zinc-700"
+                  ? "bg-white text-[#171717]"
+                  : "border border-white/15 bg-white/5 text-white/70 backdrop-blur-md hover:bg-white/10"
               )}
             >
               {category}
@@ -84,6 +96,10 @@ function ProjectsPageInner() {
           </AnimatePresence>
         </div>
       </div>
+
+      <AnimatePresence>
+        {activeProject && <ProjectDetailOverlay key={activeProject.slug} project={activeProject} />}
+      </AnimatePresence>
     </main>
   )
 }
