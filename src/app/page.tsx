@@ -8,7 +8,6 @@ import {
   type Variants,
 } from "motion/react"
 import Image from "next/image"
-import dynamic from "next/dynamic"
 import { useEffect, useRef, useState } from "react"
 import type { IconType } from "react-icons"
 import {
@@ -35,10 +34,6 @@ import {
 import TransitionLink from "@/components/ui/transition-link"
 import { HermesAgentIcon } from "@/components/icons/hermes-agent"
 import { cn } from "@/lib/utils"
-
-const OceanBackground = dynamic(() => import("@/components/ocean-background"), {
-  ssr: false,
-})
 
 const timeline: { period: string; org: string; detail: string }[] = [
   {
@@ -350,9 +345,6 @@ export default function Home() {
       ref={mainRef}
       className="font-kr relative h-dvh overflow-y-scroll text-white/90 selection:bg-white selection:text-black"
     >
-      <OceanBackground />
-      <div className="fixed inset-0 -z-10 bg-black/55" />
-
       {/* Hero */}
       <section className="relative flex min-h-dvh flex-col justify-center px-6 md:px-12">
         <motion.div
