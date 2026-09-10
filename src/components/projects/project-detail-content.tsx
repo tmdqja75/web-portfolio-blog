@@ -1,21 +1,56 @@
 "use client"
 
 import type { ComponentType } from "react"
+import dynamic from "next/dynamic"
 import { motion, useReducedMotion } from "motion/react"
 
 import type { Project, ProjectMetric } from "@/app/projects/data"
 import { ProjectBannerModal } from "@/components/projects/project-banner-modal"
-import { PipelineDiagram } from "@/components/projects/pipeline-diagram"
-import { AnalysisDiagram } from "@/components/projects/analysis-diagram"
-import { AccuracyDiagram } from "@/components/projects/accuracy-diagram"
-import { ChatbotPipelineDiagram } from "@/components/projects/chatbot-pipeline-diagram"
-import { ChatbotAnalysisDiagram } from "@/components/projects/chatbot-analysis-diagram"
-import { ChatbotLatencyDiagram } from "@/components/projects/chatbot-latency-diagram"
-import { ChatbotArchitectureDiagram } from "@/components/projects/chatbot-architecture-diagram"
-import { ChatbotV2AnalysisDiagram } from "@/components/projects/chatbot-v2-analysis-diagram"
-import { MlopsArchitectureDiagram } from "@/components/projects/mlops-architecture-diagram"
-import { MlopsLeadtimeDiagram } from "@/components/projects/mlops-leadtime-diagram"
-import { NewsletterArchitectureDiagram } from "@/components/projects/newsletter-architecture-diagram"
+
+// Dynamically imported: any single open project renders at most a handful of
+// these, so loading all ten eagerly would bloat the /projects bundle for
+// diagrams most page loads never see.
+const PipelineDiagram = dynamic(() =>
+  import("@/components/projects/pipeline-diagram").then((m) => m.PipelineDiagram)
+)
+const AnalysisDiagram = dynamic(() =>
+  import("@/components/projects/analysis-diagram").then((m) => m.AnalysisDiagram)
+)
+const AccuracyDiagram = dynamic(() =>
+  import("@/components/projects/accuracy-diagram").then((m) => m.AccuracyDiagram)
+)
+const ChatbotPipelineDiagram = dynamic(() =>
+  import("@/components/projects/chatbot-pipeline-diagram").then((m) => m.ChatbotPipelineDiagram)
+)
+const ChatbotAnalysisDiagram = dynamic(() =>
+  import("@/components/projects/chatbot-analysis-diagram").then((m) => m.ChatbotAnalysisDiagram)
+)
+const ChatbotLatencyDiagram = dynamic(() =>
+  import("@/components/projects/chatbot-latency-diagram").then((m) => m.ChatbotLatencyDiagram)
+)
+const ChatbotArchitectureDiagram = dynamic(() =>
+  import("@/components/projects/chatbot-architecture-diagram").then(
+    (m) => m.ChatbotArchitectureDiagram
+  )
+)
+const ChatbotV2AnalysisDiagram = dynamic(() =>
+  import("@/components/projects/chatbot-v2-analysis-diagram").then(
+    (m) => m.ChatbotV2AnalysisDiagram
+  )
+)
+const MlopsArchitectureDiagram = dynamic(() =>
+  import("@/components/projects/mlops-architecture-diagram").then(
+    (m) => m.MlopsArchitectureDiagram
+  )
+)
+const MlopsLeadtimeDiagram = dynamic(() =>
+  import("@/components/projects/mlops-leadtime-diagram").then((m) => m.MlopsLeadtimeDiagram)
+)
+const NewsletterArchitectureDiagram = dynamic(() =>
+  import("@/components/projects/newsletter-architecture-diagram").then(
+    (m) => m.NewsletterArchitectureDiagram
+  )
+)
 
 const PAAR_EYEBROW = { problem: "PROBLEM", analysis: "ANALYSIS", action: "ACTION", result: "RESULT" } as const
 

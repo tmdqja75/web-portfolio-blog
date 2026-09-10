@@ -8,6 +8,7 @@ import {
   type Variants,
 } from "motion/react"
 import Image from "next/image"
+import dynamic from "next/dynamic"
 import { useEffect, useRef, useState } from "react"
 import type { IconType } from "react-icons"
 import {
@@ -33,8 +34,11 @@ import {
 } from "react-icons/ri"
 import TransitionLink from "@/components/ui/transition-link"
 import { HermesAgentIcon } from "@/components/icons/hermes-agent"
-import { OceanBackground } from "@/components/ocean-background"
 import { cn } from "@/lib/utils"
+
+const OceanBackground = dynamic(() => import("@/components/ocean-background"), {
+  ssr: false,
+})
 
 const timeline: { period: string; org: string; detail: string }[] = [
   {
