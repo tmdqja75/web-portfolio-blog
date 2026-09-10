@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Noto_Sans_KR } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import PageTransition from "@/components/ui/page-transition";
 import SiteHeader from "@/components/site-header";
 import MadeWithBadge from "@/components/made-with-badge";
@@ -40,6 +41,7 @@ export default function RootLayout({
         <SiteHeader />
         <PageTransition>{children}</PageTransition>
         <MadeWithBadge />
+        <Analytics />
       </body>
     </html>
   );
