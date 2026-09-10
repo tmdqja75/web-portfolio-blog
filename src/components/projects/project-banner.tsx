@@ -81,7 +81,7 @@ export function ProjectBanner({
     <div
       role="img"
       aria-label={`${project.title} 대표 기술`}
-      className={`relative flex w-full items-center justify-center overflow-hidden border border-black/10 bg-gradient-to-br from-black/[0.06] via-transparent to-transparent backdrop-blur-md dark:border-white/10 dark:from-white/10 ${
+      className={`relative flex w-full items-center justify-center overflow-hidden border border-white/10 bg-white/0 backdrop-blur-md ${
         compact ? "h-full rounded-[6px]" : "aspect-[16/9] rounded-xl"
       }`}
     >
