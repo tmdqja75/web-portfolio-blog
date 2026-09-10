@@ -61,10 +61,10 @@ export function MlopsArchitectureDiagram() {
       <rect width="1320" height="610" fill="url(#mlops-architecture-grid-fine)" />
       <rect width="1320" height="610" fill="url(#mlops-architecture-grid-bold)" />
 
-      <text x="40" y="30" fontSize="17" fontWeight="600" letterSpacing="1.7" className="fill-[#888888] dark:fill-zinc-500">
+      <text x="40" y="30" fontSize="20" fontWeight="600" letterSpacing="1.7" className="fill-[#888888] dark:fill-zinc-500">
         ARCHITECTURE
       </text>
-      <text x="40" y="60" fontSize="20" className="fill-[#4d4d4d] dark:fill-zinc-400">
+      <text x="40" y="60" fontSize="22" className="fill-[#4d4d4d] dark:fill-zinc-400">
         실험 기록부터 배포·관측·알림까지 이어지는 표준 경로
       </text>
 
@@ -74,7 +74,7 @@ export function MlopsArchitectureDiagram() {
           <text
             x={n.x + (n.w - ICON_RESERVE) / 2}
             y={n.y + n.h / 2 - 5}
-            fontSize="16"
+            fontSize="19"
             fontWeight="600"
             textAnchor="middle"
             className="fill-[#171717] dark:fill-white"
@@ -84,7 +84,7 @@ export function MlopsArchitectureDiagram() {
           <text
             x={n.x + (n.w - ICON_RESERVE) / 2}
             y={n.y + n.h / 2 + 15}
-            fontSize="13"
+            fontSize="16"
             textAnchor="middle"
             className="fill-[#888888] dark:fill-zinc-500"
           >
@@ -102,15 +102,15 @@ export function MlopsArchitectureDiagram() {
       {/* ECS Fargate — hero box with nested CD mechanism */}
       <motion.g variants={step}>
         <rect x="40" y="302" width="700" height="120" rx="10" fill="none" strokeWidth="2" className="stroke-[#171717] dark:stroke-white" />
-        <text x="64" y="336" fontSize="20" fontWeight="600" className="fill-[#171717] dark:fill-white">
+        <text x="64" y="336" fontSize="22" fontWeight="600" className="fill-[#171717] dark:fill-white">
           ECS Fargate 서비스
         </text>
-        <text x="64" y="360" fontSize="13" className="fill-[#888888] dark:fill-zinc-500">
+        <text x="64" y="360" fontSize="16" className="fill-[#888888] dark:fill-zinc-500">
           (모델별 독립 컨테이너, 장애 격리 단위)
         </text>
         <FaAws x="696" y="318" size="26" className="text-[#171717] dark:text-white" />
         <rect x="64" y="376" width="652" height="38" rx="8" fill="none" strokeDasharray="4 4" className="stroke-[#a1a1a1] dark:stroke-zinc-700" />
-        <text x="390" y="400" fontSize="14" fontWeight="500" textAnchor="middle" className="fill-[#4d4d4d] dark:fill-zinc-400">
+        <text x="390" y="400" fontSize="17" fontWeight="500" textAnchor="middle" className="fill-[#4d4d4d] dark:fill-zinc-400">
           GitHub Actions CD: 변경 감지 → 빌드 → ECR 푸시 → ALB 라우팅 검증 → 갱신
         </text>
       </motion.g>
@@ -145,11 +145,11 @@ export function MlopsArchitectureDiagram() {
 
       <line x1="40" y1="452" x2="1280" y2="452" strokeWidth="1.5" className="stroke-[#ebebeb] dark:stroke-zinc-800" />
 
-      <text x="40" y="478" fontSize="15" fontWeight="600" letterSpacing="1.5" className="fill-[#888888] dark:fill-zinc-500">
+      <text x="40" y="478" fontSize="18" fontWeight="600" letterSpacing="1.5" className="fill-[#888888] dark:fill-zinc-500">
         MONITORING
       </text>
 
-      <text x="40" y="584" fontSize="13" className="fill-[#888888] dark:fill-zinc-500">
+      <text x="40" y="584" fontSize="16" className="fill-[#888888] dark:fill-zinc-500">
         * Airflow 오케스트레이션은 본인 담당 범위 밖이라 이 다이어그램에서 제외
       </text>
     </motion.svg>

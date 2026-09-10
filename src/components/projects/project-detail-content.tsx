@@ -105,7 +105,7 @@ function PAARSection({
 
       <ul className="mt-4 space-y-2.5">
         {bullets.map((bullet) => (
-          <li key={bullet} className="flex gap-3 text-[15px] leading-relaxed text-[#4d4d4d] dark:text-zinc-400">
+          <li key={bullet} className="flex gap-3 text-base leading-6 text-[#4d4d4d] dark:text-zinc-400">
             <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-[2px] bg-[#a1a1a1] dark:bg-zinc-600" />
             <span>{bullet}</span>
           </li>
@@ -170,7 +170,7 @@ export function ProjectDetailContent({ project }: { project: Project }) {
           </p>
         )}
 
-        <p className="mt-4 text-[#4d4d4d] dark:text-zinc-400">
+        <p className="mt-4 text-base leading-6 text-[#4d4d4d] dark:text-zinc-400">
           {project.paar ? project.subtitle : project.description}
         </p>
 
@@ -190,7 +190,7 @@ export function ProjectDetailContent({ project }: { project: Project }) {
             <span className="text-xs font-semibold tracking-[1.5px] text-[#888888] dark:text-zinc-500">TL;DR</span>
             <ul className="mt-2 space-y-2">
               {project.metrics.map((metric) => (
-                <li key={metric.label} className="flex gap-3 text-[15px] leading-relaxed text-[#4d4d4d] dark:text-zinc-400">
+                <li key={metric.label} className="flex gap-3 text-base leading-6 text-[#4d4d4d] dark:text-zinc-400">
                   <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-[2px] bg-[#a1a1a1] dark:bg-zinc-600" />
                   <span>
                     <strong className="font-semibold text-[#171717] dark:text-white">{metric.value}</strong> · {metric.label}

@@ -105,7 +105,7 @@ export function ProjectDetailOverlay({ project }: { project: Project }) {
           animate={{ scale: 1 }}
           exit={{ scale: 0.97 }}
           transition={panelTransition}
-          className="relative my-12 w-full max-w-3xl overflow-hidden rounded-xl border border-black/10 outline-none dark:border-white/10"
+          className="relative my-12 w-full max-w-4xl overflow-hidden rounded-xl border border-black/10 outline-none dark:border-white/10"
         >
           <button
             onClick={close}

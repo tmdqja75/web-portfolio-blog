@@ -61,10 +61,10 @@ export function ChatbotArchitectureDiagram() {
       <rect width="1320" height="610" fill="url(#chatbot-architecture-grid-fine)" />
       <rect width="1320" height="610" fill="url(#chatbot-architecture-grid-bold)" />
 
-      <text x="40" y="30" fontSize="17" fontWeight="600" letterSpacing="1.7" className="fill-[#888888] dark:fill-zinc-500">
+      <text x="40" y="30" fontSize="20" fontWeight="600" letterSpacing="1.7" className="fill-[#888888] dark:fill-zinc-500">
         ARCHITECTURE
       </text>
-      <text x="40" y="60" fontSize="20" className="fill-[#4d4d4d] dark:fill-zinc-400">
+      <text x="40" y="60" fontSize="22" className="fill-[#4d4d4d] dark:fill-zinc-400">
         요청 한 번이 클라이언트에서 DB까지 거치는 경로
       </text>
 
@@ -74,7 +74,7 @@ export function ChatbotArchitectureDiagram() {
           <text
             x={n.x + (n.w - ICON_RESERVE) / 2}
             y={n.y + n.h / 2 - 5}
-            fontSize="16"
+            fontSize="19"
             fontWeight="600"
             textAnchor="middle"
             className="fill-[#171717] dark:fill-white"
@@ -84,7 +84,7 @@ export function ChatbotArchitectureDiagram() {
           <text
             x={n.x + (n.w - ICON_RESERVE) / 2}
             y={n.y + n.h / 2 + 15}
-            fontSize="13"
+            fontSize="16"
             textAnchor="middle"
             className="fill-[#888888] dark:fill-zinc-500"
           >
@@ -102,15 +102,15 @@ export function ChatbotArchitectureDiagram() {
       {/* LangGraph Agent — hero box with nested db_agent subgraph */}
       <motion.g variants={step}>
         <rect x="40" y="302" width="700" height="120" rx="10" fill="none" strokeWidth="2" className="stroke-[#171717] dark:stroke-white" />
-        <text x="64" y="336" fontSize="20" fontWeight="600" className="fill-[#171717] dark:fill-white">
+        <text x="64" y="336" fontSize="22" fontWeight="600" className="fill-[#171717] dark:fill-white">
           LangGraph Agent
         </text>
-        <text x="64" y="360" fontSize="13" className="fill-[#888888] dark:fill-zinc-500">
+        <text x="64" y="360" fontSize="16" className="fill-[#888888] dark:fill-zinc-500">
           (관련성 판단 → 병렬 수집 → 정보추출 → 응답생성)
         </text>
         <SiLangchain x="696" y="318" size="28" className="text-[#171717] dark:text-white" />
         <rect x="64" y="376" width="652" height="38" rx="8" fill="none" strokeDasharray="4 4" className="stroke-[#a1a1a1] dark:stroke-zinc-700" />
-        <text x="390" y="400" fontSize="14" fontWeight="500" textAnchor="middle" className="fill-[#4d4d4d] dark:fill-zinc-400">
+        <text x="390" y="400" fontSize="17" fontWeight="500" textAnchor="middle" className="fill-[#4d4d4d] dark:fill-zinc-400">
           db_agent 서브그래프 (3-노드, LLM 호출 1회)
         </text>
       </motion.g>
@@ -153,11 +153,11 @@ export function ChatbotArchitectureDiagram() {
 
       <line x1="40" y1="452" x2="1280" y2="452" strokeWidth="1.5" className="stroke-[#ebebeb] dark:stroke-zinc-800" />
 
-      <text x="40" y="478" fontSize="15" fontWeight="600" letterSpacing="1.5" className="fill-[#888888] dark:fill-zinc-500">
+      <text x="40" y="478" fontSize="18" fontWeight="600" letterSpacing="1.5" className="fill-[#888888] dark:fill-zinc-500">
         DEPLOYMENT
       </text>
 
-      <text x="40" y="584" fontSize="13" className="fill-[#888888] dark:fill-zinc-500">
+      <text x="40" y="584" fontSize="16" className="fill-[#888888] dark:fill-zinc-500">
         * main 브랜치 반영 시 GitHub Actions가 Docker 이미지를 빌드해 ECR에 푸시하고 ECS(dev/prod) 서비스를 갱신
       </text>
     </motion.svg>
