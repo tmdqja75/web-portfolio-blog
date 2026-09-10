@@ -8,7 +8,6 @@ import {
   type Variants,
 } from "motion/react"
 import Image from "next/image"
-import dynamic from "next/dynamic"
 import { useEffect, useRef, useState } from "react"
 import type { IconType } from "react-icons"
 import {
@@ -36,16 +35,11 @@ import TransitionLink from "@/components/ui/transition-link"
 import { HermesAgentIcon } from "@/components/icons/hermes-agent"
 import { cn } from "@/lib/utils"
 
-const OceanBackground = dynamic(() => import("@/components/ocean-background"), {
-  ssr: false,
-})
-
-const timeline: { period: string; org: string; detail: string }[] = [
+const timeline: { period: string; org: string; detail: string | string[] }[] = [
   {
-    period: "2015 — 2021",
+    period: "2015.08 — 2021.05",
     org: "The University of Texas at Austin",
-    detail:
-      "기계공학 학사. 졸업 이후 머신러닝과 데이터 엔지니어링으로 방향을 옮겨, 물리 시스템을 다루던 감각을 소프트웨어로 가져왔습니다.",
+    detail: ["기계공학과 학사", "The Elements of Computing Program Certificate 수료"],
   },
   {
     period: "2023.06 — 현재",
@@ -245,12 +239,12 @@ function Section({
 
 function Eyebrow({ children }: { children: React.ReactNode }) {
   return (
-    <motion.p
+    <motion.h2
       variants={rise}
-      className="mb-12 font-mono text-xs tracking-[0.2em] text-white/40 uppercase"
+      className="mb-12 text-[32px] leading-[40px] font-semibold tracking-[-1.28px] text-white"
     >
       {children}
-    </motion.p>
+    </motion.h2>
   )
 }
 
@@ -350,9 +344,6 @@ export default function Home() {
       ref={mainRef}
       className="font-kr relative h-dvh overflow-y-scroll text-white/90 selection:bg-white selection:text-black"
     >
-      <OceanBackground />
-      <div className="fixed inset-0 -z-10 bg-black/55" />
-
       {/* Hero */}
       <section className="relative flex min-h-dvh flex-col justify-center px-6 md:px-12">
         <motion.div
@@ -424,14 +415,22 @@ export default function Home() {
                 variants={rise}
                 className="grid gap-3 md:grid-cols-[180px_1fr] md:gap-12"
               >
-                <p className="font-mono text-sm text-white/40">{item.period}</p>
+                <p className="font-mono text-base text-white/40">{item.period}</p>
                 <div>
-                  <h3 className="text-2xl font-semibold tracking-[-0.02em] md:text-3xl">
+                  <h3 className="text-2xl font-semibold tracking-[-0.02em] md:text-[32px] md:leading-[40px] md:tracking-[-1.28px]">
                     {item.org}
                   </h3>
-                  <p className="mt-3 max-w-xl leading-relaxed text-white/60">
-                    {item.detail}
-                  </p>
+                  {Array.isArray(item.detail) ? (
+                    <ul className="mt-3 max-w-xl list-disc space-y-1 pl-5 leading-relaxed text-white/60">
+                      {item.detail.map((line) => (
+                        <li key={line}>{line}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="mt-3 max-w-xl leading-relaxed text-white/60">
+                      {item.detail}
+                    </p>
+                  )}
                 </div>
               </motion.div>
             ))}
@@ -445,7 +444,7 @@ export default function Home() {
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {STACK_GROUPS.map((group) => (
             <div key={group} className="flex flex-col gap-3">
-              <h3 className="mb-1 font-mono text-xs tracking-[0.2em] text-white/40 uppercase">
+              <h3 className="mb-1 text-[24px] leading-[32px] font-semibold tracking-[-0.96px] text-white">
                 {group}
               </h3>
               {stack

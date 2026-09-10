@@ -7,7 +7,10 @@ export default async function BlogPage() {
   const posts = await getAllPosts()
 
   return (
-    <main className="relative min-h-screen w-full bg-zinc-50 px-6 pb-24 dark:bg-black">
+    <main
+      id="page-scroll-root"
+      className="relative h-dvh w-full overflow-y-scroll bg-zinc-50 px-6 pb-24 dark:bg-black"
+    >
       <div className="mx-auto max-w-5xl pt-24">
         <h1
           className="pb-8 font-sans text-2xl font-semibold text-[#171717] dark:text-white"
