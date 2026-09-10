@@ -14,7 +14,7 @@ export function ProjectCard({
   categoryParam: string | null
 }) {
   const shouldReduceMotion = useReducedMotion()
-  const href = `/projects/${project.slug}${categoryParam ? `?category=${categoryParam}` : ""}`
+  const href = `/projects?project=${project.slug}${categoryParam ? `&category=${categoryParam}` : ""}`
 
   return (
     <Link href={href} scroll={false} className="group block">

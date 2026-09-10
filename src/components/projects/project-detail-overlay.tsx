@@ -23,22 +23,19 @@ export function ProjectDetailOverlay({ project }: { project: Project }) {
   const close = () => router.back()
 
   const goTo = (slug: string) => {
-    const qs = activeCategory ? `?category=${activeCategory}` : ""
-    router.replace(`/projects/${slug}${qs}`, { scroll: false })
+    const params = new URLSearchParams(searchParams)
+    params.set("project", slug)
+    router.replace(`/projects?${params.toString()}`, { scroll: false })
   }
 
-  const navRef = useRef({ prevProject, nextProject, activeCategory })
+  const navRef = useRef({ prevProject, nextProject, goTo })
   useEffect(() => {
-    navRef.current = { prevProject, nextProject, activeCategory }
-  }, [prevProject, nextProject, activeCategory])
+    navRef.current = { prevProject, nextProject, goTo }
+  })
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      const { prevProject, nextProject, activeCategory } = navRef.current
-      const goTo = (slug: string) => {
-        const qs = activeCategory ? `?category=${activeCategory}` : ""
-        router.replace(`/projects/${slug}${qs}`, { scroll: false })
-      }
+      const { prevProject, nextProject, goTo } = navRef.current
       if (e.key === "Escape") router.back()
       if (e.key === "ArrowLeft" && prevProject) goTo(prevProject.slug)
       if (e.key === "ArrowRight" && nextProject) goTo(nextProject.slug)
@@ -110,7 +107,7 @@ export function ProjectDetailOverlay({ project }: { project: Project }) {
           >
             ✕
           </button>
-          <ProjectDetailContent project={project} inModal />
+          <ProjectDetailContent project={project} />
 
           {navigable.length > 1 && (
             <div className="fixed inset-x-0 bottom-6 z-30 flex justify-center gap-2">

@@ -30,16 +30,15 @@ Next.js 16.2.11 (App Router, Turbopack, `src/app/`), React 19, TypeScript, Tailw
 
 ## Architecture
 
-Single-user portfolio/blog. Two top-level pages plus a projects detail route:
+Single-user portfolio/blog. Two top-level pages; project detail is a modal-only overlay on `/projects`, not a separate route:
 
 - `src/app/page.tsx` — landing: full-screen nav list (`navigationItems` array; items with `href` become links) using `TextRoll` hover animation.
-- `src/app/projects/page.tsx` — client component (wrapped in `Suspense` since it reads `useSearchParams`). Filterable grid (not a carousel): category buttons write `?category=` to the URL, `AnimatePresence`/`motion` fades cards in/out on filter change. Project data comes from `src/app/projects/data.ts` (`categories`, `getCategoryProjects`, `getProject`), not an inline array.
-- `src/app/projects/[slug]/page.tsx` — full-page project detail (direct nav / refresh / no-JS fallback).
-- `src/app/projects/@modal/(.)[slug]/page.tsx` + `default.tsx` — parallel/intercepted route: clicking a card from `/projects` opens the same detail as an overlay modal (`ProjectDetailOverlay`) without leaving the grid; `src/app/projects/layout.tsx` renders `{children}` and `{modal}` side by side per Next's parallel-routes convention.
-- `src/components/projects/project-card.tsx` — grid card. It renders `ProjectBanner` above the card copy, so cards and detail pages share the same project visual.
-- `src/components/projects/project-banner.tsx` — reusable 16:9 transparent-glass banner. `PROJECT_BANNER_ICONS` maps each project slug to exactly two representative icons; the non-compact banner always uses the same `gap-10` center-row spacing. The V2 DSPy mark is `public/icons/dspy.png`.
-- `src/components/projects/project-detail-overlay.tsx` — modal chrome: focus trap (Tab cycles within the panel), Escape/backdrop-click to close (`router.back()`), prev/next via arrow keys and a thumbnail rail, all gated through `getCategoryProjects` so navigation stays within the active filter.
-- `src/components/projects/project-detail-content.tsx` — body shared between the full page and the overlay.
+- `src/app/projects/page.tsx` — client component (wrapped in `Suspense` since it reads `useSearchParams`). Filterable grid (not a carousel): category buttons write `?category=` to the URL, `AnimatePresence`/`motion` fades cards in/out on filter change. Project data comes from `src/app/projects/data.ts` (`categories`, `getCategoryProjects`, `getProject`), not an inline array. Clicking a card sets `?project=<slug>` on the same URL (preserving `?category=`) and this page renders `ProjectDetailOverlay` for the matching project — there is no `/projects/[slug]` route; opening/closing/prev-next all happen via that query param and browser history (`router.push`/`router.back`).
+- `src/components/projects/project-card.tsx` — grid card. It renders `ProjectBanner` above the card copy and links to `/projects?project=<slug>`.
+- `src/components/projects/project-banner.tsx` — reusable 16:9 transparent-glass banner used on the grid and detail body. `PROJECT_BANNER_ICONS` maps each project slug to exactly two representative icons (exported, shared with `project-banner-modal.tsx`); the non-compact banner always uses the same `gap-10` center-row spacing. The V2 DSPy mark is `public/icons/dspy.png`.
+- `src/components/projects/project-banner-modal.tsx` — modal-only banner variant. The modal's own `backdrop-filter` blur doesn't recomposite live over the WebGPU ocean canvas when stacked with another blurred ancestor (browsers snapshot it once instead of resampling per frame), so exactly one element in the whole modal may carry `backdrop-blur` — that's this component; the modal shell and body around it use plain alpha transparency instead.
+- `src/components/projects/project-detail-overlay.tsx` — modal chrome: focus trap (Tab cycles within the panel), Escape/backdrop-click to close (`router.back()`), prev/next via arrow keys and a thumbnail rail, all gated through `getCategoryProjects` so navigation stays within the active filter. The panel shell is transparent/bordered only.
+- `src/components/projects/project-detail-content.tsx` — the detail body, only ever rendered inside `ProjectDetailOverlay`. Renders the banner edge-to-edge (so it's exposed directly to the live background behind the modal) followed by a separate opaque body div for the rest of the content.
 
 ### PAAR project sections
 

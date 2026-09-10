@@ -6,8 +6,9 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react"
 
 import { cn } from "@/lib/utils"
 import { ProjectCard } from "@/components/projects/project-card"
+import { ProjectDetailOverlay } from "@/components/projects/project-detail-overlay"
 import { OceanBackground } from "@/components/ocean-background"
-import { categories, getCategoryProjects } from "./data"
+import { categories, getCategoryProjects, getProject } from "./data"
 
 export default function ProjectsPage() {
   return (
@@ -23,6 +24,7 @@ function ProjectsPageInner() {
   const shouldReduceMotion = useReducedMotion()
   const activeCategory = searchParams.get("category")
   const visibleProjects = getCategoryProjects(activeCategory)
+  const activeProject = getProject(searchParams.get("project") ?? "")
 
   const setCategory = (category: string | null) => {
     const params = new URLSearchParams(searchParams)
@@ -88,6 +90,10 @@ function ProjectsPageInner() {
           </AnimatePresence>
         </div>
       </div>
+
+      <AnimatePresence>
+        {activeProject && <ProjectDetailOverlay key={activeProject.slug} project={activeProject} />}
+      </AnimatePresence>
     </main>
   )
 }

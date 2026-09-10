@@ -4,7 +4,6 @@ import type { ComponentType } from "react"
 import { motion, useReducedMotion } from "motion/react"
 
 import type { Project, ProjectMetric } from "@/app/projects/data"
-import { ProjectBanner } from "@/components/projects/project-banner"
 import { ProjectBannerModal } from "@/components/projects/project-banner-modal"
 import { PipelineDiagram } from "@/components/projects/pipeline-diagram"
 import { AnalysisDiagram } from "@/components/projects/analysis-diagram"
@@ -104,13 +103,7 @@ function PAARSection({
   )
 }
 
-export function ProjectDetailContent({
-  project,
-  inModal = false,
-}: {
-  project: Project
-  inModal?: boolean
-}) {
+export function ProjectDetailContent({ project }: { project: Project }) {
   const shouldReduceMotion = useReducedMotion()
   const entranceTransition = shouldReduceMotion ? { duration: 0.15 } : { duration: 0.3 }
   const paarDiagram = PAAR_DIAGRAM_BY_PROJECT[project.slug] ?? {}
@@ -264,25 +257,12 @@ export function ProjectDetailContent({
     </>
   )
 
-  const banner = (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={entranceTransition}>
-      {inModal ? <ProjectBannerModal project={project} /> : <ProjectBanner project={project} />}
-    </motion.div>
-  )
-
-  if (inModal) {
-    return (
-      <div>
-        {banner}
-        <div className="bg-white p-8 pb-24 dark:bg-[#0a0a0a]">{rest}</div>
-      </div>
-    )
-  }
-
   return (
-    <div className="mx-auto max-w-3xl">
-      {banner}
-      {rest}
+    <div>
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={entranceTransition}>
+        <ProjectBannerModal project={project} />
+      </motion.div>
+      <div className="bg-white p-8 pb-24 dark:bg-[#0a0a0a]">{rest}</div>
     </div>
   )
 }
