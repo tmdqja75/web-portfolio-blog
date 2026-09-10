@@ -118,7 +118,7 @@ const stack: {
   { name: "Airflow", group: "Infrastructure", icon: SiApacheairflow, color: "#017CEE" },
   { name: "AWS", group: "Infrastructure", icon: FaAws, color: "#FF9900" },
   { name: "Docker", group: "Infrastructure", icon: SiDocker, color: "#2496ED" },
-  { name: "BentoML", group: "Infrastructure", icon: SiBentoml, color: "#FF6E42" },
+  { name: "BentoML", group: "Infrastructure", icon: SiBentoml, color: "#FFFFFF" },
   { name: "MLflow", group: "Infrastructure", icon: SiMlflow, color: "#0194E2" },
   { name: "LangFuse", group: "Observability", icon: "/icons/langfuse.svg", color: "#0A60B5" },
   { name: "Prometheus", group: "Observability", icon: SiPrometheus, color: "#E6522C" },
@@ -222,79 +222,6 @@ function useKoreanTyping(frames: string[], stepMs: number, startDelayMs: number)
   return text
 }
 
-const SNAP_STICK_MS = 350
-const SNAP_TRANSITION_MS = 600
-
-function useSnapScroll(containerRef: React.RefObject<HTMLElement | null>) {
-  useEffect(() => {
-    const container = containerRef.current
-    if (!container) return
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
-
-    const sections = Array.from(
-      container.querySelectorAll<HTMLElement>("[data-snap]")
-    )
-    if (sections.length === 0) return
-
-    let locked = false
-
-    function activeIndex() {
-      const top = container!.scrollTop
-      for (let i = 0; i < sections.length; i++) {
-        if (top < sections[i].offsetTop + sections[i].offsetHeight - 10) return i
-      }
-      return sections.length
-    }
-
-    function scrollToIndex(index: number) {
-      const target = sections[index]
-      if (!target) return
-      locked = true
-      // Let the browser's compositor drive the scroll instead of hand-rolling
-      // it with rAF + scrollTop — a main-thread tween fights Framer Motion's
-      // concurrent reveal animations and stutters.
-      container!.scrollTo({ top: target.offsetTop, behavior: "smooth" })
-
-      let settled = false
-      function unlock() {
-        if (settled) return
-        settled = true
-        container!.removeEventListener("scrollend", unlock)
-        setTimeout(() => {
-          locked = false
-        }, SNAP_STICK_MS)
-      }
-      container!.addEventListener("scrollend", unlock, { once: true })
-      // Safety net for browsers without "scrollend" support.
-      setTimeout(unlock, SNAP_TRANSITION_MS)
-    }
-
-    function onWheel(e: WheelEvent) {
-      if (locked) {
-        e.preventDefault()
-        return
-      }
-      if (Math.abs(e.deltaY) < 10) return
-      const idx = activeIndex()
-      if (e.deltaY > 0 && idx < sections.length - 1) {
-        e.preventDefault()
-        scrollToIndex(idx + 1)
-      } else if (e.deltaY < 0) {
-        if (idx === sections.length) {
-          e.preventDefault()
-          scrollToIndex(sections.length - 1)
-        } else if (idx > 0) {
-          e.preventDefault()
-          scrollToIndex(idx - 1)
-        }
-      }
-    }
-
-    container.addEventListener("wheel", onWheel, { passive: false })
-    return () => container.removeEventListener("wheel", onWheel)
-  }, [containerRef])
-}
-
 function Section({
   children,
   id,
@@ -305,12 +232,11 @@ function Section({
   return (
     <motion.section
       id={id}
-      data-snap
       variants={stagger}
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, amount: 0.2 }}
-      className="flex min-h-dvh snap-start flex-col justify-center border-t border-white/10 px-6 py-20 [scroll-snap-stop:always] md:px-12 md:py-24 lg:py-32"
+      className="flex min-h-dvh flex-col justify-center px-6 py-20 md:px-12 md:py-24 lg:py-32"
     >
       <div className="mx-auto w-full max-w-5xl">{children}</div>
     </motion.section>
@@ -395,7 +321,6 @@ export default function Home() {
   const heroEyebrow = useKoreanTyping(HERO_EYEBROW_FRAMES, 45, 400)
   const heroName = useKoreanTyping(HERO_NAME_FRAMES, 60, 400)
   const heroSuffix = useKoreanTyping(HERO_SUFFIX_FRAMES, 70, 400)
-  useSnapScroll(mainRef)
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
@@ -423,16 +348,13 @@ export default function Home() {
     <main
       id="page-scroll-root"
       ref={mainRef}
-      className="font-kr relative h-dvh snap-y snap-mandatory overflow-y-scroll text-white/90 selection:bg-white selection:text-black"
+      className="font-kr relative h-dvh overflow-y-scroll text-white/90 selection:bg-white selection:text-black"
     >
       <OceanBackground />
       <div className="fixed inset-0 -z-10 bg-black/55" />
 
       {/* Hero */}
-      <section
-        data-snap
-        className="relative flex min-h-dvh snap-start flex-col justify-center px-6 [scroll-snap-stop:always] md:px-12"
-      >
+      <section className="relative flex min-h-dvh flex-col justify-center px-6 md:px-12">
         <motion.div
           initial="hidden"
           animate="show"
