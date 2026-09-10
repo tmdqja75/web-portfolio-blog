@@ -8,9 +8,9 @@ export function ProjectBannerModal({ project }: { project: Pick<Project, "slug" 
     <div
       role="img"
       aria-label={`${project.title} 대표 기술`}
-      className="relative flex aspect-[16/9] w-full items-center justify-center overflow-hidden rounded-t-xl border-b border-black/10 bg-gradient-to-br from-black/[0.06] via-transparent to-transparent backdrop-blur-md dark:border-white/10 dark:from-white/10"
+      className="relative flex aspect-[16/9] w-full items-center justify-center overflow-hidden rounded-t-xl border-b border-black/10 bg-gradient-to-br from-black/[0.06] via-transparent to-transparent backdrop-blur-md [will-change:backdrop-filter] dark:border-white/10 dark:from-white/10"
     >
-      <div className="relative z-10 flex items-center justify-center gap-10 text-[#171717] dark:text-white">
+      <div className="relative z-10 flex items-center justify-center gap-10 text-white">
         <BannerIcons icons={icons} sizePx={40} iconSizeClass="h-10 w-10" />
       </div>
     </div>

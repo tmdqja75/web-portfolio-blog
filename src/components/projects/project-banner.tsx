@@ -1,7 +1,7 @@
 import Image from "next/image"
 import type { IconType } from "react-icons"
 import { FaAws } from "react-icons/fa6"
-import { SiClaudecode, SiFastapi, SiLanggraph, SiMlflow } from "react-icons/si"
+import { SiClaudecode, SiFastapi, SiMlflow } from "react-icons/si"
 import { RiClaudeLine, RiFileExcel2Line, RiMailSendLine, RiPresentationLine } from "react-icons/ri"
 
 import type { Project } from "@/app/projects/data"
@@ -20,15 +20,15 @@ export const PROJECT_BANNER_ICONS: Record<string, BannerIcon[]> = {
     { id: "excel", kind: "react", Icon: RiFileExcel2Line },
   ],
   "savee-chatbot-api": [
-    { id: "langgraph", kind: "react", Icon: SiLanggraph },
+    { id: "langgraph", kind: "image", src: "/icons/langgraph-white.svg" },
     { id: "fastapi", kind: "react", Icon: SiFastapi },
   ],
   "savee-chatbot-api-v2": [
-    { id: "langgraph", kind: "react", Icon: SiLanggraph },
+    { id: "langgraph", kind: "image", src: "/icons/langgraph-white.svg" },
     { id: "dspy", kind: "image", src: "/icons/dspy.png" },
   ],
   "newsletter-automation": [
-    { id: "langgraph", kind: "react", Icon: SiLanggraph },
+    { id: "deepagents", kind: "image", src: "/icons/deepagents-white.svg" },
     { id: "mail", kind: "react", Icon: RiMailSendLine },
   ],
   "claude-code-codex-training": [
@@ -55,7 +55,7 @@ export function BannerIcons({
           alt=""
           width={sizePx}
           height={sizePx}
-          className={`${iconSizeClass} object-contain`}
+          className={`${iconSizeClass} object-contain brightness-0 invert`}
         />
       )
     }
@@ -83,7 +83,7 @@ export function ProjectBanner({
         compact ? "h-full rounded-[6px]" : "aspect-[16/9] rounded-xl"
       }`}
     >
-      <div className={`relative z-10 flex items-center justify-center text-[#171717] dark:text-white ${compact ? "gap-1.5" : "gap-10"}`}>
+      <div className={`relative z-10 flex items-center justify-center text-white ${compact ? "gap-1.5" : "gap-10"}`}>
         <BannerIcons icons={icons} sizePx={compact ? 16 : 40} iconSizeClass={iconSizeClass} />
       </div>
     </div>

@@ -259,9 +259,7 @@ export function ProjectDetailContent({ project }: { project: Project }) {
 
   return (
     <div>
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={entranceTransition}>
-        <ProjectBannerModal project={project} />
-      </motion.div>
+      <ProjectBannerModal project={project} />
       <div className="bg-white p-8 pb-24 dark:bg-[#0a0a0a]">{rest}</div>
     </div>
   )
