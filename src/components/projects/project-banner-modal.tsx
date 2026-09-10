@@ -10,8 +10,8 @@ export function ProjectBannerModal({ project }: { project: Pick<Project, "slug" 
       aria-label={`${project.title} 대표 기술`}
       className="relative flex aspect-[16/9] w-full items-center justify-center overflow-hidden rounded-t-xl border-b border-white/10 bg-white/0 backdrop-blur-md [will-change:backdrop-filter]"
     >
-      <div className="relative z-10 flex items-center justify-center gap-14 text-white">
-        <BannerIcons icons={icons} sizePx={64} iconSizeClass="h-16 w-16" />
+      <div className="relative z-10 flex items-center justify-center gap-[84px] text-white">
+        <BannerIcons icons={icons} sizePx={96} iconSizeClass="h-24 w-24" />
       </div>
     </div>
   )

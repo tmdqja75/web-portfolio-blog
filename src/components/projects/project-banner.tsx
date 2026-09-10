@@ -75,7 +75,7 @@ export function ProjectBanner({
   showIcons?: boolean
 }) {
   const icons = PROJECT_BANNER_ICONS[project.slug]
-  const iconSizeClass = compact ? "h-4 w-4" : "h-10 w-10"
+  const iconSizeClass = compact ? "h-4 w-4" : "h-[60px] w-[60px]"
 
   return (
     <div
@@ -86,8 +86,8 @@ export function ProjectBanner({
       }`}
     >
       {showIcons && (
-        <div className={`relative z-10 flex items-center justify-center text-white ${compact ? "gap-1.5" : "gap-10"}`}>
-          <BannerIcons icons={icons} sizePx={compact ? 16 : 40} iconSizeClass={iconSizeClass} />
+        <div className={`relative z-10 flex items-center justify-center text-white ${compact ? "gap-1.5" : "gap-[60px]"}`}>
+          <BannerIcons icons={icons} sizePx={compact ? 16 : 60} iconSizeClass={iconSizeClass} />
         </div>
       )}
     </div>
