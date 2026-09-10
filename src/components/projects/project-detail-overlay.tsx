@@ -2,17 +2,20 @@
 
 import { useEffect, useRef } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
-import { motion, AnimatePresence } from "motion/react"
+import { motion, AnimatePresence, useReducedMotion } from "motion/react"
 
 import type { Project } from "@/app/projects/data"
 import { getCategoryProjects } from "@/app/projects/data"
 import { ProjectDetailContent } from "./project-detail-content"
+import { ProjectBanner } from "@/components/projects/project-banner"
 
 export function ProjectDetailOverlay({ project }: { project: Project }) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const activeCategory = searchParams.get("category")
   const panelRef = useRef<HTMLDivElement>(null)
+  const shouldReduceMotion = useReducedMotion()
+  const panelTransition = { duration: shouldReduceMotion ? 0.15 : 0.3 }
 
   const navigable = getCategoryProjects(activeCategory)
   const currentIndex = navigable.findIndex((p) => p.slug === project.slug)
@@ -22,22 +25,19 @@ export function ProjectDetailOverlay({ project }: { project: Project }) {
   const close = () => router.back()
 
   const goTo = (slug: string) => {
-    const qs = activeCategory ? `?category=${activeCategory}` : ""
-    router.replace(`/projects/${slug}${qs}`, { scroll: false })
+    const params = new URLSearchParams(searchParams)
+    params.set("project", slug)
+    router.replace(`/projects?${params.toString()}`, { scroll: false })
   }
 
-  const navRef = useRef({ prevProject, nextProject, activeCategory })
+  const navRef = useRef({ prevProject, nextProject, goTo })
   useEffect(() => {
-    navRef.current = { prevProject, nextProject, activeCategory }
-  }, [prevProject, nextProject, activeCategory])
+    navRef.current = { prevProject, nextProject, goTo }
+  })
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      const { prevProject, nextProject, activeCategory } = navRef.current
-      const goTo = (slug: string) => {
-        const qs = activeCategory ? `?category=${activeCategory}` : ""
-        router.replace(`/projects/${slug}${qs}`, { scroll: false })
-      }
+      const { prevProject, nextProject, goTo } = navRef.current
       if (e.key === "Escape") router.back()
       if (e.key === "ArrowLeft" && prevProject) goTo(prevProject.slug)
       if (e.key === "ArrowRight" && nextProject) goTo(nextProject.slug)
@@ -72,6 +72,7 @@ export function ProjectDetailOverlay({ project }: { project: Project }) {
         initial={{ backgroundColor: "rgba(0,0,0,0)" }}
         animate={{ backgroundColor: "rgba(0,0,0,0.4)" }}
         exit={{ backgroundColor: "rgba(0,0,0,0)" }}
+        transition={panelTransition}
         onClick={(e) => {
           if (e.target === e.currentTarget) close()
         }}
@@ -95,17 +96,21 @@ export function ProjectDetailOverlay({ project }: { project: Project }) {
           </button>
         )}
 
-        <div
+        <motion.div
           ref={panelRef}
           tabIndex={-1}
           role="dialog"
           aria-modal="true"
-          className="relative my-12 w-full max-w-3xl rounded-xl bg-white p-8 pb-24 outline-none dark:bg-[#0a0a0a]"
+          initial={{ scale: 0.97 }}
+          animate={{ scale: 1 }}
+          exit={{ scale: 0.97 }}
+          transition={panelTransition}
+          className="relative my-12 w-full max-w-3xl overflow-hidden rounded-xl border border-black/10 outline-none dark:border-white/10"
         >
           <button
             onClick={close}
             aria-label="Close"
-            className="fixed top-6 right-6 z-30 flex h-7 w-7 cursor-pointer items-center justify-center rounded-[6px] border border-white bg-white text-[#171717] shadow-md dark:bg-zinc-900 dark:text-white"
+            className="absolute top-4 right-4 z-30 flex h-7 w-7 cursor-pointer items-center justify-center rounded-[6px] border border-white bg-white text-[#171717] shadow-md dark:bg-zinc-900 dark:text-white"
           >
             ✕
           </button>
@@ -118,15 +123,16 @@ export function ProjectDetailOverlay({ project }: { project: Project }) {
                   key={p.slug}
                   onClick={() => goTo(p.slug)}
                   aria-label={p.title}
-                  className={`h-12 w-12 shrink-0 overflow-hidden rounded-[6px] bg-cover bg-center ring-2 transition-all ${
+                  className={`h-12 w-12 shrink-0 overflow-hidden rounded-[6px] ring-2 transition-all ${
                     p.slug === project.slug ? "ring-[#171717] dark:ring-white" : "ring-transparent opacity-60"
                   }`}
-                  style={{ backgroundImage: `url(${p.image})` }}
-                />
+                >
+                  <ProjectBanner project={p} compact />
+                </button>
               ))}
             </div>
           )}
-        </div>
+        </motion.div>
       </motion.div>
     </AnimatePresence>
   )

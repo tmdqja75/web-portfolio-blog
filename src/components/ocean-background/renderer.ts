@@ -128,15 +128,22 @@ export function createRenderer({ canvas }: RendererOptions) {
     unsubscribeResize = output.onResize(scheduleResize);
 
     const time = clock(gpu);
-    frameLoop(gpu, (currentFrame) => {
-      if (disposed || !graph || !output) return;
-      try {
-        setDynamics(graph, time.time * OCEAN_TUNING.simulation.timeScale);
-        renderGraph(currentFrame, graph, output);
-      } catch (error) {
-        fail(error);
-      }
-    });
+    frameLoop(
+      gpu,
+      (currentFrame) => {
+        if (disposed || !graph || !output) return;
+        try {
+          setDynamics(graph, time.time * OCEAN_TUNING.simulation.timeScale);
+          renderGraph(currentFrame, graph, output);
+        } catch (error) {
+          fail(error);
+        }
+      },
+      // Ambient wave motion reads as smooth well under display refresh rate;
+      // uncapped, a 120Hz+ display redoes the full FFT/bloom/particle pipeline
+      // twice as often as a 60Hz one for no visible benefit.
+      { fps: 30 }
+    );
   };
 
   const ready = initialize().catch((error: unknown) => {

@@ -4,6 +4,7 @@ import type { ComponentType } from "react"
 import { motion, useReducedMotion } from "motion/react"
 
 import type { Project, ProjectMetric } from "@/app/projects/data"
+import { ProjectBannerModal } from "@/components/projects/project-banner-modal"
 import { PipelineDiagram } from "@/components/projects/pipeline-diagram"
 import { AnalysisDiagram } from "@/components/projects/analysis-diagram"
 import { AccuracyDiagram } from "@/components/projects/accuracy-diagram"
@@ -107,16 +108,8 @@ export function ProjectDetailContent({ project }: { project: Project }) {
   const entranceTransition = shouldReduceMotion ? { duration: 0.15 } : { duration: 0.3 }
   const paarDiagram = PAAR_DIAGRAM_BY_PROJECT[project.slug] ?? {}
 
-  return (
-    <div className="mx-auto max-w-3xl">
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={entranceTransition}
-        className="relative aspect-[16/9] w-full overflow-hidden rounded-xl bg-cover bg-center"
-        style={{ backgroundImage: `url(${project.image})` }}
-      />
-
+  const rest = (
+    <>
       <motion.h1
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
@@ -261,6 +254,13 @@ export function ProjectDetailContent({ project }: { project: Project }) {
           </div>
         )}
       </motion.div>
+    </>
+  )
+
+  return (
+    <div>
+      <ProjectBannerModal project={project} />
+      <div className="bg-white p-8 pb-24 dark:bg-[#0a0a0a]">{rest}</div>
     </div>
   )
 }

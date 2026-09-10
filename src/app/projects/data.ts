@@ -30,7 +30,6 @@ export type Project = {
   title: string
   subtitle: string
   category: "MLOps" | "AI Agent" | "Side Project"
-  image: string
   description: string
   techStack: string[]
   role?: string
@@ -48,7 +47,6 @@ export const projects: Project[] = [
     title: "AWS 기반 MLOps 플랫폼",
     subtitle: "혼자 운영하고 팀이 함께 쓰는 모델 배포 표준",
     category: "MLOps",
-    image: "/projects/aws-mlops-platform-banner.png",
     description:
       "모델 실험은 각자 로컬 환경에 흩어져 있었고 운영 추론은 Lambda 코드를 사람이 직접 고쳐 배포하던 시기였습니다. 팀원 두 명이 퇴사하면서 플랫폼 구축을 사실상 혼자 맡게 됐고, SageMaker와 단일 EC2 다중 컨테이너 구성을 검토했지만 1인 운영 부담과 장애 전파 범위가 걸림돌이었습니다. BentoML로 서비스 패키징을 표준화하고 ECS Fargate로 배포 단위를 나눈 뒤, MLflow(실험·아티팩트)와 DynamoDB(건물별 배포 구성)의 역할을 분리하고 Prometheus·Grafana로 서빙 상태를 먼저 확인하는 구조를 만들었습니다. 수동 배포에 약 30분이 걸리던 것이 GitHub Actions 실배포 60건 기준 중앙값 4.71분으로 줄었고, 지금은 다른 데이터 사이언티스트 2명도 이 경로로 자신의 모델을 배포하고 있습니다.",
     techStack: [
@@ -120,7 +118,6 @@ export const projects: Project[] = [
     title: "DXF 분전반 도면 파서",
     subtitle: "VLM 기반 회로표 자동 추출 파이프라인",
     category: "AI Agent",
-    image: "/projects/dxf-panel-parser-banner.png",
     description:
       "수주마다 분전반 도면 20~60장의 회로표를 팀원이 손으로 옮겨 적어 프로젝트당 10~30시간이 걸렸습니다. 도면마다 레이아웃이 제각각이라 DXF 텍스트 직접 파싱은 일반화가 어렵고, OCR은 표 구조 복원에 별도 로직이 필요해 인식과 구조화를 한 번에 처리하는 VLM(Claude/GPT) 방식을 택했습니다. 정확도는 주장 대신 직접 만든 사람 투표 도구로 측정했고, 크롭·프롬프트 엔지니어링·few-shot 개선을 거쳐 실도면 3건·패널 약 200개 기준 두 모델 모두 정답 비율을 35.0%에서 91.7%까지 끌어올렸습니다.",
     techStack: ["Python", "ezdxf", "Claude API", "GPT-5.4", "Batch API", "FastAPI", "Docker"],
@@ -180,7 +177,6 @@ export const projects: Project[] = [
     title: "세이비 챗봇 API",
     subtitle: "BEMS 데이터를 자연어로 묻는 LangGraph 에이전트",
     category: "AI Agent",
-    image: "/projects/savee-chatbot-api-banner.png",
     description:
       "BEMS 사용자가 여러 대시보드를 뒤지고 시각화 페이지에 들어갈 때마다 필터를 손으로 입력해야 하던 문제를 직접 발굴했습니다. 중앙 오케스트레이터 방식은 토큰 낭비와 디버깅 난이도가 걸렸고 n8n은 서버를 하나 더 관리해야 해서 LangGraph 노드 기반 설계를 택했습니다.",
     techStack: [
@@ -244,7 +240,6 @@ export const projects: Project[] = [
     title: "세이비 챗봇 API V2",
     subtitle: "21개 대시보드로 확장한 semantic routing과 품질·보안 인프라",
     category: "AI Agent",
-    image: "https://picsum.photos/seed/savee-chatbot-api-v2/640/400",
     description:
       "21개 대시보드 중 어디를 봐야 할지 헤매는 사용자를 위해 챗봇이 질문과 관련된 화면으로 직접 연동해주는 semantic routing을 직접 발굴해 확장했고, 세션 영속화·에이전트 평가 시스템·DSPy 프롬프트 최적화·role/tier 기반 접근 제어까지 품질·보안 인프라를 단독으로 구축했습니다. 저신뢰 라우팅 정확도를 50%에서 100%(holdout)로 올리고, semantic routing 오분류를 60%(25건→10건) 줄였습니다.",
     techStack: [
@@ -313,7 +308,6 @@ export const projects: Project[] = [
     title: "오토마타 뉴스레터 자동화",
     subtitle: "LangGraph 멀티에이전트 기반 AI 뉴스레터 자동 발행 시스템",
     category: "AI Agent",
-    image: "/projects/newsletter-automation-banner.png",
     description:
       "매주 수요일 발행하는 AI 뉴스레터의 리서치와 작성에 부담을 느껴 자동화를 시작했지만, 오픈엔드 에이전트에게 전부 맡기는 방식은 실제 운영에서 토픽 품질을 보장하지 못했습니다. 검색과 랭킹은 결정론적 파이프라인으로 옮기고 토픽 선정에는 Human-in-the-Loop 승인 단계를 남기는 구조로 다시 설계했습니다. 현재도 실제로 매주 발행 중이며, LangSmith로 실측한 실행당 평균 소요 시간은 27분, 비용은 1.06달러입니다.",
     techStack: [
@@ -385,7 +379,6 @@ export const projects: Project[] = [
     title: "사내 Coding Agent 활용 교육",
     subtitle: "컨텍스트 엔지니어링을 중심으로 설계한 Claude Code·Codex 워크숍",
     category: "AI Agent",
-    image: "/projects/claude-code-codex-training-banner.png",
     description:
       "Claude Code와 Codex 같은 Coding Agent를 안전하고 재현 가능하게 쓰기 위한 사내 워크숍이다. 회사와 팀장 요청으로 시작했고, 교육 콘텐츠 구성과 44페이지 자료 제작, 진행을 단독으로 맡았다.",
     techStack: ["Claude Code", "Codex", "MCP", "Subagents", "Skills", "Context Engineering"],
