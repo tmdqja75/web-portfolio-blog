@@ -4,7 +4,7 @@ import Link from "next/link"
 import { motion, useReducedMotion } from "motion/react"
 
 import type { Project } from "@/app/projects/data"
-import { ProjectBanner } from "@/components/projects/project-banner"
+import { BannerIcons, PROJECT_BANNER_ICONS, ProjectBanner } from "@/components/projects/project-banner"
 
 export function ProjectCard({
   project,
@@ -23,9 +23,12 @@ export function ProjectCard({
         transition={shouldReduceMotion ? { duration: 0.15 } : { duration: 0.2 }}
         className="relative aspect-[16/9] overflow-hidden rounded-xl"
       >
-        <ProjectBanner project={project} />
+        <ProjectBanner project={project} showIcons={false} />
 
-        <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/70 via-black/20 to-transparent p-4">
+        <div className="absolute inset-0 flex flex-col bg-gradient-to-t from-black/70 via-black/20 to-transparent p-4">
+          <div className="flex flex-1 items-center justify-center gap-10 text-white">
+            <BannerIcons icons={PROJECT_BANNER_ICONS[project.slug]} sizePx={40} iconSizeClass="h-10 w-10" />
+          </div>
           <h3 className="text-base font-semibold text-white" style={{ letterSpacing: "-0.28px" }}>
             {project.title}
           </h3>

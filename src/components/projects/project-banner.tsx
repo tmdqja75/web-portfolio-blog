@@ -68,9 +68,11 @@ export function BannerIcons({
 export function ProjectBanner({
   project,
   compact = false,
+  showIcons = true,
 }: {
   project: Pick<Project, "slug" | "title">
   compact?: boolean
+  showIcons?: boolean
 }) {
   const icons = PROJECT_BANNER_ICONS[project.slug]
   const iconSizeClass = compact ? "h-4 w-4" : "h-10 w-10"
@@ -83,9 +85,11 @@ export function ProjectBanner({
         compact ? "h-full rounded-[6px]" : "aspect-[16/9] rounded-xl"
       }`}
     >
-      <div className={`relative z-10 flex items-center justify-center text-white ${compact ? "gap-1.5" : "gap-10"}`}>
-        <BannerIcons icons={icons} sizePx={compact ? 16 : 40} iconSizeClass={iconSizeClass} />
-      </div>
+      {showIcons && (
+        <div className={`relative z-10 flex items-center justify-center text-white ${compact ? "gap-1.5" : "gap-10"}`}>
+          <BannerIcons icons={icons} sizePx={compact ? 16 : 40} iconSizeClass={iconSizeClass} />
+        </div>
+      )}
     </div>
   )
 }
