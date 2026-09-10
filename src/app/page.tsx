@@ -534,7 +534,7 @@ export default function Home() {
               key={link.name}
               href={link.href}
               {...(link.external ? { target: "_blank", rel: "noreferrer" } : {})}
-              className="flex h-14 items-center gap-3 rounded-full border border-white/20 px-6 text-base font-medium text-white transition-colors hover:bg-white/10"
+              className="flex h-14 items-center gap-3 rounded-full border border-white/10 bg-white/0 px-6 text-base font-medium text-white backdrop-blur-md transition-colors hover:bg-white/10"
             >
               <link.icon
                 aria-hidden
