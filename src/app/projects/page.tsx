@@ -37,7 +37,7 @@ function ProjectsPageInner() {
   }
 
   return (
-    <main className="relative min-h-screen w-full px-6 pb-24">
+    <main id="page-scroll-root" className="relative h-dvh w-full overflow-y-scroll px-6 pb-24">
       <div className="mx-auto max-w-5xl pt-24">
         <h1
           className="px-0 pb-8 font-sans text-2xl font-semibold text-white"

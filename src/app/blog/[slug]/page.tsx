@@ -31,7 +31,10 @@ export default async function PostPage({
   const { meta, html, headings } = post
 
   return (
-    <main className="relative min-h-screen w-full bg-zinc-50 px-6 pb-32 dark:bg-black">
+    <main
+      id="page-scroll-root"
+      className="relative h-dvh w-full overflow-y-scroll bg-zinc-50 px-6 pb-32 dark:bg-black"
+    >
       <TransitionLink
         href="/blog"
         className="fixed top-20 left-6 z-10 flex h-7 items-center rounded-[6px] bg-[#171717] px-2 text-sm font-medium text-white dark:bg-white dark:text-[#171717]"
