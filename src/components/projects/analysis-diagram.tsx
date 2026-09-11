@@ -25,21 +25,21 @@ function buildVariants(instant: boolean) {
 const CANDIDATES = [
   {
     x: 40,
-    status: "기각",
+    status: "X",
     accepted: false,
     title: "DXF 텍스트 직접 파싱",
     reason: ["도면마다 레이아웃이", "제각각이라 일반화 어려움"],
   },
   {
     x: 430,
-    status: "기각",
+    status: "X",
     accepted: false,
     title: "전통 OCR (Tesseract 등)",
     reason: ["표 구조(행·열) 복원을", "별도 로직으로 만들어야 함"],
   },
   {
     x: 820,
-    status: "채택",
+    status: "O",
     accepted: true,
     title: "VLM (Claude · GPT)",
     reason: ["인식 + 구조화를 프롬프트", "하나로 동시 처리"],
@@ -79,7 +79,7 @@ export function AnalysisDiagram() {
         ANALYSIS
       </text>
       <text x="40" y="60" fontSize="22" className="fill-[#4d4d4d] dark:fill-zinc-400">
-        회로표 추출 방식 세 가지를 비교하고 두 개를 기각했다
+        분전반 패널 파싱 방식 세 가지를 비교
       </text>
 
       {CANDIDATES.map((c) => (
@@ -154,10 +154,6 @@ export function AnalysisDiagram() {
           </text>
         </g>
       </motion.g>
-
-      <text x="40" y="506" fontSize="19" className="fill-[#888888] dark:fill-zinc-500">
-        * 정확도 개선 단계에서 3개 이상 모델 앙상블도 검토했으나, 혼자 개발하는 상황에서 운영 복잡도가 커져 기각
-      </text>
     </motion.svg>
   )
 }

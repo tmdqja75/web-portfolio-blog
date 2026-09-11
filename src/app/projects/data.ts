@@ -16,6 +16,8 @@ export type ProjectMetric = { value: string; label: string }
 export type ProjectPAARSection = {
   heading: string
   bullets: string[]
+  image?: string
+  evidenceImage?: { src: string; alt: string; caption?: string }
 }
 
 export type ProjectPAAR = {
@@ -116,11 +118,11 @@ export const projects: Project[] = [
   {
     slug: "dxf-panel-parser",
     title: "DXF 분전반 도면 파서",
-    subtitle: "VLM 기반 회로표 자동 추출 파이프라인",
+    subtitle: "VLM 기반 분전반 CAD → 엑셀 자동 변환 플랫폼",
     category: "AI Agent",
     description:
       "수주마다 분전반 도면 20~60장의 회로표를 팀원이 손으로 옮겨 적어 프로젝트당 10~30시간이 걸렸습니다. 도면마다 레이아웃이 제각각이라 DXF 텍스트 직접 파싱은 일반화가 어렵고, OCR은 표 구조 복원에 별도 로직이 필요해 인식과 구조화를 한 번에 처리하는 VLM(Claude/GPT) 방식을 택했습니다. 정확도는 주장 대신 직접 만든 사람 투표 도구로 측정했고, 크롭·프롬프트 엔지니어링·few-shot 개선을 거쳐 실도면 3건·패널 약 200개 기준 두 모델 모두 정답 비율을 35.0%에서 91.7%까지 끌어올렸습니다.",
-    techStack: ["Python", "ezdxf", "Claude API", "GPT-5.4", "Batch API", "FastAPI", "Docker"],
+    techStack: ["Python", "OpenAI API", "FastAPI", "Docker"],
     role: "단독 개발",
     timeframe: "2026.08",
     diagramImage: "/projects/dxf-panel-parser-diagram.svg",
@@ -132,25 +134,20 @@ export const projects: Project[] = [
     paar: {
       problem: {
         heading: "도면 한 장에 30분씩",
+        image: "/projects/dxf-panel-parser-original-cad.png",
         bullets: [
-          "수주마다 분전반 도면 20~60장의 회로표를 팀원이 손으로 옮겨 적음(도면 1장당 30분 이상)",
-          "프로젝트당 10~30시간의 반복 수작업, 수주 주기가 불규칙해 몰릴 때 병목이 됨",
-          "지시받은 업무가 아니라 이 비효율을 직접 발견해 착수",
-        ],
-        stats: [
-          { value: "20~60장", label: "수주당 처리할 분전반" },
-          { value: "30분+", label: "도면 1장당 수작업 시간" },
-          { value: "10~30h", label: "프로젝트당 반복 수작업" },
+          "새로운 건물을 수주할 때마다 수많은 분전반 CAD 도면을 팀원이 손으로 옮겨 적음",
+          "수주 건물이 들 병목이 됨",
+          "CAD 도면 작업에 드는 시간 비용을 줄이기 위해 직접 개발 착수",
         ],
       },
       analysis: {
-        heading: "세 가지 후보, 두 번의 기각",
+        heading: "정확도와 개발 비용을 고려한 파싱 방법",
         bullets: [
           "DXF 텍스트 직접 파싱 기각. 도면마다 레이아웃이 제각각이라 규칙 기반 파서를 일반화하기 어려움",
           "전통 OCR 기각. 텍스트 인식과 표 구조(행·열) 복원을 별도 로직으로 만들어야 함",
           "VLM(Claude/GPT) 채택. 인식과 구조화를 프롬프트 하나로 동시에 처리하는 대신 100% 정확도 보장은 포기",
-          "정확도 개선 단계에서 3개 이상 모델 앙상블도 검토했으나, 혼자 개발하는 상황에서 운영 복잡도가 커져 기각",
-          "100%를 보장할 수 없다는 전제 위에서, 사람이 결과를 검증하는 투표 도구를 직접 만들어 신뢰도를 수치화",
+          "Hallucination과 분전반 패널 이미지 해상도에 따라 정확도를 100%를 보장할 수 없다는 판단을 내리고, 사람이 결과를 검증하는 투표 도구를 직접 만들어 신뢰도를 수치화하기로 계획",
         ],
       },
       action: {
@@ -158,17 +155,25 @@ export const projects: Project[] = [
         bullets: [
           "DWG→DXF 변환 후 기하 연산(ezdxf)으로 분전반 영역 자동 탐지, 한글 SHX 폰트 오버라이드 렌더링",
           "Claude·GPT VLM으로 회로표 추출. 단건·병렬·Batch 3가지 실행 모드와 비용 추정(--estimate) 지원",
+          "정확도를 주장 대신 측정하려고 Claude Code와 바이브 코딩으로 사람 투표 평가 도구(eval/viewer.html)를 직접 제작해 검증 체계까지 파이프라인에 포함",
           "FastAPI 웹앱(업로드 → SSE 진행률 → Excel 내보내기)까지 단독 설계·구현, Docker로 패키징",
           "원래 건물 전체 CAD 데이터를 분석하는 에이전트로 기획했으나 개발 범위가 과도해 분전반 파서로 스코프 축소",
         ],
       },
       result: {
-        heading: "35%에서 92%까지",
+        heading: "패널 파싱 정확도를 35%에서 92%까지",
         bullets: [
           "실도면 3건·패널 약 200개를 사람 투표로 검증한 결과, 두 모델 모두 정답 비율이 35.0%→72.9%→91.7%로 올라감",
           "크롭+프롬프트 엔지니어링이 가장 큰 개선(+37.9%p), few-shot 추가가 2차 개선(+18.8%p)",
+          "단계별로 뜯어보면 원본 단계에서는 Claude가 GPT보다 패널 143/200개 대 111/200개로 앞섰지만, 개선이 쌓일수록 격차가 좁혀져 few-shot 단계에서는 195/204 대 196/204로 사실상 동률에 도달함",
           "도면 1장당 회로표 정리 시간 30분+→수분 대로 단축, 현재도 실사용 중",
         ],
+        evidenceImage: {
+          src: "/projects/dxf-panel-parser-voting-tool.png",
+          alt: "패널 이미지와 Claude·GPT 추출 결과를 나란히 놓고 투표하는 자체 제작 평가 도구 화면",
+          caption:
+            "정확도를 주장 대신 측정하려고 Claude Code와 바이브 코딩으로 직접 만든 투표 플랫폼. 패널마다 두 모델 결과를 나란히 놓고 하나씩 직접 투표해 정량 비교 데이터를 모았다.",
+        },
       },
     },
   },
