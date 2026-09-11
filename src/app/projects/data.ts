@@ -402,16 +402,11 @@ export const projects: Project[] = [
     },
     paar: {
       problem: {
-        heading: "설치보다 먼저 필요한 사용 기준",
+        heading: "사내 새로운 Coding Agent 도입",
         bullets: [
           "회사가 Claude Code·Codex 같은 Coding Agent의 도입과 확산을 검토하면서, 개발자와 데이터 사이언티스트가 실제 업무에 적용할 수 있는 교육이 필요했음",
-          "워크숍 진행은 회사와 팀장 요청으로 시작했지만, 무엇을 어떤 순서로 가르칠지와 자료 구성은 직접 맡았음",
-          "도구 설치와 명령어만으로는 맥락이 부족한 요청, 길어지는 대화, 권한이 넓은 도구 설정에서 생길 수 있는 문제를 다루기 어려웠음",
-        ],
-        stats: [
-          { value: "1회", label: "사내 워크숍" },
-          { value: "5~15명", label: "개발자·데이터 사이언티스트 대상" },
-          { value: "2026", label: "진행 시기" },
+          "개발자/데이터사이언티스트 팀 대상으로 ",
+          "개발자 팀에서도 코덱스/클로드 코드가 개발 컨벤션을 잘 지키지 못하거나 환각 (hallucination) 문제를 겪는 사례가 있었음",
         ],
       },
       analysis: {
@@ -424,7 +419,7 @@ export const projects: Project[] = [
         ],
       },
       action: {
-        heading: "44페이지에 원리와 실사용을 묶다",
+        heading: "코딩 에이전트 사용법만 알려주지 않고, 원리부터 설명하기",
         bullets: [
           "LLM·Agent 기초, 컨텍스트 엔지니어링, Claude Code 핵심 컴포넌트, 실사용 케이스, 팁과 주의사항까지 이어지는 44페이지 발표 자료를 직접 설계·제작했음",
           "개발자 사례에서는 GitHub Issue를 Skills, Memory, Plan Mode로 해결하고 PR을 만드는 흐름을, 비개발자 사례에서는 MCP, Subagents, Skills를 조합한 리서치 흐름을 시연했음",
