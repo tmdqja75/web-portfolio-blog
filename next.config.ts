@@ -14,6 +14,7 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ["motion", "react-icons"],
   },
+  allowedDevOrigins: ["*.devtunnels.ms"],
 };
 
 export default nextConfig;
