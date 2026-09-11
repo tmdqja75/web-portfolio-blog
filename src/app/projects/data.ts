@@ -327,7 +327,8 @@ export const projects: Project[] = [
     role: "단독 개발 (Claude Code 협업)",
     timeframe: "2026.01–2026.08 (진행 중)",
     links: [
-      { label: "Repository", href: "https://github.com/tmdqja75/newsletter-automation-gpters" },
+      { label: "Repository", href: "https://github.com/tmdqja75/newsletter-automation-gpters/tree/personal" },
+      { label: "뉴스레터", href: "https://maily.so/automata" },
     ],
     metrics: [
       { value: "27분·$1.06", label: "실행당 평균 (LangSmith 실측 12회, 범위 7~66분·$0.71~$1.54)" },

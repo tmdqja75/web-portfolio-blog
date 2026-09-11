@@ -55,6 +55,11 @@ const NewsletterArchitectureDiagram = dynamic(() =>
     (m) => m.NewsletterArchitectureDiagram
   )
 )
+const NewsletterWorkflowDiagram = dynamic(() =>
+  import("@/components/projects/newsletter-workflow-diagram").then(
+    (m) => m.NewsletterWorkflowDiagram
+  )
+)
 
 const PAAR_EYEBROW = { problem: "PROBLEM", analysis: "ANALYSIS", action: "ACTION", result: "RESULT" } as const
 
@@ -83,6 +88,7 @@ const PAAR_DIAGRAM_BY_PROJECT: Record<string, Partial<Record<PAARDiagramKey, Com
   },
   "newsletter-automation": {
     action: NewsletterArchitectureDiagram,
+    result: NewsletterWorkflowDiagram,
   },
 }
 

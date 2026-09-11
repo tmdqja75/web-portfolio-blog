@@ -152,7 +152,7 @@ export function NewsletterArchitectureDiagram() {
           topic-researcher
         </text>
         <text x="315" y="462" textAnchor="middle" fontSize="19" className="fill-[#4d4d4d] dark:fill-zinc-400">
-          사용자가 지정한 토픽 하나를 조사
+          사용자가 지정한 토픽 조사
         </text>
 
         <rect x="74" y="482" width="233" height="90" rx="7" fill="none" className="stroke-[#a1a1a1] dark:stroke-zinc-700" />
