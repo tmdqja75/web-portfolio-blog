@@ -7,7 +7,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 ## Commands
 
 ```bash
-npm run dev      # Dev server (a dev server is often already running on port 3001 — check before starting another; Next refuses a second instance)
+npm run dev      # Dev server — always check for and use an already-running instance on port 3032 unless the user specifies otherwise; Next refuses a second instance
 npm run build    # Production build
 npm run lint     # ESLint (or ./node_modules/.bin/eslint src for full output)
 npx tsc --noEmit # Typecheck

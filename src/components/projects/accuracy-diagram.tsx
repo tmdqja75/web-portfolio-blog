@@ -54,10 +54,10 @@ export function AccuracyDiagram() {
       <rect width="1200" height="500" fill="url(#accuracy-grid-fine)" />
       <rect width="1200" height="500" fill="url(#accuracy-grid-bold)" />
 
-      <text x="40" y="28" fontSize="17" fontWeight="600" letterSpacing="1.7" className="fill-[#888888] dark:fill-zinc-500">
+      <text x="40" y="28" fontSize="20" fontWeight="600" letterSpacing="1.7" className="fill-[#888888] dark:fill-zinc-500">
         EXPERIMENT
       </text>
-      <text x="40" y="58" fontSize="20" className="fill-[#4d4d4d] dark:fill-zinc-400">
+      <text x="40" y="58" fontSize="22" className="fill-[#4d4d4d] dark:fill-zinc-400">
         3단계 프롬프트 개선으로 두 모델이 모두 맞힌 정답률을 끌어올린 실험
       </text>
 
@@ -65,7 +65,7 @@ export function AccuracyDiagram() {
         <line x1="220" y1="116" x2="1080" y2="116" />
         <line x1="220" y1="246" x2="1080" y2="246" />
       </g>
-      <g fontSize="15" textAnchor="end" fontFamily="ui-monospace, monospace" className="fill-[#888888] dark:fill-zinc-500">
+      <g fontSize="18" textAnchor="end" fontFamily="ui-monospace, monospace" className="fill-[#888888] dark:fill-zinc-500">
         <text x="190" y="121">100%</text>
         <text x="190" y="251">50%</text>
         <text x="190" y="381">0%</text>
@@ -79,19 +79,19 @@ export function AccuracyDiagram() {
           <text x={b.x + 70} y={b.y - 30} fontSize="44" fontWeight="600" textAnchor="middle" className="fill-[#171717] dark:fill-white">
             {b.value}
           </text>
-          <text x={b.x + 70} y="406" fontSize="19" fontWeight="600" textAnchor="middle" className="fill-[#171717] dark:fill-white">
+          <text x={b.x + 70} y="406" fontSize="21" fontWeight="600" textAnchor="middle" className="fill-[#171717] dark:fill-white">
             {b.label}
           </text>
-          <text x={b.x + 70} y="430" fontSize="16" textAnchor="middle" className="fill-[#888888] dark:fill-zinc-500">
+          <text x={b.x + 70} y="430" fontSize="19" textAnchor="middle" className="fill-[#888888] dark:fill-zinc-500">
             {b.sub}
           </text>
         </motion.g>
       ))}
 
-      <text x="40" y="456" fontSize="15" className="fill-[#888888] dark:fill-zinc-500">
+      <text x="40" y="456" fontSize="18" className="fill-[#888888] dark:fill-zinc-500">
         * Claude(claude-sonnet-4-6) · GPT(gpt-5.4) 교차 채점, 자체 제작 사람 투표 평가 도구 기준
       </text>
-      <text x="40" y="478" fontSize="15" className="fill-[#888888] dark:fill-zinc-500">
+      <text x="40" y="478" fontSize="18" className="fill-[#888888] dark:fill-zinc-500">
         (실도면 3건·패널 약 200개, 두 모델 모두 정답인 비율)
       </text>
     </motion.svg>

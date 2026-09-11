@@ -57,10 +57,10 @@ export function ChatbotLatencyDiagram() {
       <rect width="1200" height="526" fill="url(#chatbot-latency-grid-fine)" />
       <rect width="1200" height="526" fill="url(#chatbot-latency-grid-bold)" />
 
-      <text x="40" y="28" fontSize="17" fontWeight="600" letterSpacing="1.7" className="fill-[#888888] dark:fill-zinc-500">
+      <text x="40" y="28" fontSize="20" fontWeight="600" letterSpacing="1.7" className="fill-[#888888] dark:fill-zinc-500">
         RESULT
       </text>
-      <text x="40" y="58" fontSize="20" className="fill-[#4d4d4d] dark:fill-zinc-400">
+      <text x="40" y="58" fontSize="22" className="fill-[#4d4d4d] dark:fill-zinc-400">
         건물정보 조회를 동기 순차에서 비동기 병렬로 바꾼 벤치마크
       </text>
 
@@ -72,10 +72,10 @@ export function ChatbotLatencyDiagram() {
           <text x={b.x + 75} y={b.y - 22} fontSize="34" fontWeight="600" textAnchor="middle" className="fill-[#171717] dark:fill-white">
             {b.value}
           </text>
-          <text x={b.x + 75} y="406" fontSize="19" fontWeight="600" textAnchor="middle" className="fill-[#171717] dark:fill-white">
+          <text x={b.x + 75} y="406" fontSize="21" fontWeight="600" textAnchor="middle" className="fill-[#171717] dark:fill-white">
             {b.label}
           </text>
-          <text x={b.x + 75} y="430" fontSize="16" textAnchor="middle" className="fill-[#888888] dark:fill-zinc-500">
+          <text x={b.x + 75} y="430" fontSize="19" textAnchor="middle" className="fill-[#888888] dark:fill-zinc-500">
             {b.sub}
           </text>
         </motion.g>
@@ -89,18 +89,18 @@ export function ChatbotLatencyDiagram() {
 
       <motion.g variants={badge}>
         <rect x="560" y="150" width="180" height="48" rx="24" className="fill-[#171717] dark:fill-white" />
-        <text x="650" y="180" fontSize="18" fontWeight="600" textAnchor="middle" className="fill-white dark:fill-[#171717]">
+        <text x="650" y="180" fontSize="20" fontWeight="600" textAnchor="middle" className="fill-white dark:fill-[#171717]">
           51.98%↓ · 2.08x
         </text>
       </motion.g>
 
-      <text x="40" y="456" fontSize="15" className="fill-[#888888] dark:fill-zinc-500">
+      <text x="40" y="456" fontSize="18" className="fill-[#888888] dark:fill-zinc-500">
         * benchmark_async_vs_sync.py, 프로덕션 DB 대상 5회 반복 측정 평균값
       </text>
-      <text x="40" y="478" fontSize="15" className="fill-[#888888] dark:fill-zinc-500">
+      <text x="40" y="478" fontSize="18" className="fill-[#888888] dark:fill-zinc-500">
         (실사용자 트래픽 지표는 아직 규모가 작아 별도로 수치화하지 않음)
       </text>
-      <text x="40" y="500" fontSize="15" className="fill-[#888888] dark:fill-zinc-500">
+      <text x="40" y="500" fontSize="18" className="fill-[#888888] dark:fill-zinc-500">
         * db_agent도 별도로 재설계해 쿼리당 LLM 호출을 4회→1회로 줄임(ms 실측치 없음, ANALYSIS 참고)
       </text>
     </motion.svg>

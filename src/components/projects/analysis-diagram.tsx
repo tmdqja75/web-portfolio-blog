@@ -75,10 +75,10 @@ export function AnalysisDiagram() {
       <rect width="1200" height="520" fill="url(#analysis-grid-fine)" />
       <rect width="1200" height="520" fill="url(#analysis-grid-bold)" />
 
-      <text x="40" y="30" fontSize="17" fontWeight="600" letterSpacing="1.7" className="fill-[#888888] dark:fill-zinc-500">
+      <text x="40" y="30" fontSize="20" fontWeight="600" letterSpacing="1.7" className="fill-[#888888] dark:fill-zinc-500">
         ANALYSIS
       </text>
-      <text x="40" y="60" fontSize="20" className="fill-[#4d4d4d] dark:fill-zinc-400">
+      <text x="40" y="60" fontSize="22" className="fill-[#4d4d4d] dark:fill-zinc-400">
         회로표 추출 방식 세 가지를 비교하고 두 개를 기각했다
       </text>
 
@@ -105,7 +105,7 @@ export function AnalysisDiagram() {
           <text
             x={c.x + 292}
             y={BOX_Y + 33}
-            fontSize="15"
+            fontSize="18"
             fontWeight="600"
             textAnchor="middle"
             className={c.accepted ? "fill-white dark:fill-[#171717]" : "fill-[#c50000] dark:fill-red-400"}
@@ -116,7 +116,7 @@ export function AnalysisDiagram() {
             {c.title}
           </text>
           {c.reason.map((line, i) => (
-            <text key={line} x={c.x + 20} y={BOX_Y + 110 + i * 26} fontSize="17" className="fill-[#888888] dark:fill-zinc-500">
+            <text key={line} x={c.x + 20} y={BOX_Y + 110 + i * 26} fontSize="20" className="fill-[#888888] dark:fill-zinc-500">
               {line}
             </text>
           ))}
@@ -128,7 +128,7 @@ export function AnalysisDiagram() {
         <motion.g key={c.x} variants={fade} className="text-[#a1a1a1] dark:text-zinc-700">
           <line x1={c.x + 170} y1={BOX_Y + BOX_H} x2={c.x + 170} y2="288" strokeWidth="2" strokeDasharray="5 5" stroke="currentColor" />
           <circle cx={c.x + 170} cy="306" r="16" fill="none" stroke="currentColor" strokeWidth="2" />
-          <text x={c.x + 170} y="312" fontSize="17" textAnchor="middle" className="fill-[#a1a1a1] dark:fill-zinc-700">
+          <text x={c.x + 170} y="312" fontSize="20" textAnchor="middle" className="fill-[#a1a1a1] dark:fill-zinc-700">
             ✕
           </text>
         </motion.g>
@@ -142,20 +142,20 @@ export function AnalysisDiagram() {
 
       <motion.g variants={outcome}>
         <rect x="820" y="336" width="340" height="140" rx="10" className="fill-[#171717] dark:fill-white" />
-        <text x="844" y="372" fontSize="20" fontWeight="600" className="fill-white dark:fill-[#171717]">
+        <text x="844" y="372" fontSize="22" fontWeight="600" className="fill-white dark:fill-[#171717]">
           채택 후 트레이드오프
         </text>
         <g opacity="0.7">
-          <text x="844" y="402" fontSize="17" className="fill-white dark:fill-[#171717]">
+          <text x="844" y="402" fontSize="20" className="fill-white dark:fill-[#171717]">
             100% 정확도 보장은 포기하고
           </text>
-          <text x="844" y="428" fontSize="17" className="fill-white dark:fill-[#171717]">
+          <text x="844" y="428" fontSize="20" className="fill-white dark:fill-[#171717]">
             사람 투표 검증 도구를 직접 제작
           </text>
         </g>
       </motion.g>
 
-      <text x="40" y="506" fontSize="16" className="fill-[#888888] dark:fill-zinc-500">
+      <text x="40" y="506" fontSize="19" className="fill-[#888888] dark:fill-zinc-500">
         * 정확도 개선 단계에서 3개 이상 모델 앙상블도 검토했으나, 혼자 개발하는 상황에서 운영 복잡도가 커져 기각
       </text>
     </motion.svg>
