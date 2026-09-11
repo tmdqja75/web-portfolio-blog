@@ -58,10 +58,10 @@ export function PipelineDiagram() {
       <rect width="1200" height="270" fill="url(#pipeline-grid-fine)" />
       <rect width="1200" height="270" fill="url(#pipeline-grid-bold)" />
 
-      <text x="34" y="32" fontSize="17" fontWeight="600" letterSpacing="1.7" className="fill-[#888888] dark:fill-zinc-500">
+      <text x="34" y="32" fontSize="20" fontWeight="600" letterSpacing="1.7" className="fill-[#888888] dark:fill-zinc-500">
         PIPELINE
       </text>
-      <text x="34" y="62" fontSize="20" className="fill-[#4d4d4d] dark:fill-zinc-400">
+      <text x="34" y="62" fontSize="22" className="fill-[#4d4d4d] dark:fill-zinc-400">
         도면 이미지를 구조화된 회로표 데이터로 변환하는 5단계
       </text>
 
@@ -69,13 +69,13 @@ export function PipelineDiagram() {
         <motion.g key={s.n} variants={step}>
           <rect x={s.x} y={BOX_Y} width={BOX_W} height={BOX_H} rx="10" fill="none" className="stroke-[#a1a1a1] dark:stroke-zinc-700" />
           <circle cx={s.x + 24} cy={BOX_Y} r="19" className="fill-[#171717] dark:fill-white" />
-          <text x={s.x + 24} y={BOX_Y + 6} fontSize="18" fontWeight="600" textAnchor="middle" className="fill-white dark:fill-[#171717]">
+          <text x={s.x + 24} y={BOX_Y + 6} fontSize="20" fontWeight="600" textAnchor="middle" className="fill-white dark:fill-[#171717]">
             {s.n}
           </text>
           <text x={s.x + BOX_W / 2} y={BOX_Y + 68} fontSize="23" fontWeight="600" textAnchor="middle" className="fill-[#171717] dark:fill-white">
             {s.title}
           </text>
-          <text x={s.x + BOX_W / 2} y={BOX_Y + 100} fontSize="17" textAnchor="middle" className="fill-[#888888] dark:fill-zinc-500">
+          <text x={s.x + BOX_W / 2} y={BOX_Y + 100} fontSize="20" textAnchor="middle" className="fill-[#888888] dark:fill-zinc-500">
             {s.sub}
           </text>
         </motion.g>

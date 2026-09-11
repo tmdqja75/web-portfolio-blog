@@ -33,6 +33,10 @@ const ChatbotArchitectureDiagram = dynamic(() =>
     (m) => m.ChatbotArchitectureDiagram
   )
 )
+const PdfViewer = dynamic(
+  () => import("@/components/projects/pdf-viewer").then((m) => m.PdfViewer),
+  { ssr: false }
+)
 const ChatbotV2AnalysisDiagram = dynamic(() =>
   import("@/components/projects/chatbot-v2-analysis-diagram").then(
     (m) => m.ChatbotV2AnalysisDiagram
@@ -105,7 +109,7 @@ function PAARSection({
 
       <ul className="mt-4 space-y-2.5">
         {bullets.map((bullet) => (
-          <li key={bullet} className="flex gap-3 text-[15px] leading-relaxed text-[#4d4d4d] dark:text-zinc-400">
+          <li key={bullet} className="flex gap-3 text-base leading-6 text-[#4d4d4d] dark:text-zinc-400">
             <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-[2px] bg-[#a1a1a1] dark:bg-zinc-600" />
             <span>{bullet}</span>
           </li>
@@ -170,7 +174,7 @@ export function ProjectDetailContent({ project }: { project: Project }) {
           </p>
         )}
 
-        <p className="mt-4 text-[#4d4d4d] dark:text-zinc-400">
+        <p className="mt-4 text-base leading-6 text-[#4d4d4d] dark:text-zinc-400">
           {project.paar ? project.subtitle : project.description}
         </p>
 
@@ -190,7 +194,7 @@ export function ProjectDetailContent({ project }: { project: Project }) {
             <span className="text-xs font-semibold tracking-[1.5px] text-[#888888] dark:text-zinc-500">TL;DR</span>
             <ul className="mt-2 space-y-2">
               {project.metrics.map((metric) => (
-                <li key={metric.label} className="flex gap-3 text-[15px] leading-relaxed text-[#4d4d4d] dark:text-zinc-400">
+                <li key={metric.label} className="flex gap-3 text-base leading-6 text-[#4d4d4d] dark:text-zinc-400">
                   <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-[2px] bg-[#a1a1a1] dark:bg-zinc-600" />
                   <span>
                     <strong className="font-semibold text-[#171717] dark:text-white">{metric.value}</strong> · {metric.label}
@@ -217,25 +221,11 @@ export function ProjectDetailContent({ project }: { project: Project }) {
             <p className="mt-1 text-sm text-[#888888] dark:text-zinc-500">
               직접 제작한 {project.presentation.pageCount}페이지 워크숍 자료
             </p>
-            <div className="relative mt-5 aspect-video overflow-hidden rounded-xl border border-[#ebebeb] dark:border-zinc-800">
-              <iframe
-                src={project.presentation.src}
-                title={project.presentation.title}
-                loading="lazy"
-                className="absolute inset-0 h-full w-full"
-              />
-            </div>
-            <p className="mt-3 text-sm text-[#888888] dark:text-zinc-500">
-              PDF가 표시되지 않나요?{" "}
-              <a
-                href={project.presentation.src}
-                target="_blank"
-                rel="noreferrer"
-                className="underline underline-offset-4"
-              >
-                새 탭에서 자료 보기
-              </a>
-            </p>
+            <PdfViewer
+              src={project.presentation.src}
+              pageCount={project.presentation.pageCount}
+              title={project.presentation.title}
+            />
           </section>
         )}
 

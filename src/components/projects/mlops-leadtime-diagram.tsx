@@ -57,10 +57,10 @@ export function MlopsLeadtimeDiagram() {
       <rect width="1200" height="526" fill="url(#mlops-leadtime-grid-fine)" />
       <rect width="1200" height="526" fill="url(#mlops-leadtime-grid-bold)" />
 
-      <text x="40" y="28" fontSize="17" fontWeight="600" letterSpacing="1.7" className="fill-[#888888] dark:fill-zinc-500">
+      <text x="40" y="28" fontSize="20" fontWeight="600" letterSpacing="1.7" className="fill-[#888888] dark:fill-zinc-500">
         RESULT
       </text>
-      <text x="40" y="58" fontSize="20" className="fill-[#4d4d4d] dark:fill-zinc-400">
+      <text x="40" y="58" fontSize="22" className="fill-[#4d4d4d] dark:fill-zinc-400">
         수동 Lambda 갱신에서 GitHub Actions 실배포까지, 배포 리드타임 비교
       </text>
 
@@ -72,10 +72,10 @@ export function MlopsLeadtimeDiagram() {
           <text x={b.x + 75} y={b.y - 22} fontSize="30" fontWeight="600" textAnchor="middle" className="fill-[#171717] dark:fill-white">
             {b.value}
           </text>
-          <text x={b.x + 75} y="406" fontSize="19" fontWeight="600" textAnchor="middle" className="fill-[#171717] dark:fill-white">
+          <text x={b.x + 75} y="406" fontSize="21" fontWeight="600" textAnchor="middle" className="fill-[#171717] dark:fill-white">
             {b.label}
           </text>
-          <text x={b.x + 75} y="430" fontSize="15" textAnchor="middle" className="fill-[#888888] dark:fill-zinc-500">
+          <text x={b.x + 75} y="430" fontSize="18" textAnchor="middle" className="fill-[#888888] dark:fill-zinc-500">
             {b.sub}
           </text>
         </motion.g>
@@ -83,15 +83,15 @@ export function MlopsLeadtimeDiagram() {
 
       <motion.g variants={badge}>
         <rect x="440" y="150" width="240" height="48" rx="24" className="fill-[#171717] dark:fill-white" />
-        <text x="560" y="180" fontSize="17" fontWeight="600" textAnchor="middle" className="fill-white dark:fill-[#171717]">
+        <text x="560" y="180" fontSize="20" fontWeight="600" textAnchor="middle" className="fill-white dark:fill-[#171717]">
           84.3%↓ · 6.4배
         </text>
       </motion.g>
 
-      <text x="40" y="456" fontSize="14" className="fill-[#888888] dark:fill-zinc-500">
+      <text x="40" y="456" fontSize="17" className="fill-[#888888] dark:fill-zinc-500">
         * 성공한 GitHub Actions 실행 중 소요 2분 이상만 실배포로 분류해 60건 집계, 60건 중 55건이 3~6분 안에 완료
       </text>
-      <text x="40" y="478" fontSize="14" className="fill-[#888888] dark:fill-zinc-500">
+      <text x="40" y="478" fontSize="17" className="fill-[#888888] dark:fill-zinc-500">
         * Before(약 30분)는 당시 배포 로그가 아니라 회고로 재구성한 추정치
       </text>
     </motion.svg>
