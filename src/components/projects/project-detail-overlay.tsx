@@ -3,11 +3,13 @@
 import { useEffect, useRef } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { motion, AnimatePresence, useReducedMotion } from "motion/react"
+import { GoArrowLeft, GoArrowRight } from "react-icons/go"
 
 import type { Project } from "@/app/projects/data"
 import { getCategoryProjects } from "@/app/projects/data"
 import { ProjectDetailContent } from "./project-detail-content"
 import { ProjectBanner } from "@/components/projects/project-banner"
+import { MagneticButton } from "@/components/projects/magnetic-button"
 
 export function ProjectDetailOverlay({ project }: { project: Project }) {
   const router = useRouter()
@@ -78,22 +80,22 @@ export function ProjectDetailOverlay({ project }: { project: Project }) {
         }}
       >
         {prevProject && (
-          <button
+          <MagneticButton
             onClick={() => goTo(prevProject.slug)}
             aria-label="Previous project"
-            className="fixed top-1/2 left-4 z-30 flex h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-white bg-white text-[#171717] shadow-md dark:bg-zinc-900 dark:text-white"
+            className="fixed top-1/2 left-4 z-30 flex h-14 w-14 -translate-y-1/2 items-center justify-center rounded-full border border-white bg-white text-[#171717] shadow-md"
           >
-            ←
-          </button>
+            <GoArrowLeft className="size-6" />
+          </MagneticButton>
         )}
         {nextProject && (
-          <button
+          <MagneticButton
             onClick={() => goTo(nextProject.slug)}
             aria-label="Next project"
-            className="fixed top-1/2 right-4 z-30 flex h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-white bg-white text-[#171717] shadow-md dark:bg-zinc-900 dark:text-white"
+            className="fixed top-1/2 right-4 z-30 flex h-14 w-14 -translate-y-1/2 items-center justify-center rounded-full border border-white bg-white text-[#171717] shadow-md"
           >
-            →
-          </button>
+            <GoArrowRight className="size-6" />
+          </MagneticButton>
         )}
 
         <motion.div
