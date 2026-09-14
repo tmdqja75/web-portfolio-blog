@@ -127,7 +127,7 @@ export function ProjectDetailOverlay({ project }: { project: Project }) {
                     onClick={() => goTo(p.slug)}
                     aria-label={p.title}
                     className={`h-12 w-12 shrink-0 overflow-hidden rounded-[6px] bg-[#171717] ring-2 transition-all ${
-                      p.slug === project.slug ? "ring-[#171717] dark:ring-white" : "ring-transparent opacity-60"
+                      p.slug === project.slug ? "ring-[#171717] dark:ring-white" : "ring-transparent"
                     }`}
                   >
                     <ProjectBanner project={p} compact />
