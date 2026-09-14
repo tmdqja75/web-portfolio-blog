@@ -2,7 +2,8 @@ import Image from "next/image"
 import type { IconType } from "react-icons"
 import { FaAws } from "react-icons/fa6"
 import { SiClaudecode, SiFastapi, SiMlflow } from "react-icons/si"
-import { RiClaudeLine, RiFileExcel2Line, RiMailSendLine, RiPresentationLine } from "react-icons/ri"
+import { RiFileExcel2Line, RiMailSendLine, RiPresentationLine } from "react-icons/ri"
+import { BsOpenai } from "react-icons/bs"
 
 import type { Project } from "@/app/projects/data"
 
@@ -16,7 +17,7 @@ export const PROJECT_BANNER_ICONS: Record<string, BannerIcon[]> = {
     { id: "mlflow", kind: "react", Icon: SiMlflow },
   ],
   "dxf-panel-parser": [
-    { id: "claude", kind: "react", Icon: RiClaudeLine },
+    { id: "openai", kind: "react", Icon: BsOpenai },
     { id: "excel", kind: "react", Icon: RiFileExcel2Line },
   ],
   "savee-chatbot-api": [

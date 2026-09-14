@@ -55,6 +55,11 @@ const NewsletterArchitectureDiagram = dynamic(() =>
     (m) => m.NewsletterArchitectureDiagram
   )
 )
+const NewsletterWorkflowDiagram = dynamic(() =>
+  import("@/components/projects/newsletter-workflow-diagram").then(
+    (m) => m.NewsletterWorkflowDiagram
+  )
+)
 
 const PAAR_EYEBROW = { problem: "PROBLEM", analysis: "ANALYSIS", action: "ACTION", result: "RESULT" } as const
 
@@ -83,6 +88,7 @@ const PAAR_DIAGRAM_BY_PROJECT: Record<string, Partial<Record<PAARDiagramKey, Com
   },
   "newsletter-automation": {
     action: NewsletterArchitectureDiagram,
+    result: NewsletterWorkflowDiagram,
   },
 }
 
@@ -92,12 +98,16 @@ function PAARSection({
   bullets,
   diagram: Diagram,
   stats,
+  image,
+  evidenceImage,
 }: {
   eyebrow: string
   heading: string
   bullets: string[]
   diagram?: ComponentType | ComponentType[]
   stats?: ProjectMetric[]
+  image?: string
+  evidenceImage?: { src: string; alt: string; caption?: string }
 }) {
   const diagrams = Diagram ? (Array.isArray(Diagram) ? Diagram : [Diagram]) : []
   return (
@@ -106,6 +116,14 @@ function PAARSection({
       <h2 className="mt-1 text-lg font-semibold text-[#171717] dark:text-white" style={{ letterSpacing: "-0.6px" }}>
         {heading}
       </h2>
+
+      {image && (
+        <img
+          src={image}
+          alt={`${heading} 원본 도면`}
+          className="mt-4 w-full rounded-xl border border-[#ebebeb] dark:border-zinc-800"
+        />
+      )}
 
       <ul className="mt-4 space-y-2.5">
         {bullets.map((bullet) => (
@@ -137,6 +155,21 @@ function PAARSection({
             </div>
           ))}
         </div>
+      )}
+
+      {evidenceImage && (
+        <figure className="mt-6">
+          <img
+            src={evidenceImage.src}
+            alt={evidenceImage.alt}
+            className="w-full rounded-xl border border-[#ebebeb] dark:border-zinc-800"
+          />
+          {evidenceImage.caption && (
+            <figcaption className="mt-2 text-sm leading-6 text-[#888888] dark:text-zinc-500">
+              {evidenceImage.caption}
+            </figcaption>
+          )}
+        </figure>
       )}
     </div>
   )
@@ -235,6 +268,7 @@ export function ProjectDetailContent({ project }: { project: Project }) {
               eyebrow={PAAR_EYEBROW.problem}
               heading={project.paar.problem.heading}
               bullets={project.paar.problem.bullets}
+              image={project.paar.problem.image}
               stats={project.paar.problem.stats}
             />
             <PAARSection
@@ -254,6 +288,7 @@ export function ProjectDetailContent({ project }: { project: Project }) {
               heading={project.paar.result.heading}
               bullets={project.paar.result.bullets}
               diagram={paarDiagram.result}
+              evidenceImage={project.paar.result.evidenceImage}
             />
           </div>
         ) : (
@@ -271,6 +306,8 @@ export function ProjectDetailContent({ project }: { project: Project }) {
               <a
                 key={link.href}
                 href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="rounded-[6px] bg-[#171717] px-3 py-1.5 text-sm font-medium text-white dark:bg-white dark:text-[#171717]"
               >
                 {link.label}
