@@ -119,19 +119,21 @@ export function ProjectDetailOverlay({ project }: { project: Project }) {
           <ProjectDetailContent project={project} />
 
           {navigable.length > 1 && (
-            <div className="fixed inset-x-0 bottom-6 z-30 flex justify-center gap-2">
-              {navigable.map((p) => (
-                <button
-                  key={p.slug}
-                  onClick={() => goTo(p.slug)}
-                  aria-label={p.title}
-                  className={`h-12 w-12 shrink-0 overflow-hidden rounded-[6px] ring-2 transition-all ${
-                    p.slug === project.slug ? "ring-[#171717] dark:ring-white" : "ring-transparent opacity-60"
-                  }`}
-                >
-                  <ProjectBanner project={p} compact />
-                </button>
-              ))}
+            <div className="fixed inset-x-0 bottom-6 z-30 flex justify-center">
+              <div className="flex gap-2 rounded-2xl border border-white/40 bg-gradient-to-b from-white/25 to-white/10 p-2 shadow-lg ring-1 ring-inset ring-white/20 dark:border-white/15 dark:from-white/10 dark:to-white/5 dark:ring-white/10">
+                {navigable.map((p) => (
+                  <button
+                    key={p.slug}
+                    onClick={() => goTo(p.slug)}
+                    aria-label={p.title}
+                    className={`h-12 w-12 shrink-0 overflow-hidden rounded-[6px] bg-[#171717] ring-2 transition-all ${
+                      p.slug === project.slug ? "ring-[#171717] dark:ring-white" : "ring-transparent opacity-60"
+                    }`}
+                  >
+                    <ProjectBanner project={p} compact />
+                  </button>
+                ))}
+              </div>
             </div>
           )}
         </motion.div>

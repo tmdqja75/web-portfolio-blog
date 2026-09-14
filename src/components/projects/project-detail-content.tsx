@@ -251,9 +251,6 @@ export function ProjectDetailContent({ project }: { project: Project }) {
             >
               {project.presentation.title}
             </h2>
-            <p className="mt-1 text-sm text-[#888888] dark:text-zinc-500">
-              직접 제작한 {project.presentation.pageCount}페이지 워크숍 자료
-            </p>
             <PdfViewer
               src={project.presentation.src}
               pageCount={project.presentation.pageCount}

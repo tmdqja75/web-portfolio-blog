@@ -194,8 +194,8 @@ export const projects: Project[] = [
       "Docker",
       "AWS",
     ],
-    role: "단독 개발 (백엔드·에이전트·인프라), 프론트엔드 1명과 API 협업",
-    timeframe: "2025.08–2025.11 (유지보수 지속)",
+    role: "백엔드/에이전트/인프라 개발, 프론트엔드 1명·PM 1명과 협업",
+    timeframe: "2025.08–2025.11",
     metrics: [
       { value: "1780ms→855ms", label: "건물정보 조회 지연 (async 병렬화, 51.98%↓)" },
       { value: "LLM 호출 4회→1회", label: "db_agent 쿼리 처리 (3-노드 재설계, MCP 서버로 분리)" },
@@ -243,7 +243,7 @@ export const projects: Project[] = [
   {
     slug: "savee-chatbot-api-v2",
     title: "세이비 챗봇 API V2",
-    subtitle: "21개 대시보드로 확장한 semantic routing과 품질·보안 인프라",
+    subtitle: "semantic routing과 품질/보안 인프라 관리",
     category: "AI Agent",
     description:
       "21개 대시보드 중 어디를 봐야 할지 헤매는 사용자를 위해 챗봇이 질문과 관련된 화면으로 직접 연동해주는 semantic routing을 직접 발굴해 확장했고, 세션 영속화·에이전트 평가 시스템·DSPy 프롬프트 최적화·role/tier 기반 접근 제어까지 품질·보안 인프라를 단독으로 구축했습니다. 저신뢰 라우팅 정확도를 50%에서 100%(holdout)로 올리고, semantic routing 오분류를 60%(25건→10건) 줄였습니다.",
@@ -258,7 +258,7 @@ export const projects: Project[] = [
       "Langfuse",
       "AWS ECS",
     ],
-    role: "백엔드/에이전트/인프라 단독 개발, 프론트엔드 1명·PM 1명과 협업",
+    role: "백엔드/에이전트/인프라 개발, 프론트엔드 1명·PM 1명과 협업",
     timeframe: "2026.05–2026.08 (dev 브랜치 QA 중, main 미배포)",
     metrics: [
       { value: "50%→100%", label: "저신뢰(threshold 0.47 미만) 라우팅 정확도, DSPy bootstrap holdout 측정" },
@@ -269,9 +269,9 @@ export const projects: Project[] = [
       problem: {
         heading: "3개월 손 놓았던 챗봇, 대시보드 21개를 다시 들여다보다",
         bullets: [
-          "V1 출시 후 다른 업무 우선순위에 밀려 2월 말부터 5월 말까지 약 3개월 손대지 못하다가, 지시가 아니라 직접 판단으로 재개",
+          "프로덕트 내부 대시보드가 21개나 있어 사용자가 원하는 정보를 확인하려 할 때 어느 탭부터 봐야 할지 몰라 헤멘다는 피드백 발생",
           "Savee 대시보드가 21개나 있어 사용자가 원하는 정보를 확인하려 할 때 어느 탭부터 봐야 할지 몰라 헤매는 문제를 직접 인지",
-          "방치했으면 잃었을 것: 채팅 세션 미저장으로 대화가 이어지지 않는 근본 결함, 5개 LLM 의사결정 지점의 회귀를 감으로만 판단하던 상태, role/tier가 파이프라인 어디에도 반영되지 않아 생기는 접근 제어 보안 위험",
+          "채팅 세션 미저장으로 대화가 이어지지 않는 근본 결함, 5개 LLM 의사결정 지점의 회귀를 감으로만 판단하던 상태, role/tier가 파이프라인 어디에도 반영되지 않아 생기는 접근 제어 보안 위험",
         ],
         stats: [
           { value: "21개", label: "사용자가 헤매던 대시보드 화면" },
@@ -324,7 +324,7 @@ export const projects: Project[] = [
       "GitHub API",
       "LangSmith",
     ],
-    role: "단독 개발 (Claude Code 협업)",
+    role: "에이전트 개발",
     timeframe: "2026.01–2026.08 (진행 중)",
     links: [
       { label: "Repository", href: "https://github.com/tmdqja75/newsletter-automation-gpters/tree/personal" },
@@ -388,8 +388,8 @@ export const projects: Project[] = [
     description:
       "Claude Code와 Codex 같은 Coding Agent를 안전하고 재현 가능하게 쓰기 위한 사내 워크숍이다. 회사와 팀장 요청으로 시작했고, 교육 콘텐츠 구성과 44페이지 자료 제작, 진행을 단독으로 맡았다.",
     techStack: ["Claude Code", "Codex", "MCP", "Subagents", "Skills", "Context Engineering"],
-    role: "기획·자료 제작·진행 단독 담당",
-    timeframe: "2026",
+    role: "기획/자료 제작/발표 담당",
+    timeframe: "2026.04",
     metrics: [
       { value: "44페이지", label: "직접 제작한 발표 자료" },
       { value: "1회 워크숍", label: "사내 개발자·데이터 사이언티스트 대상 진행" },
@@ -397,7 +397,7 @@ export const projects: Project[] = [
     ],
     presentation: {
       src: "/projects/claude-code-codex-training.pdf",
-      title: "Claude Code / Codex: Coding Agent 능력치 최대한 끌어올리기",
+      title: "Coding Agent 사용법 발표를 위해 직접 제작한 발표 자료",
       pageCount: 44,
     },
     paar: {
@@ -410,7 +410,7 @@ export const projects: Project[] = [
         ],
       },
       analysis: {
-        heading: "설치법 대신 컨텍스트 엔지니어링",
+        heading: "단순한 사용법을 넘어 작동 원리를 설명하기",
         bullets: [
           "LLM이 토큰을 순차 생성하는 방식과 환각이 생기는 이유부터 설명해 Coding Agent의 동작 원리를 먼저 맞췄음",
           "맥락 없는 명령과 길어지는 대화가 결과 품질에 미치는 영향을 바탕으로, Agent를 잘 쓰는 일은 컨텍스트 창을 채우는 일이라는 관점으로 교육을 구성했음",
