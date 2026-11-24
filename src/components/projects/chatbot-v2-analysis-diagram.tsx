@@ -62,7 +62,7 @@ export function ChatbotV2AnalysisDiagram() {
     <motion.svg
       viewBox="0 0 1200 830"
       className="h-auto w-full"
-      fontFamily="-apple-system, 'Segoe UI', ui-sans-serif, sans-serif"
+      fontFamily="var(--font-sans)"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.3 }}
@@ -96,7 +96,7 @@ export function ChatbotV2AnalysisDiagram() {
           <rect x={c.x} y="96" width="150" height="90" rx="8" className="fill-red-50 stroke-red-600 dark:fill-red-950/40 dark:stroke-red-800" strokeWidth="1.4" />
           <rect x={c.x} y="96" width="150" height="26" rx="8" className="fill-red-600 dark:fill-red-800" />
           <rect x={c.x} y="109" width="150" height="13" className="fill-red-600 dark:fill-red-800" />
-          <text x={c.cx} y="114" textAnchor="middle" fontSize="15" fontWeight="700" fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace" className="fill-white">
+          <text x={c.cx} y="114" textAnchor="middle" fontSize="15" fontWeight="700" fontFamily="var(--font-sans)" className="fill-white">
             {c.label}
           </text>
           {c.lines.map((line, i) => (

@@ -28,7 +28,7 @@ function buildVariants(instant: boolean) {
 
 const BARS = [
   { x: 280, y: 119, height: 257, value: "약 30분", label: "Before", sub: "(Lambda 수동 갱신, 회고 추정)", className: "fill-sky-100 dark:fill-sky-950" },
-  { x: 650, y: 336, height: 40, value: "4.71분", label: "After", sub: "(GitHub Actions 실배포 중앙값, 60건)", className: "fill-blue-600 dark:fill-blue-500" },
+  { x: 650, y: 336, height: 40, value: "4분", label: "After", sub: "(GitHub Actions 실배포 중앙값, 60건)", className: "fill-blue-600 dark:fill-blue-500" },
 ]
 
 export function MlopsLeadtimeDiagram() {
@@ -39,7 +39,7 @@ export function MlopsLeadtimeDiagram() {
     <motion.svg
       viewBox="0 0 1200 526"
       className="h-auto w-full"
-      fontFamily="-apple-system, 'Segoe UI', ui-sans-serif, sans-serif"
+      fontFamily="var(--font-sans)"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.3 }}
@@ -84,7 +84,7 @@ export function MlopsLeadtimeDiagram() {
       <motion.g variants={badge}>
         <rect x="440" y="150" width="240" height="48" rx="24" className="fill-[#171717] dark:fill-white" />
         <text x="560" y="180" fontSize="20" fontWeight="600" textAnchor="middle" className="fill-white dark:fill-[#171717]">
-          84.3%↓ · 6.4배
+          약 85%↓
         </text>
       </motion.g>
 
