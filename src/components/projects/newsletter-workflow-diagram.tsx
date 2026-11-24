@@ -82,7 +82,7 @@ export function NewsletterWorkflowDiagram() {
     <motion.svg
       viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
       className="h-auto w-full"
-      fontFamily="-apple-system, 'Segoe UI', ui-sans-serif, sans-serif"
+      fontFamily="var(--font-sans)"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.3 }}

@@ -133,6 +133,16 @@ responsive sizing and rounded corners, so no extra markup is needed. Conventions
 
 **Typography**
 - Text/labels sized large overall.
+- Text renders in Pretendard SemiBold (600), matching the site's body font — not the browser
+  default sans-serif. Since these SVGs load via a plain `<img>` tag, they can't inherit the
+  page's CSS or fetch an external font file, so each SVG embeds its own font: subset Pretendard
+  SemiBold to only the characters that SVG's `<text>` elements actually use (via
+  `subset-font`, a pure-JS/wasm hb-subset wrapper — no native/brotli toolchain needed), base64
+  it into a `@font-face` inside the SVG's own `<style>` block, and apply it with a plain
+  `text { font-family: 'Pretendard Subset', Helvetica, Arial, sans-serif; }` rule (root-level
+  `font-family` attributes don't reliably cascade the same way). Keeps each file's embed in the
+  few-to-tens-of-KB range instead of shipping the full font. Normalize all text to weight 600 —
+  the subset only bakes in that one weight.
 
 Implementation notes: the flow animation is a `<style>` block inside the SVG itself
 (`stroke-dasharray` + a `stroke-dashoffset` keyframe), wrapped in

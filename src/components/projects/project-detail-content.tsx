@@ -4,15 +4,12 @@ import type { ComponentType } from "react"
 import dynamic from "next/dynamic"
 import { motion, useReducedMotion } from "motion/react"
 
-import type { Project, ProjectMetric } from "@/app/projects/data"
+import type { ActionCarouselSlide, Project, ProjectMetric } from "@/app/projects/data"
 import { ProjectBannerModal } from "@/components/projects/project-banner-modal"
 
 // Dynamically imported: any single open project renders at most a handful of
 // these, so loading all ten eagerly would bloat the /projects bundle for
 // diagrams most page loads never see.
-const PipelineDiagram = dynamic(() =>
-  import("@/components/projects/pipeline-diagram").then((m) => m.PipelineDiagram)
-)
 const AnalysisDiagram = dynamic(() =>
   import("@/components/projects/analysis-diagram").then((m) => m.AnalysisDiagram)
 )
@@ -60,6 +57,9 @@ const NewsletterWorkflowDiagram = dynamic(() =>
     (m) => m.NewsletterWorkflowDiagram
   )
 )
+const ActionCarousel = dynamic(() =>
+  import("@/components/projects/action-carousel").then((m) => m.ActionCarousel)
+)
 
 const PAAR_EYEBROW = { problem: "PROBLEM", analysis: "ANALYSIS", action: "ACTION", result: "RESULT" } as const
 
@@ -75,7 +75,6 @@ const PAAR_DIAGRAM_BY_PROJECT: Record<string, Partial<Record<PAARDiagramKey, Com
   },
   "dxf-panel-parser": {
     analysis: AnalysisDiagram,
-    action: PipelineDiagram,
     result: AccuracyDiagram,
   },
   "savee-chatbot-api": {
@@ -92,6 +91,10 @@ const PAAR_DIAGRAM_BY_PROJECT: Record<string, Partial<Record<PAARDiagramKey, Com
   },
 }
 
+// Diagram components for individual slides inside a project's action carousel,
+// keyed by project slug then by ActionCarouselSlide.key.
+const ACTION_CAROUSEL_DIAGRAM_BY_PROJECT: Record<string, Record<string, ComponentType>> = {}
+
 function PAARSection({
   eyebrow,
   heading,
@@ -100,6 +103,8 @@ function PAARSection({
   stats,
   image,
   evidenceImage,
+  carousel,
+  carouselDiagrams,
 }: {
   eyebrow: string
   heading: string
@@ -108,6 +113,8 @@ function PAARSection({
   stats?: ProjectMetric[]
   image?: string
   evidenceImage?: { src: string; alt: string; caption?: string }
+  carousel?: ActionCarouselSlide[]
+  carouselDiagrams?: Record<string, ComponentType>
 }) {
   const diagrams = Diagram ? (Array.isArray(Diagram) ? Diagram : [Diagram]) : []
   return (
@@ -171,6 +178,8 @@ function PAARSection({
           )}
         </figure>
       )}
+
+      {carousel && <ActionCarousel slides={carousel} diagrams={carouselDiagrams} />}
     </div>
   )
 }
@@ -251,9 +260,6 @@ export function ProjectDetailContent({ project }: { project: Project }) {
             >
               {project.presentation.title}
             </h2>
-            <p className="mt-1 text-sm text-[#888888] dark:text-zinc-500">
-              직접 제작한 {project.presentation.pageCount}페이지 워크숍 자료
-            </p>
             <PdfViewer
               src={project.presentation.src}
               pageCount={project.presentation.pageCount}
@@ -282,6 +288,8 @@ export function ProjectDetailContent({ project }: { project: Project }) {
               heading={project.paar.action.heading}
               bullets={project.paar.action.bullets}
               diagram={paarDiagram.action}
+              carousel={project.paar.action.carousel}
+              carouselDiagrams={ACTION_CAROUSEL_DIAGRAM_BY_PROJECT[project.slug]}
             />
             <PAARSection
               eyebrow={PAAR_EYEBROW.result}
