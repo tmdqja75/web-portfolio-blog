@@ -27,7 +27,7 @@ export function NewsletterArchitectureDiagram() {
     <motion.svg
       viewBox="0 0 1200 660"
       className="h-auto w-full"
-      fontFamily="-apple-system, 'Segoe UI', ui-sans-serif, sans-serif"
+      fontFamily="var(--font-sans)"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.3 }}
@@ -40,7 +40,7 @@ export function NewsletterArchitectureDiagram() {
 
       <motion.g variants={fade}>
         <text x="600" y="36" textAnchor="middle" fontSize="26" fontWeight="600" className="fill-[#171717] dark:fill-white">
-          뉴스레터 자동화 — 에이전트/도구 구조도
+          뉴스레터 자동화 에이전트
         </text>
         <text x="600" y="60" textAnchor="middle" fontSize="19" className="fill-[#4d4d4d] dark:fill-zinc-400">
           메인 오케스트레이터가 서브에이전트 2개와 도구들을 호출하는 구조

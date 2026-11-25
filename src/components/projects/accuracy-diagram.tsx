@@ -85,7 +85,7 @@ export function AccuracyDiagram() {
     <motion.svg
       viewBox="0 0 1200 540"
       className="h-auto w-full"
-      fontFamily="-apple-system, 'Segoe UI', ui-sans-serif, sans-serif"
+      fontFamily="var(--font-sans)"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.3 }}
@@ -107,14 +107,14 @@ export function AccuracyDiagram() {
         EXPERIMENT
       </text>
       <text x="40" y="58" fontSize="22" className="fill-[#4d4d4d] dark:fill-zinc-400">
-        패널마다 Claude·GPT 정답 여부를 나눠 보면, 개선 단계마다 두 모델의 격차가 좁혀진다
+        패널마다 Claude·GPT 정답 여부를 나눠 보면, 전처리 단계 개선마다 두 모델의 정답 여부 격차가 좁혀진다
       </text>
 
       <g strokeWidth="1" strokeDasharray="4 4" className="stroke-[#ebebeb] dark:stroke-zinc-800">
         <line x1="220" y1="116" x2="1080" y2="116" />
         <line x1="220" y1="246" x2="1080" y2="246" />
       </g>
-      <g fontSize="18" textAnchor="end" fontFamily="ui-monospace, monospace" className="fill-[#888888] dark:fill-zinc-500">
+      <g fontSize="18" textAnchor="end" fontFamily="var(--font-sans)" className="fill-[#888888] dark:fill-zinc-500">
         <text x="190" y="121">100%</text>
         <text x="190" y="251">50%</text>
         <text x="190" y="381">0%</text>

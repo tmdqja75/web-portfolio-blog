@@ -40,7 +40,7 @@ export function ChatbotPipelineDiagram() {
     <motion.svg
       viewBox="0 0 1200 270"
       className="h-auto w-full"
-      fontFamily="-apple-system, 'Segoe UI', ui-sans-serif, sans-serif"
+      fontFamily="var(--font-sans)"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.3 }}

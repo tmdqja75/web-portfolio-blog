@@ -5,13 +5,13 @@ website: "https://vercel.com"
 description: An inspired interpretation of Vercel's design language — a developer-platform brand whose surface is a stark black-and-ink duet on near-white canvas, broken at hero scale by a multi-color mesh gradient (cyan / blue / magenta / amber) that acts as the entire decorative system, paired with a custom geometric sans for headlines and a monospaced caption face for technical labels.
 
 seo:
-  title: "Vercel Design System for React — Ink #171717, Geist, and 40+ components"
-  metaDescription: "Vercel's design language as a DESIGN.md file. Ink #171717, Geist + Geist Mono, mesh gradient, 40+ components. For React, Next.js, and AI tools."
+  title: "Vercel Design System for React — Ink #171717, Pretendard, and 40+ components"
+  metaDescription: "Vercel's design language as a DESIGN.md file. Ink #171717, Pretendard + Geist Mono, mesh gradient, 40+ components. For React, Next.js, and AI tools."
   highlights:
     - "Single ink primary — #171717 carries every CTA, never softened to a brand-blue or secondary accent"
     - "One mesh gradient — cyan #50e3c2, blue #007cf0, pink #ff0080, amber #f9cb28 fused, used only at hero scale"
     - "Two pill scales coexist — 100px marketing CTAs and 6px nav buttons, never mixed inside one screen"
-    - "Geist display caps at weight 600 — aggressive -2.4px tracking carries voice instead of heavier weights"
+    - "Pretendard display caps at weight 600 — aggressive -2.4px tracking carries voice instead of heavier weights"
     - "Stacked shadows over single drops — 4-12% black opacity layered with an inset hairline ring on every card"
   tags:
     - "Web Infrastructure & Hosting"
@@ -23,13 +23,13 @@ seo:
   opening: |
     Vercel's design language is the dashboard marketing surface for a developer platform, written for engineers who already know the syntax. The page operates with one of the strictest stark systems on the web: a near-white #fafafa body, ink-near-black #171717 for type, and a 200-step gray scale where every divider, border, and disabled state lives on its own deliberate step. There is no brand-blue or marketing accent — the ink IS the brand. Conversion targets, dark bands, code mockups, and primary CTAs all share the same #171717 tone, polarity-flipped onto white when a section needs depth.
 
-    This DESIGN.md packages the system into a single machine-readable file. Inside: 40 color tokens (including the three-pair Develop / Preview / Ship gradient stack), 15 typography styles across Geist and Geist Mono, 9 corner radii (from 0px to 9999px, with the 100px pill as the marketing-CTA signature), 12 spacing values stepping from 4px to a 192px section gap, and 40+ components from `nav-bar` to `pricing-card-featured` to the polarity-flipped `showcase-band-dark`. The format follows the Google Labs DESIGN.md spec — colors, typography, rounded, spacing, components, all token-referenced.
+    This DESIGN.md packages the system into a single machine-readable file. Inside: 40 color tokens (including the three-pair Develop / Preview / Ship gradient stack), 15 typography styles across Pretendard and Geist Mono, 9 corner radii (from 0px to 9999px, with the 100px pill as the marketing-CTA signature), 12 spacing values stepping from 4px to a 192px section gap, and 40+ components from `nav-bar` to `pricing-card-featured` to the polarity-flipped `showcase-band-dark`. The format follows the Google Labs DESIGN.md spec — colors, typography, rounded, spacing, components, all token-referenced.
 
     Feed the file to Claude, Cursor, or Copilot when you need a React component that reads as Vercel rather than as a generic shadcn theme. The agent picks up the discipline — 100px pill CTAs, sentence-case headlines with -2.4px tracking, mono eyebrows above geometric-sans body, stacked shadows instead of heavy drops. Reference the tokens directly in Tailwind config, or use the spec as an audit checklist. The system is worth studying because of what it refuses: no second accent color, no display weight above 600, no gradient miniaturization. Restraint is the product.
   related:
     - href: "https://vercel.com/design"
       title: "Vercel's design site"
-      description: "The Geist design system and brand resources direct from Vercel."
+      description: "The Pretendard design system and brand resources direct from Vercel."
     - href: "/design"
       title: "Browse all design systems"
       description: "The full directory of DESIGN.md files on shadcn.io, with live mockups for each."
@@ -44,8 +44,8 @@ seo:
       title: "What is the brand mesh gradient and where should I use it?"
       answer: "The signature decoration is a three-pair gradient stack: Develop (#007cf0 to #00dfd8), Preview (#7928ca to #ff0080), and Ship (#ff4d4d to #f9cb28). The three pairs fuse into a single multi-color mesh that floats behind the hero band and inside feature-band atmospheric backdrops. Treat it as one unified object — never crop to a single hue, never miniaturize to an icon, never reorder the stops. It lives at hero scale only."
     - id: "typography"
-      title: "What typography does Vercel use, and what should I use if Geist isn't available?"
-      answer: "The system runs Geist for display, body, button, and label, and Geist Mono for terminal mockups, code blocks, and technical eyebrows. Geist sits at weights 400 / 500 / 600 only — the display ceiling is 600, never 700+. Display sizes track aggressively negative (-2.4px at 48px hero, -1.28px at 32px section). If Geist is unavailable, Inter with `font-feature-settings: 'ss01', 'ss02'` is the closest geometric-sans substitute; JetBrains Mono at 12–13px stands in for Geist Mono."
+      title: "What typography does Vercel use, and what should I use if Pretendard isn't available?"
+      answer: "The system runs Pretendard for display, body, button, and label, and Geist Mono for terminal mockups, code blocks, and technical eyebrows. Pretendard sits at weights 400 / 500 / 600 only — the display ceiling is 600, never 700+. Display sizes track aggressively negative (-2.4px at 48px hero, -1.28px at 32px section). If Pretendard is unavailable, Inter with `font-feature-settings: 'ss01', 'ss02'` is the closest geometric-sans substitute; JetBrains Mono at 12–13px stands in for Geist Mono."
     - id: "pill-scales"
       title: "Why does the system use two different button radii?"
       answer: "Vercel deliberately runs two pill scales side by side. Marketing CTAs (`button-primary`, `button-secondary`) use a 100px radius — fully pilled, ~48px tall. In-app nav buttons (`nav-cta-signup`, `nav-cta-login`, `nav-cta-ask-ai`) use a 6px square-ish radius — the brand's `--geist-radius`. The two scales never mix on the same screen; marketing surfaces stay pilled, app surfaces stay squared. Picking one and sticking with it is part of the voice."
@@ -54,7 +54,7 @@ seo:
       answer: "The system stacks small shadows rather than dropping a single heavy one. Every elevated card combines an inset 1px hairline ring (`0 0 0 1px #00000014` inset) with 2–3 stacked offsets at 4–12% black opacity. The result is a card that reads as sitting on the page without feeling material-heavy. Five levels are documented — flat, inset hairline, subtle drop, soft stack, float stack, modal — each adds one more offset rather than blurring further."
     - id: "use-in-project"
       title: "Can I use this DESIGN.md to build my own React project?"
-      answer: "Yes — the file is structured for direct ingestion by Claude, Cursor, or any AI tool that reads token-based design specs. The agent will reproduce Vercel's restraint (ink-only primary, mesh gradient at hero scale only, Geist at weight 600 max) instead of inventing a generic shadcn theme. Every color hex, typography size, radius, and spacing value is a quoted token you can paste straight into Tailwind config, CSS variables, or a custom component library."
+      answer: "Yes — the file is structured for direct ingestion by Claude, Cursor, or any AI tool that reads token-based design specs. The agent will reproduce Vercel's restraint (ink-only primary, mesh gradient at hero scale only, Pretendard at weight 600 max) instead of inventing a generic shadcn theme. Every color hex, typography size, radius, and spacing value is a quoted token you can paste straight into Tailwind config, CSS variables, or a custom component library."
 
 colors:
   primary: "#171717"
@@ -96,59 +96,59 @@ colors:
 
 typography:
   display-xl:
-    fontFamily: Geist, Inter, system-ui, -apple-system, sans-serif
+    fontFamily: Pretendard, Inter, system-ui, -apple-system, sans-serif
     fontSize: 48px
     fontWeight: 600
     lineHeight: 48px
     letterSpacing: -2.4px
   display-lg:
-    fontFamily: Geist, Inter, system-ui, -apple-system, sans-serif
+    fontFamily: Pretendard, Inter, system-ui, -apple-system, sans-serif
     fontSize: 32px
     fontWeight: 600
     lineHeight: 40px
     letterSpacing: -1.28px
   display-md:
-    fontFamily: Geist, Inter, system-ui, -apple-system, sans-serif
+    fontFamily: Pretendard, Inter, system-ui, -apple-system, sans-serif
     fontSize: 24px
     fontWeight: 600
     lineHeight: 32px
     letterSpacing: -0.96px
   display-sm:
-    fontFamily: Geist, Inter, system-ui, -apple-system, sans-serif
+    fontFamily: Pretendard, Inter, system-ui, -apple-system, sans-serif
     fontSize: 20px
     fontWeight: 600
     lineHeight: 28px
     letterSpacing: -0.6px
   body-lg:
-    fontFamily: Geist, Inter, system-ui, -apple-system, sans-serif
+    fontFamily: Pretendard, Inter, system-ui, -apple-system, sans-serif
     fontSize: 18px
     fontWeight: 400
     lineHeight: 28px
     letterSpacing: 0px
   body-md:
-    fontFamily: Geist, Inter, system-ui, -apple-system, sans-serif
+    fontFamily: Pretendard, Inter, system-ui, -apple-system, sans-serif
     fontSize: 16px
     fontWeight: 400
     lineHeight: 24px
   body-md-strong:
-    fontFamily: Geist, Inter, system-ui, -apple-system, sans-serif
+    fontFamily: Pretendard, Inter, system-ui, -apple-system, sans-serif
     fontSize: 16px
     fontWeight: 500
     lineHeight: 24px
   body-sm:
-    fontFamily: Geist, Inter, system-ui, -apple-system, sans-serif
+    fontFamily: Pretendard, Inter, system-ui, -apple-system, sans-serif
     fontSize: 14px
     fontWeight: 400
     lineHeight: 20px
     letterSpacing: -0.28px
   body-sm-strong:
-    fontFamily: Geist, Inter, system-ui, -apple-system, sans-serif
+    fontFamily: Pretendard, Inter, system-ui, -apple-system, sans-serif
     fontSize: 14px
     fontWeight: 500
     lineHeight: 20px
     letterSpacing: -0.28px
   caption:
-    fontFamily: Geist, Inter, system-ui, -apple-system, sans-serif
+    fontFamily: Pretendard, Inter, system-ui, -apple-system, sans-serif
     fontSize: 12px
     fontWeight: 400
     lineHeight: 16px
@@ -163,12 +163,12 @@ typography:
     fontWeight: 400
     lineHeight: 20px
   button-md:
-    fontFamily: Geist, Inter, system-ui, -apple-system, sans-serif
+    fontFamily: Pretendard, Inter, system-ui, -apple-system, sans-serif
     fontSize: 14px
     fontWeight: 500
     lineHeight: 20px
   button-lg:
-    fontFamily: Geist, Inter, system-ui, -apple-system, sans-serif
+    fontFamily: Pretendard, Inter, system-ui, -apple-system, sans-serif
     fontSize: 16px
     fontWeight: 500
     lineHeight: 24px
@@ -446,7 +446,7 @@ components:
 
 Vercel is a developer-platform brand — the page is a deployment dashboard's marketing surface, written for engineers who already know the syntax. It earns that posture with one of the cleanest stark systems on the web: near-white `{colors.canvas-soft}` (`#fafafa`) body background, ink-near-black `{colors.ink}` (`#171717`) text, a 200-step gray scale that gives every divider, border, and disabled state its own deliberate step. The only place the brand introduces color at marketing scale is the multi-stop mesh gradient (`{colors.gradient-develop-start}` `#007cf0` → `{colors.gradient-preview-end}` `#ff0080` → `{colors.gradient-ship-start}` `#ff4d4d` → `{colors.cyan}` `#50e3c2` / magenta / amber) that floats in atmospheric backdrops, never miniaturized to a swatch. That gradient is the entire decoration system.
 
-Type is the second decisive voice. The brand's own custom geometric sans (Geist) carries display, body, button — everything narrative — at weight 600 for display, 500 for buttons, 400 for body. A matching monospaced face (Geist Mono) carries technical labels: terminal mockups, code blocks, sometimes filename captions. Headlines are sentence-case with aggressive negative letter-spacing (`-2.4px` at 48 px hero) — the brand never letter-spaces positively, never goes uppercase outside of mono labels.
+Type is the second decisive voice. The brand's own custom geometric sans (Pretendard) carries display, body, button — everything narrative — at weight 600 for display, 500 for buttons, 400 for body. A matching monospaced face (Geist Mono) carries technical labels: terminal mockups, code blocks, sometimes filename captions. Headlines are sentence-case with aggressive negative letter-spacing (`-2.4px` at 48 px hero) — the brand never letter-spaces positively, never goes uppercase outside of mono labels.
 
 Surfaces use a four-step ladder: `{colors.canvas}` (`#ffffff` pure white for cards), `{colors.canvas-soft}` (`#fafafa` 98% — the page body), `{colors.canvas-soft-2}` (`#f5f5f5` 95% occasional inset region), `{colors.primary}` (`#171717` deep ink-near-black used as the polarity-flipped band when a section needs the dark mode treatment). Shadows are exceptionally subtle — every elevated card carries a stacked shadow built from `0px 1px 1px #00000005` + `0px 2px 2px #0000000a` + an inset border. Cards never float on heavy drop-shadow; they sit on the page held by hairline + soft glow.
 
@@ -462,7 +462,7 @@ Surfaces use a four-step ladder: `{colors.canvas}` (`#ffffff` pure white for car
 
 ### Brand & Accent
 - **Ink** (`{colors.primary}` — `#171717`): The single primary CTA color. Black-near-pure ink that carries every Sign Up pill, every footer CTA, the dark-band polarity-flip. Used as text color throughout the page on light surfaces. (Resolved from `--ds-gray-1000`.)
-- **Cyan** (`{colors.cyan}` — `#50e3c2`): A signature mint-cyan used in the brand gradient and inside Geist-system spotlight tokens. Visible inside the hero gradient stops.
+- **Cyan** (`{colors.cyan}` — `#50e3c2`): A signature mint-cyan used in the brand gradient and inside Pretendard-system spotlight tokens. Visible inside the hero gradient stops.
 - **Highlight Pink** (`{colors.highlight-pink}` — `#ff0080`): The brand's highlight magenta, used as the high-saturation stop in the preview-gradient pair.
 - **Violet** (`{colors.violet}` — `#7928ca`): The deep purple used as the start of the preview-gradient and inside developer-console highlights.
 - **Link Blue** (`{colors.link}` — `#0070f3`): The brand's primary link color and the legacy `--geist-success` semantic.
@@ -503,7 +503,7 @@ The three pairs collapse into a single multi-color mesh gradient when used as th
 ### Font Family
 Two custom faces carry the entire system:
 
-1. **A custom geometric sans** (extracted as `Geist`) for every display, body, button, link, and label. Weights 400 / 500 / 600 are the working set; the face never appears in 700 or heavier. Display sizes are tracked aggressively negative (`-2.4 px` at 48 px hero, `-1.28 px` at 32 px section); body stays at neutral or slightly-negative tracking.
+1. **A custom geometric sans** (extracted as `Pretendard`) for every display, body, button, link, and label. Weights 400 / 500 / 600 are the working set; the face never appears in 700 or heavier. Display sizes are tracked aggressively negative (`-2.4 px` at 48 px hero, `-1.28 px` at 32 px section); body stays at neutral or slightly-negative tracking.
 2. **A custom monospaced face** (extracted as `Geist Mono`) for terminal mockups, code blocks, and small mono-caption labels — anything that wants to signal "technical." Weight 400 only at 12 – 13 px. Tracking neutral.
 
 A condensed display sans (`Space Grotesk`) is loaded as a third face for occasional editorial moments but does not render as the primary face anywhere in the captured surfaces.
